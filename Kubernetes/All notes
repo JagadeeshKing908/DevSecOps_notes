@@ -1,0 +1,1583 @@
+Day-1:-
+-------
+
+Kubernetes:-
+-----------
+1) Docker is managed by k8s with the help of its steering . It is advanced version of docker.
+
+Docker :--
+-----
+1)In docker we do not do autoscalling automatically manually we need to do.
+2)we need to roll back for the last two version not spcific versions .
+3)We have downtime in docker .
+4)Here we will create containers.
+
+1)Docker is a containerization platform – it creates and runs containers.
+
+2)No built-in auto-scaling – scaling has to be managed manually or with extra tools (like Docker Swarm).
+
+3)Docker supports rollbacks but not as flexibly as Kubernetes (limited compared to deployments in K8s).
+
+4)Possible downtime during container restarts/updates unless load balancing is set up manually.
+
+5)Docker focuses on container runtime and packaging.
+
+Kubernetes:-
+---------
+1)In kubernetes we call autoscalling .
+2)we will roll back for specific version.
+3)we don't have any downtime here.
+4)Here we will create pods. pods contains containers.
+
+
+
+1)Kubernetes is a container orchestration tool, it manages containers (Docker or others like containerd, CRI-O).
+
+2)Supports autoscaling (Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler).
+
+3)Can rollback to specific versions of deployments.
+
+4)Ensures zero-downtime deployments (rolling updates, blue-green, canary).
+
+5)Kubernetes runs pods (group of containers), which sit on worker nodes.
+
+👉 Correction: Kubernetes is not an advanced version of Docker – Docker is for containerization, Kubernetes is for orchestration. They complement each other.
+
+
+
+Kubernetes Architecture :
+-------------------------
+
+Master Node components:-
+-----------------------
+
+1)Operator/client : He will tell api server to create a pods.
+  -------------
+
+2)API Server:-This is the one who is responsiable for creation one create and managing it will send info to etcd.
+  ----------
+
+3)scheduler :- It will decide where the pods need to created. Based on below
+  ----------
+ a) Based on no of pods the server contains.
+ b)And size of server like Ram and storage.
+ c) As a client we can also decide where to create a pod
+
+4) etcd:--
+   -------
+   It contains all the cluster information. It stores values in key data pair.Only api server can access this.
+      
+5)Controller manager:- It will keep an eye on everything help us to create pods ,nodes and services when deleted them automatically with the help of API server.
+  ------------------
+  1)Replication controller:- If any pod or containers will be deleted then it will create them automatically with the help of API server.
+    ---------------------
+  2)Node controller:- It will manages the node when any nodes got deleted then node controller will create them automatically with the help of API server.
+   -----------------
+  3) Service controller:- It will manages services if any service got deleted then it will create them automatically with the help of API server.
+     ------------------
+	 
+6)contrlollers (Node controller / Replication controller / service controller) :-
+  ---------------------------------------------------------------------------
+  
+   1)controllers :-
+     -----------
+	 a)These will monitor by sending the requests the desired no of services that are running.
+	 b)If we deletes then respective controller will create new ones.
+	 c)If node controller does not get any response from any node for 40seconds then it will mark that node as unrechable . we can increase that grace time as well.
+	 
+	 
+Worker components :---
+-------------------
+
+1)kublet :---
+ -------
+   It contains the pod data like how many pods that node contain. And it will tell to api server api server tells to scheduler.
+   
+2)kube-Proxy :-
+-------------
+   It contains the network information.It helps to maintain the netwokconfig between two servers.
+   
+API Server = Gatekeeper + communication hub
+
+etcd = Brain (memory of cluster)
+
+Controllers = Managers (make sure reality matches expectation)
+
+Scheduler = Decision maker (where pods go)
+
+kubelet = Executor (runs pods on node)
+
+kube-proxy = Network manager
+
+   
+3)Pods:- It stores list of containers.
+-------
+
+   
+   
+Clusters:-- cluster is nothing but group of servers.
+--------
+
+They are two types to mantain our cluster.
+
+1)Self managed cluster:-
+----------------------
+1.minikube (single node cluster)
+2.kubeadm(multi node cluster)
+3.kops (multi node cluster)
+4.k3D (multi node cluster)
+
+2)cloud managed k8's cluster :-
+-----------------------------
+a)Aws eks
+b)azure aks
+c)google gks
+d)ibm ike
+
+
+Day-2:-
+-----
+
+minikube:-
+---------
+1)  It is a single node cluster
+2)It contains Api servers ,ETCD database and container runtime
+3)It helps us to containerize the apps.
+4)It helps us development .testing  and expermentation purposes.
+5)Here master and worker runs on the same machine
+6)It is platform independent
+7)By default it will create only one node
+8)Installing manikube is simple as compared to other tools.
+
+Note :- It will not be used in real time.
+
+Requirements to install :--
+---------------------
+1)2cpu's
+2)2gb of memeory
+3)20 gb diskspace
+4)Internet connection
+5)Docker 
+
+1)get it install from offical document
+-------------------------------------
+------->yum install docker -y ;systemctl docker -y
+check the version----->minikube version
+To start minikube ----->minikube start --driver=docker --force
+To check status---->minikube status
+
+vim bashrc
+export PATH=$PATH:/usr/local/bin/
+source .bashrc
+chmod +x kubectl
+mv /usr/local/bin/
+
+
+These are used when we use binary  files for download
+
+
+cli tool for k8s is :---kubectl
+To see list of objects in kubernetes--->kubectl api-resources.
+
+2)install kubectl from official document
+---------------------------------------
+
+Pods:-
+-----
+1)It is a smallest object that we create in kubernetes.
+2)It contains group of containers.
+3)it is like single instance for our appalication.
+4)pods are empherial (short living objects)
+5)Mostly we will create single container in a pod if required we can create multiple containers.
+6)whenever we create a pod the containers inside a pod can share same network,namespace and same volume as well.
+7)while creating a pod we must specify the image along with any necessary configuration and resource limits.
+8)k8's cannot communicate with containers they will communicate only with pods
+9)We can create pods in two ways
+   i)imperative way (command)
+   ii)Declarative way (manifest file)
+   
+
+i)imperative way (command):-
+   -------------------------  
+   
+To create pod--->kubectl run mypod --image=nginx
+To see list of pods--->kubectl get pods
+
+ ii)Declarative way (manifest file) :-
+ ----------------------------------
+ 
+ file name should be any thing
+ 
+ vim demo.yml
+ 
+ ---
+apiVersion: v1
+kind: Pod
+metadata
+  name: jagadeesh-pod
+spec:
+  containers:
+    - name: cont-1
+	  image: shaikmustafa/dm
+	  ports:
+	    - containerPort: 80
+  
+   
+To run --->kubectl apply/create -f  demo.yml
+
+-f--> means file
+
+Day-2:-
+------
+
+Kops cluster -->kubernetes operations.
+
+------------->search kops in google
+
+1)kops
+2)namespaces,labels ,selectors
+
+KOPS :
+----
+
+ It is like a kubectl in clusters .Kops will not only help you in create , destroy,upgrade and maintain production grade highly avaliable, kubernetes cluster
+but also provision the necessary cloud infrastructure. Aws , gcp, open stack , digital ocean and azure will support it .
+
+
+Installation:-
+-------------
+
+1)Kops install
+2)kubectl install 
+3)awscli install
+
+export PATH=$PATH:/usr/local/bin/
+source .bashrc
+
+After installing these -->clusters ,servers, Asg,lb ,sec gp , vpc will create automatically
+
+To create s3 bucket -->aws s3 mb s3://mustafa77.flm.k8s
+
+To check buckets ---->aws s3 ls
+
+To store cluster info in s3 bucket --->export KOPS_STATE_STORE=s3://jagadeesh5484.k8s.local
+
+To create cluster --->kops create cluster --name jagadeesh.k8s.local --zones us-east-1a,us-east-1b,us-east-1c --master-size t2.medium --master-count 1 
+                      --master-volume-size 30 --node-size t2.micro --node-count 2 --node-voulme-size 20
+					  
+To delete cluster---->
+
+1)export KOPS_STATE_STORE=s3://jagadeesh5484.k8s.local.flm
+2)kops delete cluster --name jagadeesh.k8s.local --yes
+3)kops get cluster
+					  
+copy suggestions and paste it some where--->and use it in cluster
+
+to check list of nodes -->kubectl get nodes
+
+To check live data about nodes -->kubectl get no -w   (w-watch)
+
+To see which server does the pod is created --->kubectl get po -o wide
+
+To see the details of pod in yaml format --->kubectl get po -o ymal/json	
+
+To see the full info about pod ---->kubectl describe pod jagadeesh
+
+To delete pod or list of pods -->kubectl delete pod podname/ kubectl delete --all
+
+To enter into the pod -->kubectl -it exec podname -- bash
+
+2)namespaces,labels ,selectors:-
+------------------------------
+
+Labels : these are nothing but adding name/tag to pods and is used to filter , by this will update ,delete expose.It should in key value pair
+
+we can't able to access the app by creating app. the help of pod we can't able to access the app. To access it we need to expose that .
+
+selectors:-- selectors are used to select the label.
+----------
+
+apiVersion: v1
+kind: Pod
+metadata:
+   name: Jagadeesh_pod
+   labels:
+     app: swiggy
+	 company: flm
+	 env: dev
+   
+spec:
+   containers:
+      - name: cont-1
+        image: nginx
+        ports: 
+          - container_port: 80
+
+Equality based selectors:- Here we can select only one label at a time.
+-------------------------
+To see labels ----> kubectl get po --show-lables
+To update labels for existing pod:----	kubectl label pod jagadeesh_pod app=zomato
+
+To see list of pod that belongs to swiggy---->kubectl get po -l app=swiggy
+
+Set based selectors :-- here we can use sets for selecting
+--------------------
+
+-------->kubectl get po -l 'env in (test,dev)'
+--------->kubectl get po -l app!=swiggy
+
+Node selectors:-- 
+--------------
+
+These are used to create pods on specific node.	
+
+---->kubectl get no node_id server=flm
+
+apiVersion: v1
+kind: Pod
+metadata:
+   name: Jagadeesh_pod
+   labels:
+     app: swiggy
+	 company: flm
+	 env: dev
+   
+spec:
+   containers:
+      - name: cont-1
+        image: nginx
+          - ports: 
+              - container_port: 80
+    nodeSelector:
+      server=flm	
+				
+Day-3:-
+-----
+1)Services
+
+
+
+Services :--
+---------
+1) It is a method for exposing pods in your cluster.
+2)Each pod gets its own ip address but we need to access it from ip of the node.
+3)If we want to access pod from inside we use cluster ip 
+4)If the service is of type node port or load balancer it can also be accessed fromoutside the cluster.
+5)It enables the pods to be decoupled from the network topology which makes it easier to manage and scale the appalications.
+
+
+Types of services:-
+
+ 1)Cluster Ip -->this is used to access the db internally with in the server--->use to expose db pods
+ 
+ 2)Node port -->this is used access the app from internet-->range-->30k=30,767
+  a)It used to access it internaly as well
+  b)aswell as external using node port
+ 3)Load balancer -->this is used access the app from internet
+   a)Internally & externally nodeport
+   b)DNS name
+ (Headless Service) → No ClusterIP, used when you need direct access to individual Pod IPs (common in DBs like Cassandra, StatefulSets).
+   
+ 
+ 
+vim services.yml--->clusteIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc/nodeport/svc
+spec:
+  type: clusterIP/NodePort/LoadBalanecer
+  selector: 
+     app: swiggy
+  ports:
+    - port: 80
+	  targetpot: 80
+	  nodePort: 30002
+	  
+---->kubectl create -f services.yml
+----->kubectl get services
+---->To access app with ip it locally --> curl ip
+
+Day-4:-
+------
+
+1)Replication in kubernetes
+
+Replication in kubernetes :--
+--------------------------
+1)Before kubernetes, other tools did not provide important and customized future like replicaton and scaling.
+2)when kubernetes was introduced a replication and scaling where the premium futures.that increased the popularity of containerization and orchestrazation tool
+3)Replication means if that if the pod desired state is set to 3 and whenever any pod gets deleted with the help of replication the new pod will be crated sooon
+  as posiable .this will help us in reduction of down time in appalication
+4)Scaling means if the load on app gets increased then kubernetes increase the number of pods accroding to the load on the appalication.
+
+we have two types of scaling:--
+-----------------------------
+1) Scalein :- It increases the no of pods.
+2)scaleout :- It decreases the no of pods.
+
+Replication controller :- (rc)
+---------------------
+equailty based selectors.
+
+RC-->pods--->containers
+
+Replicaset:-(rs)
+----------
+set based selector.
+
+vim rc.yml
+
+---
+apiVersion: v1
+kind: ReplicationController
+metadata: myrc
+spec:
+  replicas: 3
+  selector: 
+      app: swiggy
+  template:
+    metadata:
+	  labels:
+	    app: swiggy
+	spec: 
+	  conatiners:
+	     - name: cont-1
+		   image: jagadeesh/agriculture:new
+		   ports:
+			 - containerPort: 80
+			 
+
+kubectl create -f rc.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc/nodeport/svc
+spec:
+  type: clusterIP/NodePort/LoadBalanecer
+  selectors: 
+     app: swiggy
+  ports:
+    - port: 80
+	  targetpot: 80
+	  nodePort: 30002
+	  
+---->kubectl create -f services.yml  
+---->kubectl apply -f services.yml --To update the containers. 
+
+scaling:-
+--------
+
+we can do types of scaling .
+1)command -->kubectl scale rc myrc --replicas=2
+2)Editing -->manifest file.
+
+RC:-
+***********************************************************************************************************************************
+RC(eqality based selector)==RS (set based selector )
+
+1)No autoscaling
+2)Downtime
+3)eqality based selector
+
+RS (set based selector )
+-------------------------
+
+1)No autoscaling
+2)Downtime
+3)set based selector
+
+The drawback in rc is if  we change app image then apply modification it will not change the app the old app is running on it.
+Then we need to delete that old rc and create new rc.
+
+we don't have any auto scaling and down time as well if we want upgrade the app.
+we can use only equlaity based selector.
+
+
+
+*********************************************************************************************************************************** 
+
+vim rc.yml
+
+---
+apiVersion: app/v1
+kind: Replicaset
+metadata: myrc
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: swiggy
+  template:
+    metadata:
+	  labels:
+	    app: swiggy
+	spec: 
+	  conatiners:
+	     - name: cont-1
+		   image: jagadeesh/agriculture:new
+		   ports:
+			 - containerPort: 80
+			 
+
+kubectl create -f rc.yml
+
+Replicaset one more
+
+vim rs.yml
+
+---
+apiVersion: app/v1
+kind: ReplicaSet
+metadata: 
+  name: myrc
+spec:
+  replicas: 3
+  selector: 
+    matchExpressions:
+      - key: app
+	    operator: In
+		values:
+		  - swiggy
+		  - zomato
+		  - uber		          			  
+    template:
+    metadata:
+	  labels:
+	    app: swiggy
+	spec: 
+	  conatiners:
+	     - name: cont-1
+		   image: jagadeesh/agriculture:new
+		   ports:
+			 - containerPort: 80
+			 
+
+kubectl create -f rc.yml
+
+Day-5:-
+------
+
+versioning--->rollout
+
+Deployment object:-
+------------------
+1)It has the futures of replicaset and some other extra features like updating and rollbacking to a particular version.
+2)The best part of deployment is we can do it without downtime.
+3)we can update container image or configuration of an app.
+4)Deployment also provide you features like versioning that is help us to track the changes of appalication.
+5)It has pause feature 	which allows you to temprorily stop the updates of appalication
+6)Scaling can be done manually or automatically based on the metrics such as cpu utilization or requests per second.
+7)Deployment will create replicaset,replicaset will create pods
+8)If you delete deployment ,deployment will delete replicaset ,replicaset will delete pods.
+
+vim Deployment.yml
+
+---
+apiVersion: app/v1
+kind: Replicaset
+metadata: myrc
+spec:
+  replicas: 3
+  selector: 
+    matchExpressions:
+      - app: swiggy 		          			  
+  template:
+    metadata:
+	  labels:
+	    app: swiggy --->apply image change and check
+	spec: 
+	  conatiners:
+	     - name: cont-1
+		   image: jagadeesh/agriculture:new
+		   ports:
+			 - containerPort: 80
+			 
+
+kubectl create -f rc.yml
+kubectl set image deploy flm cont-1=jagadeesh/agriculture
+
+
+
+
+vim service.yml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc/nodeport/svc
+spec:
+  type: clusterIP/NodePort/LoadBalanecer
+  selectors: 
+     app: swiggy
+  ports:
+    - port: 80
+	  targetpot: 80
+	  
+	  
+	  
+Roll back to version:--
+--------------------
+
+To Roll back---->kubectl rollout undo deploy flm --to-revision=2
+To check whether it is rollout or not -->kubectl rollout status deploy flm
+To check history--->kubectl rollout  history deploy flm
+
+Why no downtime in kubernetes(rolling update stratagy) :-
+------------------------------------------------------
+
+when ever we are updating image then automatically a new replicaset  will be created and the old replicaset pods will be deleted one by one on creating new 
+pods to the new image so that's why there should be no image.
+
+How versioning roll back has been done?
+---------------------------------------
+when ever we are updating the image then new replicaset will be created the old replicaset will not be deleted when ever we are rolling back to the previous 
+version then we will be switching to the old replicaset will be craeted as new again and pods will be created.
+
+Scalling:-
+--------
+Manual scalling :- It is done by entering into file and change the value or by using command.
+
+Autoscaling :--
+
+1)Horizontal pod scaling:-
+
+Increasing the no of pods with same configurations we call it as horizontal scaling.
+
+2)Vertical pod scaling :-
+
+Increasing the memory and cpu of pod without configuration we call it as verical scaling.
+
+
+---------->Install it from google<---------------
+
+vim hpa.yml
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: myhpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mydeploy
+  minReplicas: 3
+  maxReplicas: 7
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+
+kubectl create -f hpa.yml
+
+kubectl top pod
+
+--->kubectl rollout pause deploy flm--->we can pause the update with the help of this.
+--->kubectl rollout resume deploy flm
+
+Day-6:-
+-----
+
+statefulset
+daemonset
+
+statefullset:--
+------------
+
+stateless-->no past data.-->deployment model
+
+statefulset-->it stores past data and creates containers based on where it has deleted there only it will be created.It will be used for databases.
+Here is deployment is stateless which does not contains past data it is used in deployment model.
+In deployment model pods will create randomly and delete randomly But In statefull by cloning the other pod data a new pod will be created.If we delete the pod
+the latest pod got deleted and old pod will store data as it is.
+
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: myss
+spec:
+  replicas: 3
+  selector: 
+    matchExpressions:
+      - app: swiggy 		          			  
+  template:
+    metadata:
+	  labels:
+	    app: swiggy --->apply image change and check
+	spec: 
+	  conatiners:
+	     - name: cont-1
+		   image: jagadeesh/agriculture:new
+		   ports:
+			 - containerPort: 80
+			 
+			 
+DeamonSet:- Used for monotoring.It will create one pod on every node server with the help of that will monitor every node.It will not support replicas.
+----------
+
+---
+apiVersion: app/v1
+kind: DaemonSet
+metadata: 
+  name: myds
+spec:
+  selector: 
+    matchExpressions:
+      - app: swiggy 		          			  
+  template:
+    metadata:
+	  labels:
+	    app: swiggy --->apply image change and check
+	spec: 
+	  conatiners:
+	     - name: cont-1
+		   image: jagadeesh/agriculture:new
+		   ports:
+			 - containerPort: 80
+			 
+Day-7:-
+-----
+Config_maps:-
+------------
+
+If we want to send data to the pod we make use of configmaps i.e.. data injection
+
+1)config maps are used to store the configuration data in key-value pairs in kubernetes.
+2)But the data should be non-confidential
+3)This is one of the ways to decouple the configuration of appalication to get rid of hardcoded values.
+4)Also if we observe some important values keep changing accroding the environments such as development,testing,production etc..Configmaps helps to fix the issue
+  to decouple the configurations
+5)So we can set the configuration of data of appalication saperately
+6)But it does not provide security and encryption .if we want to encrypt data make use of secrets in kubernetes.
+7)Limit of config map data only 1mb (we cannot store more than that)
+8)But if we want to store large ammount of data in config maps we have to mount a volume or use database or file service
+
+We can create configmap in two ways
+1)Imperative way
+  a)--from-literall
+  b)--from-file
+  c)--from-env
+2)Declarative way
+
+
+a)--from-literall :
+
+   kubectl create cm firstcm --from-literal=cloud=aws --from-literal=course=devops --from-literal=trainer=mustafa
+   kubectl describe cm firstcm
+   kubectl get cm
+   
+ b)--from-file
+     vim file.txt
+	 
+	 cloud=aws
+	 course=devops
+	 trainer=mustafa
+	 
+	 kubectl create cm secondcm --from-file=file.txt
+	 
+	 It will show the data as one unit of data
+	 
+c) --from-env 
+     vim file3.env
+    
+	  cloud=aws
+	 course=devops
+	 trainer=mustafa
+	 
+	 It will show 3 lines of data
+	 
+	  kubectl create cm secondcm --from-env-file=file.txt
+	 
+To delete config map -->kubectl delete cm firstcm
+
+
+
+2)Declarative way:-
+
+vim config.yml
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmfour
+data:
+  db_host: "mysql.flm.server"
+  dbport: "3306"
+  
+To_attach configmap to pod:-
+----------------------------
+
+1) To inject entire pod data
+
+vim pod.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+spec:
+  containers:
+     - name: cont-1
+	   image: nginx
+	   ports:
+	     - containerPort: 80
+		 
+	   envFrom:
+	     - configMapRef:
+		      name: firstcm
+			  
+2)Add values from 3 files one one value.
+	     
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+spec:
+  containers:
+     - name: cont-1
+	   image: nginx
+	   ports:
+	     - containerPort: 80
+		 
+	   env:
+	     - name: myenv
+		   valueFrom:
+		     configMapKeyRef
+			 key: cloud
+			 name: firstcm
+		 
+	     - configMapRef:
+		      name: firstcm 
+			  
+myenv: aws
+
+don't use --from-file it is throwing some errors while executing.
+
+Day-8:-
+-----
+Secrets & Namespaces
+
+Secrets:- Here we will use confidential data
+
+1)Here also we cannot pass data more than 1mb if we want we make use of volumes.
+
+1)--from-literal
+
+--->To create secret from literal-->kubectl create secret generic firstsecret --from-literal=username=admin --from-literal=password=admin@123
+
+2) .env
+
+vim secondsecret.env
+
+name=jagadeesh
+age=25
+place=hyd
+
+
+kubectl create secret generic secondsecret --from-env-file=secondsecret.env
+kubectl get secret
+kubectl describe secret secondsecret
+kubectl get secret -o yaml/json
+
+
+3) vim thirdsecret.yml
+
+---
+apiVersion: v1
+kind: Secrets
+metadata:
+  name: thirdsecret
+type: Opaque
+data:
+  DB_url: "base64"
+  Db_username: "base64"
+  DB_Password: "base64"
+  
+echo "www.mysql.com" | base64
+echo "Admin" | base64
+echo "Admin@123" | base64
+
+echo xyzxxabcedf | base64 --decode
+
+kubectl create secret generic thirdsecret --from-env-file=secondsecret.env
+kubectl get secret
+kubectl describe secret second secret
+kubectl get secret thirdsecret -o yaml/json
+
+
+vim pod.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+spec:
+  containers:
+    - name: cont-1
+	  image: shaikmustafa/dm
+	  ports:
+	    - containerPort: 80
+	  envFrom:
+	    - secretRef: 
+		    name: thirdsecret
+
+kubectl create secret generic thirdsecret --from-env-file=secondsecret.env
+kubectl get secret
+kubectl describe secret second secret
+kubectl get secret thirdsecret -o yaml/json
+kubectl exec -it pod-1 -- bash
+printenv
+
+Task-->create a private image in dockerhub and access it in pod
+
+
+Namespace:- It is used to isolate group of resources.
+----------
+
+There are four namespaces created by default.
+
+1)default:-
+  -------
+  what ever we will create it will create ny default in default name space.
+  
+2)kube-system :-
+  -------------
+  kubernetes itself runs services like DNS, Networking etc in kube-system. what ever we install it will stay here.
+  
+  EX :- when we create a cluster info like API-server,control manager ,scheduler ,kube-proxy ,etcd,kube DNS all related info present in kube system
+
+    we can see by using:-->kubectl get pods -n kube-system
+	                       we should not deploy our own apps here
+						   
+3)kube-public :-
+ -------------
+ This is used for things everyone in the cluster should be able to read like cluster information should be avaliable to all users without authentication usually 
+ not used often
+						   
+$)kube-node-lease :-
+  ---------------
+  It helps kubernetes check if nodes are still working by storing their regular checkings .It sends one signal to each node if node is alive then
+  communication will come back else not
+  
+
+ 
+ 
+
+
+------>To create in imperative --->kubectl create ns dev
+
+Delcarative ways
+
+vim namespace.yml
+
+---
+apiVersion: v1
+kind: NameSpace
+metadata:
+  name: dev
+  
+kubectl create -f my ns
+kubectl get ns
+
+
+To create pod in ns--->kubectl run pod2 --image=nginx -n dev
+To check -->kubectl get po -n dev
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  nameSpace: test
+spec:
+  containers:
+    - name: cont-1
+	  image: shaikmustafa/dm
+	  ports:
+	    - containerPort: 80
+		
+kubectl create -f pod.ym -n dev
+kubectl get po -n dev
+
+		  
+To switch the namespace -->kubect config set-context --current --namespace=dev
+To see-->kubectl config view | grep -i "name"
+To see list of resource in name space -->kubectl get all -n dev
+
+Day-9:-
+-----
+Resource Quota
+Rbac
+vertical pod autoscaler
+
+
+Resource Quota:-
+---------------
+It is one of the rich future in kubernetes that helps to manage and distribute the resources accroding to the requiremnets. (With requests and limits)
+
+Example:- Let us assume two teams are working on single cluster holding two apps A and B
+         Team A is working on big app so they are holding heavy load and team B is small app and less load
+		 
+		 
+If namespace has limits then pods also has limits if pod consumes extra consumption then it will not reach for user.
+
+
+vim one.yml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod
+spec:
+  containers:
+    - name: cont-1
+      image: nginx
+      ports: 
+        - containerPort: 80
+	  resources:
+	     requests:
+		    memory: "10Mi"
+			cpu: "100m"
+		 limits:
+		   memory: "20Mi"
+		   cpu: "200m"
+
+request:--mimimum cpu or memory
+limit: maximum cpu or memory
+
+mb--->1*10power6
+mib-->2*10power20
+***If we set requests for a pod not limits then that pod will take whatever the data it want.
+***If we set limits to pod not the requests then limits is equal to requests.
+ 
+Creating resoucequota for a name space:-
+---------------------------------------
+
+kubectl create ns dev
+
+vim rq.yml
+
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: my-rq
+spec:
+  hard:
+    limits.cpu: "500m"
+    requests.cpu: "250m"
+    limits.memory: "500Mi"
+    requests.memory: "250Mi"
+
+
+kubectl create -f rq.yml -n dev
+kubectl describe ns dev
+
+--->create one pod  and check free space
+
+
+RBAC:-(Role based access control)It povides security to our cluster. authentication & authorization
+-----
+
+operator -->Create pod-->Authentication-->Authorization-->Admission control-->kubernetes objects
+
+operator told to create a pod then Authentication :(means checks whether the user is a valid user who can access cluster) there after:(checks whether the 
+user is authorized to perform the requested actions ) Then admission control : (checks whether the request is secure and compliant) then it goes to kubernetes
+objects. Afetr pod created deleted or seen by user
+
+human account: what we used to do
+------------
+service account: kubernetes used to communicate with one service to other
+---------------
+
+There are four types of access in k8's3
+
+1)Role -->here we will give permmissions like read,view ,watch we call it as role
+2)Role binding-->attaching a role to user we call it as role binding.-->single name space -->role--role binding
+3)cluster-role-->here we will create a cluster role by giving permissions like read write watch
+4)cluster-role binding-->attaching that cluster role to user we call it as cluster role binding. allnamespace-->cluster-role--cluster role binding
+
+context-->it is used to switch the user .
+
+
+*********************************************
+
+need to know cluster-role manifest files.
+
+**********************************
+
+Day-10:-
+------
+
+volumes
+kops cluster
+two containers-->1)App container 2)Helper container
+
+volumes:-Basically these kubernetes will work on short living data So let us unveil the power of volumes like Emptydir,HostPath pv & PVC
+-------
+The data is very important thing for an appalication .IN kubernetes the data is kept for shorttime in appalications in the pods/containers . By default the data
+will no longer availabile By overcoming these we make use of kubernetes volumes.
+
+By Before going into types of volumes lets understand types of and containers and short live data.
+
+--------->kubectl events pod pod-1
+
+
+vim deploy.yml
+
+---
+apiVersion: v1
+kind: deployment
+metadata:
+  - name: mydeploy
+spec:
+  replicas: 2
+  selectors:
+    matchLabels:
+	  - name: swiggy
+  template: 
+     metadata:
+	   labels:
+	     app: swiggy
+  spec:
+    containers:
+	   - name: cont-1
+	     image: ubuntu
+	     command: ["/bin/bash", "-c" ,"while true;do echo "welcome to flm " done"]
+		 volumeMounts:
+		   - name: devops
+		     mountPath: /tmp/jenkins
+	   - name: cont-2
+	     image: ubuntu
+	     command: ["/bin/bash", "-c" ,"while true;do echo "welcome to flm " done"]
+	      volumeMounts:
+		   - name: devops
+		     mountPath: /tmp/docker
+	volumes:
+	  - name: devops
+	    emptyDir: {} (or) hostPath: 
+		                       path: /tmp/mydata
+		
+
+-c ---> command
+
+To enter in specific container:- check in containers whether data replication is working or not
+
+1)kubectl exec -it pod-1 -c cont-1-- bash
+
+Drawbacks:-
+-----------
+
+Data replication will not happen when new pod got created.
+
+HostPath:- Advanced version of emptydir.Here we will attach volume to server.
+---------
+
+vim deploy.yml
+
+---
+apiVersion: v1
+kind: deployment
+metadata:
+  name: mydeploy
+spec:
+  replicas: 2
+  selectors:
+    matchLabels:
+	  - name: swiggy
+  template: 
+     metadata:
+	   labels:
+	     app: swiggy
+  spec:
+    containers:
+	   - name: cont-1
+	     image: ubuntu
+	     command: ["/bin/bash", "-c" ,"while true;do echo "welcome to flm " done"]
+		 volumeMounts:
+		   - name: devops
+		     mountPath: /tmp/jenkins
+	   - name: cont-2
+	     image: ubuntu
+	     command: ["/bin/bash", "-c" ,"while true;do echo "welcome to flm " done"]
+	      volumeMounts:
+		   - name: devops
+		     mountPath: /tmp/docker
+	volumes:
+	  - name: devops
+        hostPath: 
+		  path: /tmp/mydata
+		  
+Drawbacks :-
+-----------
+  If node got deleted then data also got deleted.
+  
+PV & PVC :- Persistant volume & persistant volume claim .It is advanced than empty dir and hostpath
+---------
+EBS-->pv-->pvc--pod
+
+1)Create EBS volume
+2)create pv
+
+vim pv.yml
+
+---
+apiVersion: v1
+kind: PersistantVolume
+metadata:
+  name: pv1
+spec:
+  capacity:
+    Storage: 4Gi
+  accessModes:
+     - ReadWriteonce
+  PersistantVolumeReclaimPolicy: Recycle
+  awsElasticBlockStore:
+    volumeID: id
+    fsType: ext4
+
+vim pvc.yml
+
+---
+apiVersion: v1
+kind: PersistantVolumeClaim
+metadata:
+  name: pvc1
+spec:
+  accessModes:
+     - ReadWriteonce
+  resources:
+    requests:
+	   storage: 3Gi
+	   
+vim pod.yml
+
+vim deploy.yml
+
+---
+apiVersion: v1
+kind: deployment
+metadata:
+  name: mydeploy
+spec:
+  replicas: 2
+  selectors:
+    matchLabels:
+	  - name: swiggy
+  template: 
+     metadata:
+	   labels:
+	     app: swiggy
+  spec:
+    containers:
+	   - name: cont-1
+	     image: ubuntu
+	     command: ["/bin/bash", "-c" ,"while true;do echo "welcome to flm " done"]
+		 volumeMounts:
+		   - name: devops
+		     mountPath: /tmp/jenkins
+	   - name: cont-2
+	     image: ubuntu
+	     command: ["/bin/bash", "-c" ,"while true;do echo "welcome to flm " done"]
+	      volumeMounts:
+		   - name: devops
+		     mountPath: /tmp/docker
+	volumes:
+	  - name: devops
+        persistantVolumeClaim:
+		claimName: pvc1
+		
+		
+kubectl create -f pv.yml
+kubectl get pv
+kubectl create -f pvc.yml
+kubectl get pvc
+
+check by giving some files whether replication is working or not
+
+
+Day-11:-
+-------
+Helm--Install from helm.sh
+
+Helm:- Helm is a kubernetes package manager in which multiple no of Yaml files.such as backend and frontend come under one roof(helm) and deploy using helm.
+----
+
+Helm = frontend + backend + database
+
+If we want to deploy app using yaml files then we need 100's of manifest there come helm
+
+3 services -->15 manifest files 
+
+The components in helm:-
+-----------------------
+
+-->To create helm chart--->helm create devops
+--->To run helm chart -->helm install release-1 .
+---> To release one more time -->helm upgrade release-2 .
+--->To see history of deployment--->helm history version-1
+--->To rollback-->helm rollout version-1:1
+--->To roll back to specific version--->helm rollback version-1 1
+--->to check list of helms--->helm list
+--->To uninstall helm-->helm uninstall version-1 
+--->To check data inside manifest files -->helm template .
+--->To check syntax--->helm install aws --debug --dry-run
+-->to check list of repos--> helm repo list
+--->To update helm -->helm repo update
+--->To create our own helm--->helm lint myapp
+--->To pack appalication -->helm package myapp
+
+To create new helm chart:--
+---------------------------
+
+1) helm create paytm
+2)cd paytm/template
+3)rm -rf * and add some files
+4)helm install test .  (check service , pods and deployment)
+5)helm uninstall test
+6)To test-->helm lint . && helm template .
+7)helm package paytm
+8)helm repo index .
+9)git init  . --> git add * ---> git commit -m "first rpo and push git hub" . --->git clone ---> git add orign httpslink --->git push -u origin master -->
+10) goto github--->settings ---->pages ---> master /root save --->get url and paste in browser
+
+
+
+
+
+1)charts.yml :-- It stores tags apiVersons and and some dependencies related to appalication.
+
+2)Templates:- It contains predefined manifest files.
+   --------
+3)
+
+**Install jenkins using helm charts
+
+To create helm chart:-
+
+packthe app
+
+
+Day-12 :-
+--------
+ArgoCD
+
+
+gitops:-git ops is a way of managing software infracture and deployments using git as a source of truth
+-------
+
+Git as a source of truth:- In gitops all our configurations like (deployments,secrets etc ..)are stored in git repository.
+-------------------------
+
+Automated process:--
+------------------
+whenever we make any change in those yaml files gitops tools like (ArgoCd/Flux) will detect and apply those changes on kubernetes cluster. It ensures that the
+live infrastructure matches the configuraions in git repository. Here we can clearly observer that contineous deployment . whenever we make any changes in git
+It will automatically refelcts in kubernetes clister.
+
+
+ArgoCD :-- This tool is used to automate the process .when we write the then we can deploy from here directly by integrating it with cluster.
+--------	
+We can see any inforamtion by using this tool and we can do whatever we are doing it with kubectl.
+
+Without ArgoCd:-
+--------------
+1)Before ArgoCD we deployed appalications manually by installing some third party tools like kubectl,helm etc
+2)If we are working with KOPS we need to provide configuration details (RBAC) or If we are working on EKS we need to provide our IAM credentials .
+3)If we deploy any appalication There is no GUI to see status of deployment.
+4)So we are facing some security challenges and need to install some third party tools.
+
+ArgoCD installation:-
+--------------------
+1) install helm.
+2)
+
+
+
+Day-13:-
+-------
+Aws waveoff
+promethieus & graffana
+
+
+Promethieus-->we give raw data and send it too grafana
+grafana--> It will take raw data and shows the visuliation grafana will be used.
+
+create two name spaces for promethieus and grefana with help of helm 
+
+
+Deployment stratagies:- These are nothing but deploying the appalication without downtime.
+----------------------
+
+These are the techniques which are used to manage rollout and scalling of an appalication within a kubernetes cluster
+1)canary Deployment
+2)Recreate Deployment
+3)Rolling update Deployment
+4)Bluegreen Deployment
+
+1)canary Deployment:- It is stratagy that first the appalication update will be sent some pods based on customer reviews and feedbacks they will update some 
+  ------------------
+  and release it to all pods.
+  
+2)Recreate Deployment:-
+ --------------------
+  In this strategy .the exististing version of appalication is terminated completely and new version is deployed in it place This apparoach is simple but may 
+  cause downtime in update
+  
+  EX: Replication controller.
+  
+3)Rolling update Deployment :-  
+ --------------------------
+ In this stratagy ,It starts creating a few pods of new version .It monitors the new pods to make sure they are healthy and working well.If new pods are working
+ fine ,Kubernetes gradually increases their number while reducing the old pods.
+ 
+4)Bluegreen Deployment:-
+  --------------------
+  A Blue green deployment is a way of accomplishing a zero-downtime upgrading existing appalication. The blue version is the currently running  the copy of
+  appalication and green version is the new version. Once the green version is ready traffic is routed to new version
+
+  
+Day-14:-
+------
+Probes
+jobs --> Pods
+cronjobs
+Network policies.
+
+
+Probes :- These are used to check the health and readiness of containers running within the pods.There are 3 types of probes.
+-------
+
+1)Readiness probe:- It is used to check the container is running and ready to recive the traffic 
+  ---------------
+2)Liveness probe:- These are used to determine whether a container is still running and responding to the requests.
+  --------------
+3)Startup Probe:- It helps us to check whether the application is running on the container or not
+  -------------
+
+
+Kubernetes jobs:- It is a resource that is used to achieve a particular work like backup script and once the work is completed then the pod would be deleted.
+---------------
+
+Use cases:-
+---------
+1)Database backup script needs to run 
+2)Running batch process.
+3)Running the task on schudled intervel.
+4)Log rotation
+
+Key Features:-
+-------------
+1)One time execution :-If we have a task that needs to be executed one time whether it should be succed or fail then job will be finished.
+2)Parallelism:- if you want to run multiple pods at a time.
+3)Scheduling:- If you want to schedule a specific number of pods after a specific time
+4)RestartPolicy:- You can specify whether the job should be restart if it fails.
+
+vim jobs.yml
+
+---
+apiVersions: batch/v1
+kind: Job
+metadata:
+  name: job-1
+spec:
+  template: 
+    metadata: 
+	  name: Testjob
+    spec:
+	  conatiners:
+	     name: cont-1
+		 image: nginx
+		 command: ["/bin/bash","-c" ,"sudo apt update -y;sleep 30"]
+	  restartPolicy: Never/always
+  
+
+
+Cronjob:-
+--------
+
+apiVersions: batch/v1
+kind: CronJob
+metadata:
+  name: job-1
+spec:
+  schedule: " * * * * * "
+  jobTemplate: 
+    spec:
+	  template:
+	    spec
+	     conatiners:
+	       - name: cont-1
+		     image: nginx
+		     command: ["/bin/bash","-c" ,"sudo apt update -y;sleep 30"]
+	     restartPolicy: Never/always
+		 
+
+Network policies :- These are used to break or add the communication between the pods.
+----------------
+
+Ingress:--Incoming requests
+egress:-outgoing requests
+
+Day-15 :-
+------
+Ingress
+node affinity
+kubernetes dashboard
+QOS
+
+
+
+Ingress :-
+-------
+1)Hostbased -->Based on service routing will happen we call it as hostbased routing.
+2)path based--->movies will route based on path that we call it as path based routing.
+
+node affinity
+
+kubernetes dashboard
+
+
+
+------------------------------------------------------------ Install kubectl commands extension ----------------------------------------
+
+sudo yum install -y bash-completion
+echo 'source <(kubectl completion bash)' >> ~/.bashrc
+source ~/.bashrc
+echo 'alias k=kubectl' >> ~/.bashrc
+echo 'complete -F __start_kubectl k' >> ~/.bashrc
+source ~/.bashrc
+
+To Stop instance ins kops:--->aws ec2 stop-instances --instance-ids i-02bf53ca9fc61bbf6 i-0f4cff3e54b030844
+
+
+
+Private secret in docker hub
+
+kubectl create secret docker-registry dockerhub --docker-username=jagadeesh9088 --docker-password=
+
+
+
+1)crashLoopbackofferror:-
+  ---------------------
+  
+  the container will be creating state (creatingcontainerconfigerror) -->This error is because 
+  
+  1) when we give wrong configmap we will get this error
+  2)check this by describing--->kubectl describe pod mypod	
+  
