@@ -1117,7 +1117,92 @@ context-->it is used to switch the user .
 
 *********************************************
 
-need to know cluster-role manifest files.
+context-->it is used to switch the user .
+
+steps to create:-
+---------------
+required --->
+[root@ip-172-31-32-200 jagadeesh]# ll
+total 12
+-rw-r--r--. 1 root root 1115 Oct 27 02:39 jagadeesh.crt
+-rw-r--r--. 1 root root  915 Oct 27 02:37 jagadeesh.csr
+-rw-------. 1 root root 1704 Oct 27 02:32 jagadeesh.key
+[root@ip-172-31-32-200 jagadeesh]#
+
+1)lets create a folder -->mkdir jagadeesh && cd jagadeesh
+2)Generate a key using openssl -->openssl genrsa -out jagadeesh.key 2048
+3)Generate a Client Sign Request (CSR) :----> openssl req -new -key jagadeesh.key -out jagadeesh.csr -subj "/CN=jagadeesh/O=group1"
+4)Generate the certificate (CRT):--->openssl x509 -req -in jagadeesh.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out jagadeesh.crt -days 500
+
+Steps to create user.
+
+lets create a user:--->kubectl config set-credentials jagadeesh --client-certificate=jagadeesh.crt --client-key=jagadeesh.key
+Set a context entry in kubeconfig:----> kubectl config set-context my-context --cluster=minikube --user=jagadeesh
+To see the user:----->  kubectl config view
+Switch to user:---->  kubectl config use-context my-context
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: dev
+  name: dev-role
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev-role-binding
+  namespace: dev
+subjects:
+- kind: User
+  name: mustafa
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: dev-role
+  apiGroup: rbac.authorization.k8s.io
+
+
+imperative way:--
+----------------
+kubectl create role admin --verb=get,list,watch,create,update,delete --resource=pods,deployments -n dev
+kubectl create rolebinding role-binding-name --role=role-name --user=user-name
+kubectl get rolebinding -n dev
+kubectl auth can-i delete pod --as mustafa
+
+
+cluster-role :--
+-----------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mustafa-cluster-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "deployments"]
+  verbs: ["get", "watch", "list", "create"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "watch", "list", "create", "delete"
+
+----
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cluster-role-binding
+subjects:
+- kind: User
+  name: mustafa
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: mustafa-cluster-role
+  apiGroup: rbac.authorization.k8s.io
 
 **********************************
 
