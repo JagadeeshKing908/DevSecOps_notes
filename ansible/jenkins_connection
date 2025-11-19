@@ -1,0 +1,78 @@
+Client = Jenkins server
+→ must use a private key at /var/lib/jenkins/.ssh/id_rsa
+
+🧠 Key Point
+🔥 PRIVATE key is ALWAYS used by the connecting side (client).
+🔥 PUBLIC key is ALWAYS used by the target machine (server).
+
+There is no SSH connection without the private key.
+
+🖼️ Think of it like this:
+Public key = Lock (installed on server)
+Private key = Key (which is used to open tha lock)
+
+To connect jenkins server with ansible we need to copy private key of user in the linux server which need to perform actions using ansible in 
+jenkins home directory /var/lib/jenkins/.ssh/id_rsa with necessary permissions
+
+sudo cp /home/jagadeesh/.ssh/id_rsa /var/lib/jenkins/.ssh/
+sudo chmod 600 /var/lib/jenkins/.ssh/id_rsa
+sudo chown jenkins:jenkins /var/lib/jenkins/.ssh/id_rsa
+
+To verify access ---> sudo -u jenkins ssh -v jagadeesh@worker-1
+
+In jenkins:-
+-----------
+Take multi-string parameter--> hosts variable
+playbook-path---> /var/lib/jenkins/workspace/first/playbook.yml
+file or host_list --> /etc/ansible/hosts
+in advanced -->-u jagadeesh -e "host_list=$HOST_LIST" 
+
+
+Playbook Strucure:
+----------------------
+
+- name: System Info
+  hosts: "{{ host_list }}"
+  become: yes
+  connection: ssh
+  tasks:
+    - name: Checking the server is registred or Not
+      shell: subscription-manager identity
+      register: subscribe
+      ignore_errors: yes
+    - name: Subscription Details
+      debug:
+        msg: " {{ subscribe.stdout_lines }} "
+    - name: os & kernel info
+      debug:
+        msg: " {{  ansible_distribution }} - {{ansible_kernel }}"
+    - name: Check excluded packages in yum.conf
+      shell: "diff /etc/yum.repos.d/amazonlinux.repo /etc/yum.repos.d/kernel-livepatch.repo | grep -i exc "
+      register: excluded_packages
+      ignore_errors: yes
+    - name: Packages excluded
+      debug:
+        msg: "{{ excluded_packages.stdout }}"
+    - name: hostnamectl command
+      shell: hostnamectl
+      register: vm_server
+      ignore_errors: yes
+    - name: vm or server
+      debug:
+        msg: "{{ vm_server.stdout_lines }}"
+
+directly creates user and add ssh key to it
+#!/bin/bash
+sudo useradd minister
+echo "minister:123" | sudo chpasswd
+sudo touch /etc/sudoers.d/10_Temp_root_access
+echo "%minister ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/10_Temp_root_access1
+sudo visudo -c
+sudo mkdir /home/minister/.ssh
+sudo chown minister:minister /home/minister/.ssh
+sudo chmod 700 /home/minister/.ssh
+sudo touch /home/minister/.ssh/authorized_keys
+sudo chown minister:minister /home/minister/.ssh/authorized_keys
+sudo chmod 600 /home/minister/.ssh/authorized_keys
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCi3kFf6U2seE66KDAsnic3vJ7JPTuUjmPTNW4Dqkh3Hml544oIBWH+CLI+wDEwoAIl/TZa04tfaca+jo1YToejVROy9M3BbJ00Chw9ktOZ8nomOSorxDtwzjXMKhcJEwl3ISjN1xXmzE6iyED4/HiiAtIR/YGG0QsGxBGORCf/2SKgORT35GEUv23ovYO/8a3gByGKjDDLf6Qh3b8Mc1LhMBnE63KuRlOOlSUOeotjuKZZ4R8XJZEc39i8coBS/gLp4nqWV4pHaIRbfFXffqeljYb7ICB26yw/7sdeZJrWvdnlt1lkOX1LafDSeTDrXK4ImR0lOHeVX0hs+bjkbwg3CECG19dyLT6+7Tcr/3z5AVu0Ao17RLZloR/EZqWwXUWRbPQtg4ZheNva9J+Nx/lgDMPxU526+yG00MaznX1rDtiKFqJoL3hQ+sh89aEpMThVmgaRDScSGbFkivcTvYiqK6lPgAnvAfMbXT4muVawOdyIxhi0ey22evR1/D4w2jk= minister@ip-172-31-13-142.ap-south-1.compute.internal"  | sudo tee /home/minister/.ssh/authorized_keys
+systemctl restart sshd
