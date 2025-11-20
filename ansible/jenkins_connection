@@ -62,17 +62,19 @@ Playbook Strucure:
         msg: "{{ vm_server.stdout_lines }}"
 
 directly creates user and add ssh key to it
+
+
 #!/bin/bash
-sudo useradd minister
-echo "minister:123" | sudo chpasswd
-sudo touch /etc/sudoers.d/10_Temp_root_access
-echo "%minister ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/10_Temp_root_access1
-sudo visudo -c
-sudo mkdir /home/minister/.ssh
-sudo chown minister:minister /home/minister/.ssh
-sudo chmod 700 /home/minister/.ssh
-sudo touch /home/minister/.ssh/authorized_keys
-sudo chown minister:minister /home/minister/.ssh/authorized_keys
-sudo chmod 600 /home/minister/.ssh/authorized_keys
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCi3kFf6U2seE66KDAsnic3vJ7JPTuUjmPTNW4Dqkh3Hml544oIBWH+CLI+wDEwoAIl/TZa04tfaca+jo1YToejVROy9M3BbJ00Chw9ktOZ8nomOSorxDtwzjXMKhcJEwl3ISjN1xXmzE6iyED4/HiiAtIR/YGG0QsGxBGORCf/2SKgORT35GEUv23ovYO/8a3gByGKjDDLf6Qh3b8Mc1LhMBnE63KuRlOOlSUOeotjuKZZ4R8XJZEc39i8coBS/gLp4nqWV4pHaIRbfFXffqeljYb7ICB26yw/7sdeZJrWvdnlt1lkOX1LafDSeTDrXK4ImR0lOHeVX0hs+bjkbwg3CECG19dyLT6+7Tcr/3z5AVu0Ao17RLZloR/EZqWwXUWRbPQtg4ZheNva9J+Nx/lgDMPxU526+yG00MaznX1rDtiKFqJoL3hQ+sh89aEpMThVmgaRDScSGbFkivcTvYiqK6lPgAnvAfMbXT4muVawOdyIxhi0ey22evR1/D4w2jk= minister@ip-172-31-13-142.ap-south-1.compute.internal"  | sudo tee /home/minister/.ssh/authorized_keys
+useradd jagadeesh
+echo "jagadeesh:123" |  chpasswd
+touch /etc/ers.d/10_Temp_root_access
+echo "%jagadeesh ALL=(ALL) NOPASSWD:ALL" |  tee -a /etc/ers.d/10_Temp_root_access1
+visudo -c
+mkdir /home/jagadeesh/.ssh
+chown jagadeesh:jagadeesh /home/jagadeesh/.ssh
+chmod 700 /home/jagadeesh/.ssh
+touch /home/jagadeesh/.ssh/authorized_keys
+chown jagadeesh:jagadeesh /home/jagadeesh/.ssh/authorized_keys
+chmod 600 /home/jagadeesh/.ssh/authorized_keys
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCi3kFf6U2seE66KDAsnic3vJ7JPTuUjmPTNW4Dqkh3Hml544oIBWH+CLI+wDEwoAIl/TZa04tfaca+jo1YToejVROy9M3BbJ00Chw9ktOZ8nomOSorxDtwzjXMKhcJEwl3ISjN1xXmzE6iyED4/HiiAtIR/YGG0QsGxBGORCf/2SKgORT35GEUv23ovYO/8a3gByGKjDDLf6Qh3b8Mc1LhMBnE63KuRlOOlSUOeotjuKZZ4R8XJZEc39i8coBS/gLp4nqWV4pHaIRbfFXffqeljYb7ICB26yw/7sdeZJrWvdnlt1lkOX1LafDSeTDrXK4ImR0lOHeVX0hs+bjkbwg3CECG19dyLT6+7Tcr/3z5AVu0Ao17RLZloR/EZqWwXUWRbPQtg4ZheNva9J+Nx/lgDMPxU526+yG00MaznX1rDtiKFqJoL3hQ+sh89aEpMThVmgaRDScSGbFkivcTvYiqK6lPgAnvAfMbXT4muVawOdyIxhi0ey22evR1/D4w2jk= jagadeesh@ip-172-31-13-142.ap-south-1.compute.internal"  |  tee /home/jagadeesh/.ssh/authorized_keys
 systemctl restart sshd
