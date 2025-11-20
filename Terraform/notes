@@ -1,0 +1,1143 @@
+DAY:-1:-
+-------
+
+Terraform : (IAAC--Infrastructure as a code)
+
+It is a tool that is used for infrastructure as a code.
+
+the tools that are same as teraform in cloud we use services IF we are use :
+ 
+Aws-- CFT (cloud formation template ) 
+
+Azure -->ARM( Azure resource management )
+
+Google -->GRM(google resource management)
+
+*)Terraform was developed by HASHICORP It supports multicloud infrastructure.
+
+*) It will be in HCL lanaguage it is in json language.
+
+*)Terraform is free and open source.
+
+Ansible           TERAFORM
+
+Target            provider
+variables         variables
+Tasks             Resources
+
+Installation :-	
+Installation :-
+--------------------
+
+sudo yum install -y yum-utils shadow-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+-----------------------------------
+
+Code for EC2 INSTANCE :--
+
+vim main.tf
+
+provider "aws" {
+region = "us-east-1"
+access_key = ""
+secret_key = ""
+}
+
+resource "aws_instance" "myserver"{
+tags = {
+Name = "flm-server"
+Environment = "Dev"
+project =  "swiggy"
+}
+
+ami = ""
+instance_type = "t2.micro"
+key_name = "Newkey"
+avaliablity_zone = "us-east-1b"
+
+root_block_device {
+volume_size = 10
+}
+}
+ 
+statefile --> It is a file used to store copy of our main server. when we use apply it will show the changes.
+ 
+commands : (IPAD -->init plan apply destroy)
+
+terraform init    --->it will initilize and download the resources related to aws.
+terraform plan    --->It will plan and check the errors.
+terraform apply   ---> it will create an instance.
+terraform destory ---> it will delete the instance.
+terraform fmt     ---> It will give the indentation
+
+terraform validate -->it will validate the code
+terraform state list -->to see no of instances created using terraform
+terraform destory --auto-aprove -target=aws_instance.myserver[1] --->to delete paticular instance
+terraform taint aws_instance.myserver[1] ---->terraform apply --->(It will recreate the instances)
+terraform apply --auto-approve -replace="aws_instance.myserver[0]"
+terraform refresh ; terraform state list---->to check currently running instances
+--auto-approve ---> It will not ask permnission
+
+
+terraform state show aws_instance.myserver[0] ---> it will show over all list of this server
+terraform apply --auto-approve | grep public_ip --->to show the outputs
+teraform import aws_instance.mustafa instance_id
+terraform workspace list ---->to see list of workspaces
+terraform workspace new dev ---->to create workspace
+terraform workspace select default ----> to switch work space
+terraform workspace show --->to see present work space 
+$terraform.workspace --->to print current workspace
+
+
+valut server -dev --->To create valut
+vault kv put secret/aws access_key="" secret_key= "" --->To put information
+valut kv get secret/aws
+
+
+aws configure ----->to add cerdentials
+aws configure list ---->to get list of creds
+aws s3 mb s3://swetha.flm.devops ---->to create bucket bucket -->mb make bucket
+aws s3 ls --->To see list of buckets
+aws s3 rb s3://swetha.devops -->to remove bucket rb remove bucket
+aws s3 rm s3://swetha.devops --recursive -->To remove the data in the file
+aws s3 ls s3://swetha.devops  --->To add see the list of files in s3 bucket
+aws s3 cp s3://swetha.devops/build . -->to download the file to our server
+aws s3 cp app.java s3://swetha.devops 
+
+
+
+Day-2:-
+-------
+
+1)variables -->string , number, boolean
+2)security groups -->vpc_security_group_ids = resource_name.label.id
+3)count 
+4)create instances using list concept.
+
+
+vim provider.tf
+
+provider "aws"  {
+
+region = " us-east-1 "
+
+}
+
+
+vim resource.tf
+
+resource "aws_instance" "myserver" {
+
+tags = {
+
+Name = var.iname
+Environment = "test"
+
+}
+
+ami = var.ami
+instance_type = var.itype ? "t2.micro" : "t2.medium"  ( true : false"
+key_name = "Newkey"
+availability_zone = "us-east-1a"
+vpc_security_group_ids = [aws_security_group.mysg.id]
+
+root_block_device {
+
+volume_size = var.volume
+
+}
+count = 2
+}
+
+variable "iname" {
+type = string
+default = "tera-server"
+description = "This server is created from terraform"
+
+}
+
+variable "ami" {
+type = string
+default " "
+
+}
+
+variable "itype" {
+type = bool
+default = true or false
+
+}
+
+variable "volume" {
+type = number
+default = 10
+}
+
+
+vim security.tf
+
+resource "aws_security_group" "mysg" {
+
+name = terraformsg"
+description = "This sg is created by terraform"
+
+ingress {
+
+from_port = 22           
+to_port = 22
+protocol = "tcp"
+cidr_blocks =  ["0.0.0.0/0"]                                       # cidr classless inter domain routing
+}
+
+ingress {
+from_port = 8080
+to_port = 8080
+protocol = "tcp"
+cidr_blocks =  ["0.0.0.0/0"]
+}
+
+ingress {
+from_port = 80
+to_port = 80
+protocol = "tcp"
+cidr_blocks =  ["0.0.0.0/0"]
+}
+
+egress {
+from_port = 0
+to_port = 0
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+
+
+
+
+
+*********************************
+
+vim resource.tf
+
+resource "aws_instance" "myserver" {
+
+tags = { 
+
+Name = var.iname[count.index]
+Environment = "prod"
+
+}
+
+ami = ""
+instance_type = var.itype[count.index]
+key_name = "New_key"
+count = 2
+}
+
+variable "iname" {
+type = list(string)
+default = ["devops","aws"]
+}
+
+variable "itype" {
+type = list(string)
+default =  ["t2.medium" , "t2.micro"]
+}
+
+
+
+Day-3:-
+***************************************************************************
+
+Dynamic blocks :- These are used to reduce repeted code.
+Alias (task)
+output --->to print the output of the server
+Importing manual server to terraform 
+terraform workspace
+locals : when we want to assign particular  t
+
+vim main.tf
+
+
+
+resource "aws_security_group" "mysg" {
+
+name = "Terraform-sg"
+description = "this id dynamic block"
+
+dynamic "ingress" {
+
+for_each = var.ports
+
+content {
+
+form_port = ingerss.value 
+to_port = ingress.value
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+
+}
+
+
+}
+
+}
+
+variable "ports" {
+type = list(any)
+default = [22, 8080, 80, 9000]
+
+}
+
+}
+
+Task : create two instances aon two different regions .
+-------------------------------------------------------------
+
+
+vim task.tf
+
+provider "aws" {
+region = "us-east-1"
+}
+
+provider "aws" {
+region = "ap-south-1"
+alias = "mumbai"
+}
+resource "aws_instance" "myserver1" {
+
+tags = {
+Name = "NV-server"
+}
+ami = "NV ami"
+instance_type = "t2.micro"
+
+}
+
+resource "aws_instance" "myserver2" {
+
+provider = "aws.mumbai"
+tags = {
+Name = "MI-server"
+}
+ami = "MI ami"
+instance_type = "t2.micro"
+
+}
+
+output "output" {
+value = [aws_instance.myserver1.public_ip, aws_instance.myserver1.private_ip, aws_instance.myserver2.public_ip]
+
+}
+
+
+Importing instances 
+
+vim main.tf
+
+provider "aws" {
+region = "us-east-1"
+}
+resource "aws_instance" "myserver" {
+
+tags = {
+Name = "maunal-server"
+}
+
+ami = ""
+instance_type = "t2.micro"
+
+}
+
+Terraform locals :--
+
+vim main.tf
+
+provider "aws" {
+region = "us-east-1"
+}
+locals {
+
+instance_types = {
+dev = "t2.micro"
+test = "t2.medium"
+prod = "t2.large"
+}
+}
+resource "aws_instance" "myserver" {
+
+tags = {
+Name = "${terraform.workspace}-server"
+}
+
+
+ami = ""
+instance_type = local.instance_types[terraform.workspace}
+
+}
+
+
+
+
+Day-4 :--
+------
+lifecycle -->create before destroy , prvent_destroy , ignore_changes
+hashicrop world
+vault.
+run time values
+
+
+
+provider "aws" {
+region = ""
+access_key = ""
+secret_key = ""
+
+}
+
+resource "aws_instance" "my server" {
+
+tags = {
+Name = "lifecycle"
+Environment = "prod"
+
+}
+
+ami = ""
+instance_type = "t2.micro"
+key_name = "New_key"
+alaiability_zone = ""
+lifecycle {
+craete_before_destroy = true
+prevent_destroy = true
+ignore_changes = [tags]
+
+}
+}
+
+
+vault --->
+
+ export VAULT_ADDR='http://127.0.0.1:8200'
+ vault kv put secret/aws access_key="AKIARYEUCR73LCIBK362" secret_key="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"
+ 
+
+1)vault server -dev
+
+vim provider.tf 
+
+provider "vault" {
+
+address = "https://"
+token = var.mytoken
+
+}
+
+variable "mytoken"  {
+type = string
+sensitive = true
+
+}
+provider "aws" {
+
+region = "ap-south-1"
+access_key = data.vault_generic_secret.aws.data[ "access_key"]
+secret_key = data.vault_generic_secret.aws.data[ "secret_key"]
+
+}
+data "vault_generic_secret" "aws" {
+
+path = "secret/aws"
+}
+
+resource "aws_instance" "myserver" {
+
+tags = {
+Name = "vault-server"
+Environment = "prod"
+}
+ami = ""
+instance_type = "t2.micro"
+key_name = "New_key"
+
+
+}
+
+Runtime :--
+
+provider "aws" {
+
+region = var.region
+
+}
+resource "aws_instance" "myserver" {
+
+tags {
+
+Name = var.iname
+Environment = var.env
+}
+
+ami = var.ami
+instance_type = var.itype
+Key_name = var.key
+}
+
+variable "region"  {
+
+type = string
+
+}
+
+variable "iname"  {
+
+type = string
+
+}
+
+variable "env"  {
+
+type = string
+
+}
+variable "ami"  {
+
+type = string
+
+}
+variable "itye"  {
+
+type = string
+
+}
+
+
+
+Day-5 :-
+-------
+
+s3 --Saimple storage service
+
+Plugins
+
+s3 -- for s3 buckets
+
+
+S3 uses :--
+
+1)versioning
+2)static website hosting
+3)Nexus - s3.war
+
+
+Rules to create s3 :--
+
+----------------------
+
+1)Bucket name should be unique.(flm.mustafa.devops)
+2)It should not be in the foemat of ip (172.168.0.1)
+3)the legnth should be 4 to 63 characters
+4)We can't delete the bucket first we need to make it as empty
+5)If we delete the bucket then the name should be avaliable
+6)Bucket name should not start or end with special characters.
+
+
+URI = path -->  s3://swetha.devops/
+
+Jenkins --> 
+
+s3plugin -->system -->search s3 -->IAM user access key and secret_key
+
+
+pipeline synatx -->s3upload
+
+
+https://s3.ap-south-1.amazonaws.com/jagadeesh.firstbucket/March+Internet+bill+-+Copy.pdf
+
+
+Day-6 :--
+------
+
+terraform s3 -->vs code
+s3 bucket using terraform ----kops -- (--image = amiid)
+state file in s3 bucket
+
+vs code 
+-----------
+Host myserver  -->Writer whatever we want
+ Hostname 13.232.226.108
+ User ec2-user
+ IdentityFile ~/Downloads/New_key.pem
+
+provider "aws" {
+
+region = "ap-south-1"
+}
+resource "aws_s3_bucket"  "mybucket" {
+bucket = jagadeesh.bucket1
+
+}
+resource "aws_s3_bucket_versioning" "one" {
+
+bucket = aws_s3_bucket.mybucket.id
+versioning_configuration {
+
+ status = "Enabled"
+ 
+ }
+}
+
+vim backend.tf
+
+terraform {
+backend "s3"  {
+bucket = jagadeesh.firstbucket1
+key = "import/terraform.tfstate"
+region = "ap-south-1"
+}
+}
+
+Day-7 :--
+-------
+
+vpc :-- creating a private cloud inside a pubic cloud
+subnet :-- Dividing a large network into small 
+
+1)pubic subnet
+2)private subnet
+
+NAT (network translator Gateway --> It will help us to access app private.
+IGW (internet gateway)----> it allows internet to access vpc                                  internet ---->Internet gateway -->vpc--->iptables--->public app --->NAT-->iptable (routetable)--->
+iptables(route tables) --> these are route tables these allow us to access internet)
+
+Peering connectors -->It helps us to connect with one vpc to other vpc'
+
+Day-8:-
+------
+
+creating vpc,subnet,NAT using terraform
+
+
+Steps to create VPC :-
+
+1)Create a vpc and Enable DNS hostnames
+2)Create public and private subnets and assign ipv4 addresses for public subnet
+3)create IGW and attach it to vpc
+4)Create NAT gateway on public subnet
+5)create public and private route tables
+6)Attach internet gw to public RT & NAT gateway to private RT.
+7)subnet association
+
+
+vim vpc.tf
+
+provider "aws" {
+region = "us-east-1"
+
+}
+
+resource "aws_vpc" "mypc" {
+tags = {
+Name = "terraform_vpc"
+}
+cidr_blocks = `	"12.0.0.0/16"
+	instance_tenancy = "default"
+	enable_dns_hostnames = true	
+
+}
+
+vim subnets.tf
+
+resource "aws_subnet" "public_subnet" {
+vpc_id = aws_vpc.myvpc.id
+tags = {
+Name = "public_subnet"
+}
+availability_zone = "us-east-1b"
+cidr_block = "12.0.0.0/24"
+map_public_ip_on_launch = true
+
+}
+
+resource "aws_subnet" "private_subnet" {
+vpc_id = aws_vpc.myvpc.id
+tags = {
+Name = "private_subnet"
+}
+availability_zone = "us-east-1b"
+cidr_block = "12.0.1.0/24"
+
+}
+
+
+vim igw.tf
+
+resource "aws_internet_gateway" "myigw" {
+
+tags = {
+Name = "terraform-igw"
+}
+
+vpc_id = aws_vpc.mypc.id
+
+}
+
+vim "aws_route_table" "public_RT"  {
+tags = {
+Name = "Terraform_public_RT"
+}
+vpc_id = aws_vpc.myvpc.id
+
+route {
+
+cidr_blocks = "0.0.0.0/0"
+gateway_id = aws_internet_gateway.myigw.id
+
+}
+
+}
+
+
+vim nat.tf
+
+resource "aws_eip" "myeip" {
+domain = "vpc"
+}
+
+resource "aws_nat_gateway" "mynat" {
+tags = {
+Name = "terraform_nat"
+}
+subnet_id = aws_subnet.public_ip.id
+allocation_id = aws_eip.myeip.id
+}
+
+
+vim private_route.tf
+
+resource "aws_route_table" "private_route" {
+
+tags = {
+Name = "terraform_private_RT
+}
+vpc_id = aws_vpc.myvpc.id
+nat_gateway_id = aws_nat_gateway.mynat.id
+
+}
+
+
+vim subnet-association.tf
+
+resource "aws_route_table_association" "public_subnet"  {
+subnet_id = aws_subnet.public_subnet.id
+route_table_id = aws_route_table.public_RT.id
+
+} 
+
+resource "aws_route_table_association" "private_subnet"  {
+subnet_id = aws_subnet.private_subnet.id
+route_table_id = aws_route_table.private_RT.id
+
+}
+
+vim sg.tf
+
+resource "aws_security_group" "public-sg" {
+name = "public-sg"
+description = "this sg is created from terraform"
+vpc_id = aws_vpc.myvpc.id
+ingress {
+from_port = 0
+to_port = 0
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+egress {
+from_port = 0
+to_port = 0
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+}
+
+resource "aws_security_group" "private-sg" {
+name = "private-sg"
+description = "this sg is created from terraform"
+vpc_id = aws_vpc.myvpc.id
+ingress {
+from_port = 0
+to_port = 0
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+egress {
+from_port = 0
+to_port = 0
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+}
+
+
+
+Day-9:-
+-----
+ASG & LB (auto scaing groups and load balancers)
+
+Load balancer (LB) : - It will equally distribute the load between group of instance.
+
+Auto scaling groups (ASG) :- It will create an equivalent server when one sever will down another server got created.
+
+Target Group :-- selecting list of instance where the applaication needs to run we call it as target group.
+
+*********************************
+
+Steps two create ASG using terraform :--
+
+1) VPC
+2)Subnets -2
+3)Route table -1
+4)Internet gateway -1
+5)Launch template 
+6)Target group
+7)Load balancer
+8)Auto scaling group
+
+
+
+vim launch.tf
+resource "aws_launch_template" "mylt" {
+
+name = "terraform-launch-template"
+description = "This launch template is created by using terraform"
+image_id = "ami-"
+instance_type = "t2.micro"
+key_name = "Terraform"
+
+ user_data = base64encode(<<-EOF
+#!/bin/bash
+sudo yum install httpd -y
+sudo systemctl start httpd
+sudo systemctl enable httpd
+sudo systemctl restart httpd
+sudo chmod 777 /var/www/html/index.html
+echo "<h1> This is Launch template </h1><body> This template is created by using terraform</body>" > /var/www/html/index.html
+EOF
+  )
+}
+
+
+vim Loadbalancer.tf
+
+resource "aws_elb" "myelb" {
+
+name = "Terraform-lb"
+
+subnets = [aws_subnet.public_subnet.id,aws_subnet.private_subnet.id]
+listener {
+instance_port = 80
+lb_port = 80
+lb_protocol = "http"
+instance_protocol = "http"
+}
+}
+
+vim autoscaling.tf
+
+resource "aws_autoscaling_group" "myASG" {
+name = "Terraform ASG"
+
+launch_template {
+id = aws_launch_template.mylt.id
+}
+
+}
+
+
+Day-10:-
+--------
+
+1)Aws code pipeline 
+2)cloud watch
+
+
+aws cloudpipeline:-
+----------------
+
+1)code commit -->to get the source code 
+2)build -->code build
+3)Test --> code test (new service)
+4)deploy --> code deploy
+
+*************
+we will integrate these with code pipeline. 
+
+And these are saas clouds.
+
+we have two types of cloud models.
+
+1)service models
+ a)iaas --Infra as a service
+ b)paas --platform as a service
+ c)saas -->software as a service
+
+2)deploy model
+
+
+working:--- github repo -->cicd-withaws
+
+Goto build directly -->create project -->source(github)-->manage account creds---->install new app--only selected repos-->code build role-->create project
+
+create pipeline 
+
+IAM --> AWSCodePipelineServiceRole-us-east-1-mypipeline (Admin access)
+create Ec2 Role -->Amazonec2roleforawscodedeploy (attach to ec2 instance)
+
+
+Install codedeploy on ourserver.
+------------------------------------
+
+sudo yum update -y
+
+sudo yum install -y ruby wget
+
+wget https://aws-codedeploy-eu-west-1.s3.eu-west-1.amazonaws.com/latest/install
+
+chmod +x ./install
+
+sudo ./install auto
+
+sudo service codedeploy-agent status
+
+
+code-deploy:-
+------------
+
+create role :-- codedeprole -->service(code deploy) --->ec2-full prmissions
+
+
+create app --> create deployment group -->and save
+
+pipeline -->edit -->add stage -->action group--->aws code deploy -->and save it
+
+
+
+Disadvantages of code pipeline:-
+------------------------------
+
+1)It is not a opensource and billable
+2)plugins -->It will not have plugins with the help of plugins we can integrate with any tool
+3)Master and slave (it supports master and slave )
+4)Trouble shooting is not easy in code pipeline and time taking
+5)permissions.
+
+
+cloud watch:
+------------
+
+see the documents given by trainer for more info--->
+
+
+for cloud watch logs use ubuntu 22.04
+
+
+DAY-11 :-
+------
+cloud watch ----> for cloud watch logs use ubuntu 22.04
+SNS -->simple notification service.
+route53
+EFS--elastic file system
+
+
+cloud watch:--
+
+1)ami -->22.04
+2)apt update -y
+3)apt install python2.7 -y
+4)Install python binary file -->
+
+DOWNLOAD FILE : curl https://s3.amazonaws.com/awscloudwatch/downloads/latest/awslogs-agent-setup.py -O
+
+5) RUN PYTHON FILE : python awslogs-agent-setup.py —region ap-south-1
+6)IAM --> Admin access (or) cloud watch full access --->access key & secret key
+7) Need to give logs info and create group at last no
+
+Aws console -->
+----------
+1)cloud watch
+
+
+SNS :--
+-----
+
+1) create topic -- Standard topic
+2)create subscription
+
+In mail confirm subscription
+
+
+Route53 :-- for domain related workspace
+------
+
+they are multiple  sites used to create a domain . They are 
+1)godady 
+2)name space ,big rock
+3)route53 on aws --->will check cost and will buy it.
+
+
+EFS:-
+---
+Take two servers on different availability zones. And create an EFS and attach it to our servers by running the commands given on attach -->check network and attach.attch 
+the security that you have given while creating instance.
+
+
+while running the commands install efs service.---->go to official doccument and insatll efc --
+
+
+Day-12:-
+-------
+modules : terraform module is a container where we can create mutiple containers. IT is used to create a terraform files in directory structures.
+Statefile locking :--> If changes are appalied by two persons at same time then terraform state file will be courropted .to overcome this we make use of state file locking.
+
+mkdir  terraform
+
+touch main.tf
+
+vim provider.tf
+resource "aws" {
+region = "aws-east-1"
+}
+
+mkdir -p terraform/modules/instance
+
+vim main.tf 
+
+resource "aws_instance" "myinstance" {
+tags = {
+Name = var.iname
+}
+ami_id = var.ami_id
+instance_type = var.itype
+}
+
+vim variable.tf
+
+variable "iname" {
+type = string;
+}
+variable "ami_id" {
+type = string
+}
+varibale "itype" {
+type = string
+}
+
+vim modules/main.tf
+
+modules "instance_module" {
+source = "./modules/instance"
+iname = "my-server"
+ami_id = ""
+itype = ""
+}
+
+
+mkdir statefilelock
+
+vim instance.tf
+
+resource "aws_instance" "my insta" {
+tags = {
+Name = "server1"
+}
+ami = ""
+instance_type = "t2.micro"
+}
+
+vim s3.tf
+
+resource "aws_s3_bucket" "mybucket" {
+
+bucket = "mybucket"
+
+}
+resource "aws_s3_bucket_versioning_configuretion" "mybkt" {
+bucket = aws_s3_buckt.mybucket.id
+
+vresioning_configuration {
+status = "Enabled"
+
+}
+}
+
+vim backend.tf
+
+terraform {
+backend "s3" {
+region = "us-east-1"
+bucket = "mybucket"
+key = "lockterraform/terraform.tf state"
+dynamodb_table = "mydynamodb"
+encrypt = true
+}
+}
+
+need to create dynamodb first then add those into that
+
+vim dynamodb_table.tf
+
+resource "aws_dynamodb_table" "db" {
+name = "mydynamodb"
+billing_mode = "PAY_PER_REQUEST"
+hash_key = "LockID"
+
+attribute {
+name = "LockID"
+type = "S"
+} 
+}
+
+Lockusing s3:-
+
+terraform {
+backend "s3" {
+region = "us-east-1"
+bucket = "mybucket"
+key = "lockterraform/terraform.tf state"
+use_lockfile = true
+encrypt = true
+}
+}
+
+DAY-12 :--
+-------
+1)tfsec -->used to provide security to our code.
+2)tflint --> It provides configuration of our code.
+
+
+1)Install tfsec 
+2) give x permissions
+3)and mv it to sudo mv /usr/local/bin
+4)tfsec --version
+
+
+To check errors -->tfsec .
+
+. -->path
+
+1)tflint -->install tflint
+2)unzip the file
+3)sudo mv file /usr/local/bin
+
+
+tflint --chdir .
+tflint --filter .
+
+. -->path
+
+--chdir --> chaild directory
+
+	
+
+
