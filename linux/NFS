@@ -1,0 +1,125 @@
+NFS (Network file server/sharing) :(shared drives)
+---------------------------------
+If we want to share the files between two computers i.e present in our local hard drive if want share with other computer with the help of NFS
+we can do it.
+
+*It will be shared ponts to directories called mount points.
+*NFS works in between UNIX hosts only .
+*It can't be shared with windows because NFS can't be compatiable with windows .In this case sambe server will help.
+
+                                    -----------
+								   | NFS Server |192.168.222.135
+									-----------
+									    |
+										|
+			|--------------------------------------------------------------------
+			|                             |                                      |
+			|                             |                                      |
+			|                             |                                      |
+		-------------                     |                                      |
+		|NFS Client1|             -------------                            -------------
+		------------              |NFS Client2|                            |NFS Client3|
+           192.168.222.136        ------------                             ------------
+		   
+
+ProFile of NFS server:
+---------------------
+► Profile for NFS:
+► Package: nfs-utils
+► Daemons: rpc.nfsd, rpc.mountd, rpc.statd, rpc.lockd, rpc.rquotad
+► Script: /etc/init.d/nfs
+► Port number: 2049
+► Configuration file: /etc/exports
+► Other important file: /var/lib/nfs/etab, /var/lib/nfs/rmtab		   
+
+CONFIGURATION OF NFS :
+----------------------
+
+1)yum install nfs-utils* -y
+2)Create a directory (cd / ; mkdir nfs_share server  ) we are using this directory to access data .
+3)check with partitions and create a patition for the shared disk.
+4)Add entry in fstab and mount it.
+5)To export same directory to client add entry in --->
+vi /etc/exports
+ 
+ /nfs_data   192.168.222.0/24(rw,sync)
+
+Here :
+
+/nfs_data -->is mounted directory.
+192.168.222.0/24---->when there is a n number of hosts we can't add them all instead we can use that as 0.
+(rw,sync)---->this is we are setting permissions for the users 
+rw=read write
+r0=read only permissions
+sync=it is used to sync all the commands before execution
+no_wdelay= forces the writing of changes immedatily it is shows as logs when something is going to crash.
+root_sqah= it is going to sqash all root users.
+
+6)exportfs -avr --To export
+
+Here 
+a =export or  unexport all directories.
+r =rexport all directories.
+v =verbose output
+
+7)Start the service nfs start. and check it is enabled at all run levels and start them
+
+8)off IP tables.i.e firewalld.
+
+9)To check whether these are exported or not check in cat /var/lib/nfs/etab ,var/lib/nfs/rmtab
+
+10)create some files in directory nfs_data .
+
+Client configuration:
+---------------------
+1)Install nfs_utils package.
+2)Start the nfs serveice .if it not start  multiple not started then reboot the system.
+3)on the nfs service permenantly systemctl enable nfs.service
+4)if we want to show the shared directory from nfs server to client -->showmount -e serverip
+5)To get all the files from nfs server .we need to create a directotry and mount nfs_data directory to it.--->cd /;mkdir nfs_data1
+6)chmod 777 nfs_data
+7)To mount that directory to new .---->mount -t nfs 192.168.222.135:nfs_data nfs_data1
+     need to rename the nfs_data to nfs_client .we need to umount it first and do modifications and again mount it.
+      a)umount /nfs_data
+	  b)mv nfs_data1 nfs_client
+	  C)again mount it mount -t nfs 192.168.222.135:nfs_data nfs_client.
+	 
+8)check in nfs_client directory the file exits in server will be showing or not.
+9)craete a new file in server check in client.
+10)to do that permenant paste the entry in fstab entries.
+
+
+
+Trouble shooting :
+------------------
+1)If it shows divice or resource busy after mounting then we need to unmount it first and again we need to mounting.
+
+After reboot (or) power on system if it goes directlty to the emergency mode Due to nfs .and if we are able to login to the root then we need to check 
+the errors and warnings.
+
+To check use :
+
+ It will show all the system logs :---->journalctl -xb
+ For filters of warnings and errors use :--->journalctl -p err..alert -b
+ 
+To check whether the services are failed :
+    
+  --->systemctl --failed
+
+To check particular services are failed use : journalctl -u <service name>
+
+
+1)NFS error in fstab----->commented it and system is working fine.
+
+2)nfs will not show in client machine we need to see <showmount -e serverip >  to check whether we have nfsdrive or not 
+
+3)if it there try to mount manually it works.
+
+4)If it shows any mounting error for directory not found then rename the directory and again rename it as previous directory and try to mount
+ it will work.
+ 
+5)These logs are present in /var/log/boot.log
+
+
+
+   
