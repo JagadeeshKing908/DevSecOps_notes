@@ -1,0 +1,45 @@
+SWAP Memory:(volatile memory like RAM it is hard disk memory)
+
+If system RAM memeory is compleatly occupied by process then the swap memory will help that process to be waited .
+
+To calculate swap memeory =2+Ramsize 
+
+To see the memory = free -h
+
+To check swap memory == swapon -s    note command --help
+
+********************************************************************************************
+
+Swap space creation practical :
+
+To craete Addational swap space  swapon -s
+
+5)free -m
+
+6)fdisk -l ---To check partitions
+
+7)fdisk /dev/sdc
+
+8)m-check info
+
+9)l -list of partitions
+
+10)t-to enter partitions
+
+11) partion number =2
+
+12)82 = Hexcode
+
+13)p--print
+
+14)w to save 
+
+15)partprobe /dev/sdc2
+
+16)fdisk -l
+
+17)mkswap /dev/sdc2 ---To format swap file system
+
+18)swapon /dev/sdc2
+
+19)swapon -s 
