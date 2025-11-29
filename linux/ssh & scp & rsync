@@ -1,0 +1,105 @@
+//?Telnet (older way of connection) (port :23):
+It is the older way of connectig one server(shell) to other server(shell) and we can we use now as well.
+But is not a secure connection between servers in between the connection there is a chance of getting the credentials to
+be hacked in between the connection and there is chance that what commands we execute also be know by them.
+
+
+
+SSH : secure shell (port :22)
+In this connection the first machine encrypts the userid and password and then send to other machine and it will decrypts and 
+checks the user name and password and it will helps the user to login to the server.
+
+It uses rsa alogarithm to login to the server to encrypt the userid and password.
+
+It uses a tunneling technique.
+
+server----tunneling----server
+
+we are encrypting the id's from one server and in other server  will be decrypt that user id and password.
+
+
+configuration file for sshd : cat /etc/ssh/sshd_config :--
+------------------------------------------------------
+
+-->open it with vi editor vi /etc/ssh/sshd_config
+
+--->search with permit  : like /permit enter
+
+--->it shows -->password authentication is yes (then it will connect from one server to other server with password )
+
+Password less login :
+---------------------
+Generating ssh key pair : For generating ssh key we need to use command ---->ssh-keygen 
+ 1)it will generate in (-->cd /root/.ssh)  .
+ 2)After generating we have two keys i.e, (id_rsa -- private key , id_rsa.pub -- public key)
+ 3)copy the public key and paste it in the server which you want to login (Ex ssh-copy-id  -i /root/.ssh/id_rsa.pub 192.168.138.135)
+ 4)close the sessions in putty and try again .
+ 5)it will not ask for password.
+ 
+ *** sshd -t ----------> it will show if we have any login errors in the servers.
+ 
+ 
+SCP(secure copy) :
+-----------------
+1)It is used to copy the data from one server to other server.
+
+Syntax-->scp [options] [source] [destination]
+
+-r: Recursively copy entire directories.
+-P port: Specify the port to connect to on the remote host (note the uppercase P).
+-p: Preserves the modification times, access times, and modes of the original file.
+-q: Suppress the progress meter.
+-v: Enable verbose mode for debugging.
+
+*Copy a local file to a remote host:
+
+scp /path/to/local/file user@remote_host:/path/to/remote/directory
+
+**Copy a file from a remote host to a local machine:
+
+scp user@remote_host:/path/to/remote/file /path/to/local/directory
+
+***Copy an entire directory to a remote host:
+
+scp -r /path/to/local/directory user@remote_host:/path/to/remote/directory
+
+****Copy a file to a specific port on a remote host:
+
+scp -P 2222 /path/to/local/file user@remote_host:/path/to/remote/directory
+
+*****Copy from one remote host to another:
+
+scp user1@remote_host1:/path/to/file user2@remote_host2:/path/to/destination
+
+
+   Ensure you have SSH access to the remote host.
+   You may be prompted to enter a password for the remote user unless you’ve set up SSH keys for passwordless login.
+ 
+RSYNC(remote syncronised ) command:
+---------------------------------
+1)It is for backing up of files or directories from one machine other for keeping to machines in sync.
+2)In case of scp if the connection losts from one system other then we need to start everything from scratch.
+In case of rsync it will not it will start form whereever it has ended.It is design to speed up the copy of two machines.
+3)if we use the scp command it will take everything to copy but the rsync command will do whatever we have modified that will
+only be synced that when we copied.
+
+-------command :--rsync -rv -e ssh /batch7AM  192.168.195.135:/
+
+here r--recursive
+     v--verbose
+	 e--ssh 
+
+4)And do some modifications and again and run same command it willl sync only data not files again.
+
+
+**************************************************************************************
+
+ *** sshd -t ----------> it will show if we have any login errors in the servers.
+
+
+
+
+
+ 
+
+
