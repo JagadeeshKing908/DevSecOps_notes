@@ -70,3 +70,58 @@ Trouble shooting Steps :
   Then we will be  unable to swith root and we are not able to execute othe commands with---> sudo as well
   
 Sol : need to login as root directly and check in the files which file we are getting error and comment that line.
+
+We are looking for Sudo privilege access for the below Control M agent service – as MAS team would be managing the below service, going forward.
+
+Server list: attached the same (odyssey user)
+
+Path: /etc/systemd/system/
+Service filename: ctmagent.service
+
+ChatGPT
+To grant sudo privileges for managing the ctmagent.service service to a specific user (e.g., odyssey), you'll need to configure the /etc/sudoers file to allow that user to run specific systemctl commands related to this service. Here's a step-by-step guide:
+
+Open the sudoers file with visudo:
+
+bash
+
+sudo visudo
+Add the necessary configuration.
+
+To allow the odyssey user to start, stop, restart, and check the status of ctmagent.service using systemctl, add the following lines:
+
+plaintext
+
+odyssey ALL=(ALL) NOPASSWD: /bin/systemctl start ctmagent.service
+odyssey ALL=(ALL) NOPASSWD: /bin/systemctl stop ctmagent.service
+odyssey ALL=(ALL) NOPASSWD: /bin/systemctl restart ctmagent.service
+odyssey ALL=(ALL) NOPASSWD: /bin/systemctl status ctmagent.service
+
+                     (or)
+					
+echo "odyssey ALL=(ALL) NOPASSWD: /bin/systemctl start ctmagent.service">>/etc/sudoers.d/10_INC000022055835;    ---We can create directly 
+echo "odyssey ALL=(ALL) NOPASSWD: /bin/systemctl stop ctmagent.service">>/etc/sudoers.d/10_INC000022055835;
+echo "odyssey ALL=(ALL) NOPASSWD: /bin/systemctl restart ctmagent.service">>/etc/sudoers.d/10_INC000022055835;
+echo "odyssey ALL=(ALL) NOPASSWD: /bin/systemctl status ctmagent.service">>/etc/sudoers.d/10_INC000022055835;
+echo "odyssey ALL=(ALL) NOPASSWD: /bin/systemctl reset-failed ctmagent.service">>/etc/sudoers.d/10_INC000022055835;
+					
+Here’s a breakdown:
+
+odyssey: the username.
+
+ALL: applies to all hosts.
+
+(ALL): allows running as any user.
+
+NOPASSWD: no password prompt required.
+
+/bin/systemctl ...: specifies the exact commands and paths.
+
+Save and exit visudo. If you’re using vim as the editor, press Esc, then type :wq, and press Enter.
+
+Verify the configuration to ensure that the odyssey user can execute the commands without needing a password. For example:
+
+
+sudo systemctl start ctmagent.service
+
+The configuration will allow the user odyssey to manage the ctmagent.service service without needing to enter a password. If you need the user to have additional privileges or specific restrictions, adjust the /etc/sudoers file accordingly. Always ensure that you are only granting the minimum necessary privileges to maintain system security.
