@@ -1,1 +1,98 @@
+for version -->8/9
+
+cd /var/log/
+
+[root@cdopld-417 log]# cat dnf.rpm.log | grep "2024-09-15" | grep -w Upgrade |wc -l
+327
+[root@cdopld-417 log]# cat dnf.rpm.log | grep "2024-09-15" | grep -w Upgraded |wc -l
+327
+[root@cdopld-417 log]#
+
+
+for version -->7/6
+
+updated means old package ---> yum history
+update means --new pacakage.
+
+[root@lsp1app111 ~]# cd /var/log/
+[root@lsp1app111 log]# ls
+anaconda           cron-20240818       maillog-20240818   rhsm              spooler-20240901            vmware-caf                xferlog
+audit              cron-20240825       maillog-20240825   sa                spooler-20240908            vmware-install.log        xferlog-20240818
+boot.log           cron-20240901       maillog-20240901   sdcsslog          tallylog                    vmware-network.1.log      xferlog-20240825
+boot.log-20221106  cron-20240908       maillog-20240908   secure            tuned                       vmware-network.2.log      xferlog-20240901
+boot.log-20230212  dmesg               messages           secure-20240818   USERV_ENV_11                vmware-network.log        xferlog-20240908
+boot.log-20230514  dmesg.old           messages-20240818  secure-20240825   USERV_ENV_12                vmware-vgauthsvc.log.0    yum.log
+boot.log-20230806  dynatrace           messages-20240825  secure-20240901   USERV_ENV_12.20210628.9594  vmware-vmsvc.log          yum.log-20220101
+boot.log-20231105  grubby              messages-20240901  secure-20240908   USERV_ENV_13                vmware-vmsvc-root.log     yum.log-20230101
+boot.log-20240225  grubby_prune_debug  messages-20240908  socauditbeat-app  USERV_ENV_211               vmware-vmtoolsd-root.log  yum.log-20240101
+boot.log-20240505  httpd               ntpstats           socfilebeat       USERV_ENV_212               VRTSpbx                   yum.log-20240908
+btmp               ids_syslog.pipe     oldreleasecl       spooler           USERV_ENV_22                wpa_supplicant.log
+btmp-20240901      lastlog             ppp                spooler-20240818  USERV_ENV_31                wtmp
+cron               maillog             puredisk           spooler-20240825  USERV_ENV_41                wtmp-20240901
+[root@lsp1app111 log]# cat yum.log
+
+	
+rpm output
+
+
+[root@lsp1app111 log]# rpm -qa | grep glibc
+glibc-common-2.17-326.el7_9.3.x86_64
+glibc-headers-2.17-326.el7_9.3.x86_64
+glibc-devel-2.17-326.el7_9.3.x86_64
+glibc-2.17-326.el7_9.3.x86_64
+glibc-2.17-326.el7_9.3.i686
+
+
+[root@lsp1app111 log]# rpm -qa | grep -i java-1.8.0
+
+
+[root@lsp1app111 log]# yum history info 88 |grep glibc---->88 is the output of---> yum history 
+    Updated glibc-2.17-326.el7_9.i686                                  @rhel-7-server-rpms
+    Updated glibc-2.17-326.el7_9.x86_64                                @rhel-7-server-rpms
+    Updated glibc-common-2.17-326.el7_9.x86_64                         @rhel-7-server-rpms
+    Updated glibc-devel-2.17-326.el7_9.x86_64                          @rhel-7-server-rpms
+    Updated glibc-headers-2.17-326.el7_9.x86_64                        @rhel-7-server-rpms
+[root@lsp1app111 log]# yum history info 88 |grep glibc | more
+    Updated glibc-2.17-326.el7_9.i686                                  @rhel-7-server-rpms
+    Updated glibc-2.17-326.el7_9.x86_64                                @rhel-7-server-rpms
+    Updated glibc-common-2.17-326.el7_9.x86_64                         @rhel-7-server-rpms
+    Updated glibc-devel-2.17-326.el7_9.x86_64                          @rhel-7-server-rpms
+    Updated glibc-headers-2.17-326.el7_9.x86_64                        @rhel-7-server-rpms
+[root@lsp1app111 log]# yum history info 88 | more
+Loaded plugins: product-id, search-disabled-repos, subscription-manager
+Transaction ID : 88
+Begin time     : Sun Sep 15 01:59:37 2024
+Begin rpmdb    : 763:328a982e9e08b396f08033ecacb41cc17aea3964
+End time       :            02:08:31 2024 (8 minutes)
+End rpmdb      : 763:9207c0d2c7c8a718570a1229a9fdef1a90e6d45f
+User           : IGDC_T1_Hwy_Unix.BAN.INDIA@cgi.com, CGI Unix cpass ID#WO0000006061495 <cpass>
+Return-Code    : Success
+Command Line   : -d 2 -y update
+Transaction performed with:
+    Installed     rpm-4.11.3-48.el7_9.x86_64                  @rhel-7-server-rpms
+    Installed     subscription-manager-1.24.54-1.el7_9.x86_64 @rhel-7-server-rpms
+    Installed     yum-3.4.3-168.el7.noarch                    @rhel-7-server-rpms
+Packages Altered:
+    Updated bind-export-libs-32:9.11.4-26.P2.el7_9.15.x86_64           @rhel-7-server-rpms
+    Update                   32:9.11.4-26.P2.el7_9.16.x86_64           @rhel-7-server-rpms
+    Updated bind-libs-32:9.11.4-26.P2.el7_9.15.x86_64                  @rhel-7-server-rpms
+    Update            32:9.11.4-26.P2.el7_9.16.x86_64                  @rhel-7-server-rpms
+    Updated bind-libs-lite-32:9.11.4-26.P2.el7_9.15.x86_64             
+	
+	
+ Updated java-1.8.0-openjdk-1:1.8.0.402.b06-1.el7_9.x86_64          @rhel-7-server-rpms
+ Update                     1:1.8.0.412.b08-1.el7_9.x86_64          @rhel-7-server-rpms
+    Updated java-1.8.0-openjdk-headless-1:1.8.0.402.b06-1.el7_9.x86_64 @rhel-7-server-rpms
+    Update                              1:1.8.0.412.b08-1.el7_9.x86_64 @rhel-7-server-rpms
+    Updated java-11-openjdk-1:11.0.22.0.7-1.el7_9.x86_64               @rhel-7-server-rpms
+    Update                  1:11.0.23.0.9-2.el7_9.x86_64               @rhel-7-server-rpms
+    Updated java-11-openjdk-headless-1:11.0.22.0.7-1.el7_9.x86_64      @rhel-7-server-rpms
+    Update                           1:11.0.23.0.9-2.el7_9.x86_64 
+
+rpm 
+
+[root@lsp1app111 log]# rpm -qa | grep -i java-1.8.0
+java-1.8.0-openjdk-1.8.0.412.b08-1.el7_9.x86_64
+java-1.8.0-openjdk-headless-1.8.0.412.b08-1.el7_9.x86_64
+
 
