@@ -1,0 +1,175 @@
+Disk Partition and file system Practical:
+
+if we need a raw disk(LUN) we need to ask for storage team. Then windows team will add that disk to the virtual machine.
+
+1)fdisk -l (or) parted -l (or) lsblk--list of blocks(it will show summary of disks)  (detailed---To view the exesting partation)
+
+
+To check added disk we need to scan the lun's that are avaliable :
+
+###echo "---" > /sys/class/scsi_host/host0/scan
+
+The three "---" in command will act like wild cards meaning Rescan everything. Remembering that three values normally stands for channel , SCSI
+target ID, and Lun.
+
+Switch to path cd /sys/class/scsi_host and give ll . Then you will scan every scsi disk found and scan after scanning if the new disk was decteted   .It means 
+
+echo "---" > /sys/class/scsi_host/host0/scan
+lsblk
+echo "---" > /sys/class/scsi_host/host1/scan
+lsblk
+echo "---" > /sys/class/scsi_host/host2/scan
+lsblk
+
+/sys/class/scsi_host/host*/scan  or lsscsi
+
+Partition for 10Gb SCSI disk(1035)
+
+2)fidisk /dev/diskname 
+
+3)m--for help n --new partition
+
+4)2p+1e
+
+5)if we do the disks  partationed it will be divide as cylinders every time.
+
+*n
+select partition : p-primary
+                   e-extended
+	
+*p	
+6)partition number :1
+
+7)first default cylinder : 1
+
+8)end cylinder : 400
+
+created partition  below p is used to check.
+
+9)p : to see the partition table
+
+*n --for new partition
+
+select partition : p-primary
+                   e-extended
+
+*p-primary
+
+10)partition number :2
+
+11)first default cylinder : 401 (default)
+
+12)end cylinder : 802
+
+created partition  below p is used to check.
+
+13)p : to see the partition table
+
+*n --for new partition
+select partition : p-primary
+                   e-extended
+				   
+*e
+
+14)partition number :3
+
+15)first default cylinder : 802 (default)
+
+16)end cylinder : 802
+
+created partition  below p is used to check.
+
+17)p : to see the partition table
+
+after creating Extendiding partition then only the system will ask for extended partition.
+
+*n --for new partition
+select partition : p-primary
+                  l-logical
+				   
+*l
+
+18)partition number :3
+
+19)first default cylinder : 802 (default)   ----(1035-802=503 503/2=254)
+
+20)end cylinder : 1054
+
+created partition  below p is used to check.
+
+21)p : to see the partition table
+
+*n --for new partition
+select partition : p-primary
+                  l-logical
+				   
+*l
+
+22)partition number :3
+
+23)first default cylinder : 1054 (default)   ---- >(1035-1054=254)
+
+24)end cylinder : 1035
+
+created partition  below p is used to check.
+
+25)p : to see the partition table
+
+
+26) w --To save the partition.
+
+27)partprobe /dev/sdc ---updating the partition table without restarting the system
+
+
+28)mkfs.ext4 /dev/sdc1  [size]   we are creating file system because we organise data 
+   mkfs.ext4 /dev/sdc2
+   mkfs.ext4 /dev/sdc3
+
+29)we need to create a directory. cd / -- > mkdir /linuxdata
+
+30) mount /dev/sdc1 /linuxdata
+
+31) we need add entries in vi /etc/fstab.
+
+    Divice name      mount point     filesystem type  mountoption  dumping sequencechip
+     /dev/sdc1        /linudata          ext4             default    0         0
+	 
+	 /dev/vg00/osconfigbck   /OSConfig                       ext4    defaults        1 2
+
+
+
+32)for unmounting :
+
+     umount  /directoryname
+
+     mount -a -- >mount all file systems of fstab
+
+33) for deleting
+
+   1)fdisk /dev/sdc
+   2)m -->for help 
+   3)d --> delete
+   4)no of partion 1 (or) 2 (or)  3
+   5)w ---To save
+   6)p--to print file system.
+   7) q--quit
+   
+36)partprobe /dev/sdc
+
+37)lsblk  (if not go it will ask for reboot we need to reboot the system but in prod will not do)
+
+#############################################################################
+
+Trouble shooting
+
+1) If we are working on the file system (directoy) it will not work to do umount---It will show divice busy 
+
+2) if any other users are also working on it also it will not work to do umount ---It will show divice busy 
+
+3)To check who is working on it the cmd is---> fuser -cu /dev/sdc1
+
+4) for terminating this error----fuser -ck  /dev/sdc1
+
+
+
+ 
