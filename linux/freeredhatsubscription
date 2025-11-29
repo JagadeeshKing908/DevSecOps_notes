@@ -1,0 +1,19 @@
+You can create it on Red Hat’s official website:---->https://access.redhat.com
+
+How to Register RHEL for Free Developer Subscription :
+-----------------------------------------------------
+Login with Details --->https://developers.redhat.com
+Register the system by running--->sudo subscription-manager register
+Attach your free developer subscription---->sudo subscription-manager attach --auto
+
+
+Q)how many days can i use and how many machines any pricess if we use ?
+
+A)1-year subscription, renew free every year. Up to 16 machines (physical or virtual)
+
+If you forget to renew your free RHEL developer subscription after a year, you won’t get charged, and your installed RHEL system will continue working.
+The only difference is that you’ll lose access to official updates, patches, and subscription-based services until you renew.
+
+
+
+
