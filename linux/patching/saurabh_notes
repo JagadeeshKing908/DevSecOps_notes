@@ -1,0 +1,1736 @@
+
+Our Unix queue:
+CGI Support to BC > Server Management > Unix
+
+
+
+skulsang
+
+https://groupecgi-my.sharepoint.com/:x:/g/personal/saurabh_kulsange_cgi_com/Ear9DT-mhYVDiNF3ruVkzN4BqgP3ZQnLh9O3z3RsvorwNA?e=lZMUGZ   --> Console
+https://groupecgi-my.sharepoint.com/:x:/g/personal/pankaj_poddar_cgi_com/EQTqIP7IlHdIuipRqsEW6aABMOPLXQuQSkDPm88Ml9BnfA?e=OdkfGb      --> Patching Issue
+
+
+===============================================
+Patching procedure :
+
+1. precheck ( registration, (cat /etc/redhat-release) ,yum clean all, check physical or vm ,  to check yum update its working , password reset for havalako(local user) )
+2. before reboot
+
+
+3. snooze alert  ---( to occ team )
+4. sanity reboot  (before patching )
+5. yum update   ( if any exclusion --exclude *package name* )
+6. reboot (init 6 or reboot)
+
+
+
+
+7. post check ( uname -r, mount -a , df -hT, ntpq -pn (offset value < 500) or chronyc tracking (leap status should be normal ), ls -l /etc/resolv.conf (check the last update time))
+8. IMP : if any changes in resolv.conf verify with before reboot output 
+9. if it is a rack server verify --- /etc/hosts   Heartbeat ip is pingable 
+10. At last run the net backup commands 
+
+-n
+Output all host addresses in dotted-quad numeric format rather than converting to the canonical host names.
+
+-p
+Print a list of the peers known to the server as well as a summary of their state. This is equivalent to the peers interactive command.
+
+[cpass@DCOBW6-221 ospatching]$ pwd
+/OSConfig/dnd-unix/Bellunixjenkins/playbooks/ospatching
+[cpass@DCOBW6-221 ospatching]$
+
+
+
+
+=========================   
+
+mount -a;
+ls -l /etc/resolv.conf;
+ntpq -pn;chronyc tracking;
+df -hTP;
+
+/opt/VRTSpbx/bin/vxpbx_exchanged start;
+/usr/openv/netbackup/bin/bp.start_all;
+/usr/openv/netbackup/bin/bpps -x;
+
+=========================
+   
+IMP: if rpm db error occurs we need to rebuilt it (db)
+
+mkdir /var/lib/rpm/backup
+cp -a /var/lib/rpm/__db* /var/lib/rpm/backup/
+rm -f /var/lib/rpm/__db.[0-9][0-9]*
+rpm --quiet -qa
+rpm --rebuilddb
+yum clean all
+
+
+****** This error occurs when while registering a server ***** 
+
+
+=========================
+
+IMP:
+
+if time difference and high offset value , follow the below steps to correct it .
+
+
+
+#systemctl stop ntpd
+[root@cdopla-105 ~]# ntpd -gq
+ntpd: time slew +0.000061s
+#systemctl start ntpd
+#systemctl status ntpd
+
+
+
+check the date again if it is corrected .
+================================
+
+For chronyd 
+
+#systemctl stop chronyd
+#timedatectl set-local-rtc 0
+#hwclock --utc –systohc
+
+ntpdate -u 142.183.120.42
+ntpdate -u 142.117.81.97
+
+
+========================================
+
+quarter Q1-registration key
+
+2023-Q1 RHEL 6, 7 & 8 OS Security Patch Bundle Summary (Cut off date: 31-Dec-2022)
+"RHEL 8.7 patch update
+New Kernel Version: kernel-4.18.0-425.3.1.el8
+Servers  8.6 and below  will get upgraded to RHEL 8.7 and get latest kernel
+Servers at 8.7 will remain at 8.7 and get latest kernel
+
+RHEL 7.9 patch update
+New Kernel Version: kernel-3.10.0-1160.81.1.el7
+Servers below 7.9 will get upgraded to RHEL 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+
+RHEL 6.10 patch update
+Kernel Version: Kernel- 2.6.32-754.48.1.el6
+Servers below 6.10 will get upgraded to RHEL 6.10 and get latest kernel
+Servers at 6.10 will remain at 6.10 and get latest kernel
+Note: Kernel version has not changed
+
+Oracle Linux  8.7 patch update
+New Kernel Version: kernel-5.4.17-2136.314.6.3.el8uek
+Servers below 8.6 will get upgraded to Oracle Linux 8.7  and get latest kernel
+Servers at 8.7  will remain at 8.7 and get latest kernel"
+
+Oracle Linux  7.9 patch update
+New Kernel Version: kernel-5.4.17-2136.315.5.el8uek.x86_64
+Servers below 7.9 will get upgraded to Oracle Linux 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel"
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2023_Q1" --force
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q1" --force
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_7_2023_Q1" --force
+
+ 
+ 
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7.9_Monthly_Patching"                            -----> Monthly patching  
+3.10.0-1160.83.1.el7 
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q1_Bigdata"                             -----> BI BIG Data
+
+
+
+
+=================================================================================================================================================
+
+
+
+Quarter Q2-registration key
+
+
+
+2023-Q2 RHEL 6, 7 & 8 OS Security Patch Bundle Summary (Cut off date: 31-Mar-2023)
+
+RHEL 8.7 patch update
+New Kernel Version: kernel-4.18.0-425.13.1.el8_7
+Servers  8.6 and below  will get upgraded to RHEL 8.7 and get latest kernel
+Servers at 8.7 will remain at 8.7 and get latest kernel
+
+RHEL 7.9 patch update
+New Kernel Version: kernel-3.10.0-1160.88.1.el7
+Servers below 7.9 will get upgraded to RHEL 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+
+RHEL 6.10 patch update
+Kernel Version: Kernel-2.6.32-754.49.1.el6
+Servers below 6.10 will get upgraded to RHEL 6.10 and get latest kernel
+Servers at 6.10 will remain at 6.10 and get latest kernel
+
+
+
+Oracle Linux  8.7 patch update
+New Kernel Version:kernel-5.4.17-2136.317.5.3.el8uek
+Servers below 8.6 will get upgraded to Oracle Linux 8.7  and get latest kernel
+Servers at 8.7  will remain at 8.7 and get latest kernel
+
+Oracle Linux  7.9 patch update
+New Kernel Version: kernel-5.4.17-2136.317.5.3.el7uek
+Servers below 7.9 will get upgraded to Oracle Linux 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+
+
+
+RHEL9-April-2023-Q2	5.14.0-162.22.2.el9_1.x86_64	
+RHEL8-April-2023-Q2	4.18.0-425.13.1.el8_7
+RHEL7.9-April-2023-Q2	3.10.0-1160.88.1.el7
+RHEL6.10-April-2023-Q2	2.6.32-754.49.1.el6	
+RHEL7.9-April-2023-Q2	3.10.0-1160.88.1.el7
+
+
+
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL9_2023_Q2"
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_7_2023_Q2"
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q2"
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2023_Q2"
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q2_Bigdata"                                    -----> BI BIG Data
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7.9_Monthly_Patching" --force                           -----> Monthly Patching
+
+
+==================================================================================================================================================================================================================================================================================================
+
+Cpasscgi@123
+
+Quarter Q3 - registration key
+
+2023-Q3 RHEL 6, 7 & 8 OS Security Patch Bundle Summary (Cut off date: 30-June-2023)
+
+"RHEL 8.8 patch update
+New Kernel Version: kernel-4.18.0-477.15.1.el8_8
+Servers  8.7 and below  will get upgraded to RHEL 8.8 and get latest kernel
+Servers at 8.8 will remain at 8.8 and get latest kernel
+"
+"RHEL 7.9 patch update
+New Kernel Version: kernel-3.10.0-1160.92.1.el7
+Servers below 7.9 will get upgraded to RHEL 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+"
+"RHEL 6.10 patch update
+Kernel Version: Kernel-2.6.32-754.50.1.el6
+Servers below 6.10 will get upgraded to RHEL 6.10 and get latest kernel
+Servers at 6.10 will remain at 6.10 and get latest kernel
+"
+"Oracle Linux  8.8 patch update
+New Kernel Version:kernel-5.4.17-2136.320.7.1.el8uek
+Servers below 8.7 will get upgraded to Oracle Linux 8.8  and get latest kernel
+Servers at 8.7  will remain at 8.7 and get latest kernel"
+
+"Oracle Linux  7.9 patch update
+New Kernel Version: kernel-5.4.17-2136.320.7.1.el7uek
+Servers below 7.9 will get upgraded to Oracle Linux 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel"
+
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_8_2023_Q3"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q3"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2023_Q3"
+
+
+
+
+
+RHEL9-July-2023-Q3	    5.14.0-284.18.1.el9_1.x86_64	
+RHEL8-July-2023-Q3	    4.18.0-477.15.1.el8_8
+RHEL7_9-July-2023-Q3	3.10.0-1160.92.1.el7
+RHEL6_10-July-2023-Q3	2.6.32-754.50.1.el6
+RHEL7_9-July-2023-Q3	3.10.0-1160.92.1.el7
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_8_2023_Q4"
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL9_2023_Q3"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_8_2023_Q3"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q3"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2023_Q3"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q3_Bigdata"
+
+
+
+
+
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q3_Bigdata"
+
+
+
+
+==================================================================================================================================================
+
+Quarter Q4 - registration key
+
+2023-Q4 RHEL 6, 7 & 8 OS Security Patch Bundle Summary (Cut off date: 30-Sept-2023)
+"RHEL 8.8 patch update
+New Kernel Version: kernel-4.18.0-477.27.1.el8_8
+Servers  8.7 and below  will get upgraded to RHEL 8.8 and get latest kernel
+Servers at 8.8 will remain at 8.8 and get latest kernel
+"
+"RHEL 7.9 patch update
+New Kernel Version: kernel-3.10.0-1160.99.1.el7
+Servers below 7.9 will get upgraded to RHEL 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+"
+"RHEL 6.10 patch update
+Kernel Version: Kernel-2.6.32-754.50.1.el6
+Servers below 6.10 will get upgraded to RHEL 6.10 and get latest kernel
+Servers at 6.10 will remain at 6.10 and get latest kernel
+"
+"Oracle Linux  8.8 patch update
+New Kernel Version:kernel-5.4.17-2136.323.8.2.el8uek
+Servers below 8.7 will get upgraded to Oracle Linux 8.8  and get latest kernel
+Servers at 8.7  will remain at 8.7 and get latest kernel"
+
+"Oracle Linux  7.9 patch update
+New Kernel Version: kernel-5.4.17-2136.323.8.2.el7uek
+Servers below 7.9 will get upgraded to Oracle Linux 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel"
+
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_8_2023_Q4"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q4"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2023_Q4"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2023_Q4_Bigdata"
+
+
+NOV : 3.10.0-1160.102.1.el7  --> Monthly kernel
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7.9_Monthly_Patching"
+
+
+
+
+
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2024_Q1"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q1"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_9_2024_Q1"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q1_Bigdata"
+
+
+==================================================================================================================================================
+
+
+Quarter Q1_2024 - registration key
+
+
+"RHEL 8.9 patch update
+New Kernel Version: kernel - 4.18.0-513.9.1.el8_9
+Servers  below  8.9 will get upgraded to RHEL 8.9 and get latest kernel
+Servers at 8.9 will remain at 8.9 and get latest kernel
+As RHEL Patches are cumulative all earlier patches will also be included.
+There are 367 new patches (112 are security) in 2024-Q1 (released between 10/1 & 12/31/2023)"
+
+"RHEL 7.9 patch update
+New Kernel Version: kernel-3.10.0-1160.105.1.el7
+Servers below 7.9 will get upgraded to RHEL 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+As RHEL Patches are cumulative all earlier patches will also be included.
+There are 54 new patches (38 are security) in 2024-Q1 (released between 10/1 & 12/31/2023)"
+
+"RHEL 6.10 patch update
+Kernel Version: Kernel- 2.6.32-754.50.1.el6
+Servers below 6.10 will get upgraded to RHEL 6.10 and get latest kernel
+Servers at 6.10 will remain at 6.10 and get latest kernel
+As RHEL Patches are cumulative all earlier patches will also be included.
+There are 5 new patches (4 are security)  in 2024-Q1 (released between 10/1 & 12/31/2023)
+Note: Kernel version has not changed hence reboot may not be required after patching if server was patched in 2023-Q4"
+
+"Oracle Linux  8.9 patch update
+New Kernel Version: kernel-5.4.17-2136.326.6.el8uek
+Servers below 8.9 will get upgraded to Oracle Linux 8.9 and get latest kernel
+Servers at 8.9  will remain at 8.9 and get latest kernel
+As the patches are cumulative all earlier patches will also be included.
+There are 126 new security patches in 2024-Q1 (released between 10/1 & 12/31/2023)"
+
+"Oracle Linux  7.9 patch update
+New Kernel Version: kernel- 5.4.17-2136.326.6.el7uek
+Servers below 7.9 will get upgraded to Oracle Linux 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+As the patches are cumulative all earlier patches will also be included.
+There are 44 new security patches in 2024-Q1 (released between 10/1 & 12/31/2023)"
+
+
+
+
+
+
+
+RHEL8-2024-Q1	4.18.0-513.9.1.el8_9	
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_9_2024_Q1"
+
+RHEL7.9-2024-Q1	3.10.0-1160.105.1.el7	
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q1"
+
+RHEL6.10-2024-Q1	2.6.32-754.50.1.el6	
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2024_Q1"
+
+BigData:
+RHEL7.9-2024-Q1	3.10.0-1160.105.1.el7	
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q1_Bigdata"
+
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7.9_Monthly_Patching"
+
+
+========================================================================================================
+
+
+Quarter Q2_2024 - registration key
+
+
+2024-Q2 RHEL 6, 7 ,8&9 OS Security Patch Bundle Summary (Cut off date: 31-Mar-2024)
+"RHEL 9 patch update
+New Kernel Version: kernel-5.14.0-362.24.1.el9_3
+Servers  9.2 and below  will get upgraded to RHEL 9.3 and get latest kernel
+Servers at 9.3 will remain at 9.3 and get latest kernel
+"
+"RHEL 8.9 patch update
+New Kernel Version: kernel-4.18.0-513.18.1.el8_9
+Servers  8.8 and below  will get upgraded to RHEL 8.9 and get latest kernel
+Servers at 8.9 will remain at 8.9 and get latest kernel
+"
+"RHEL 7.9 patch update
+New Kernel Version: kernel-3.10.0-1160.114.2.el7
+Servers below 7.9 will get upgraded to RHEL 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+"
+"RHEL 6.10 patch update
+Kernel Version: Kernel-2.6.32-754.50.1.el6
+Servers below 6.10 will get upgraded to RHEL 6.10 and get latest kernel
+Servers at 6.10 will remain at 6.10 and get latest kernel
+"
+"Oracle Linux  8.9 patch update
+New Kernel Version:kernel-5.4.17-2136.329.3.1.el8uek
+Servers below 8.8 will get upgraded to Oracle Linux 8.9  and get latest kernel
+Servers at 8.9  will remain at 8.9 and get latest kernel"
+
+"Oracle Linux  7.9 patch update
+New Kernel Version: kernel-5.4.17-2136.329.3.1.el7uek
+Servers below 7.9 will get upgraded to Oracle Linux 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel"
+
+RHEL9-2024-Q2	5.14.0-362.24.1.el9_3	
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL9_2024_Q2"
+
+RHEL8-2024-Q2	4.18.0-513.18.1.el8_9	
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_9_2024_Q2"
+
+RHEL7.9-2024-Q2	3.10.0-1160.114.2.el7	
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q2"
+
+RHEL6.10-2024-Q2	2.6.32-754.50.1.el6	
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2024_Q2"
+
+RHEL7.9-2024-Q2	3.10.0-1160.114.2.el7	
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q2_Bigdata"
+
+
+[Monday 4:50 PM] Damireddy, Subbaramaiah
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2024_Q2"
+[Monday 4:52 PM] Damireddy, Subbaramaiah
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q2"
+[Monday 4:53 PM] Damireddy, Subbaramaiah
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_9_2024_Q2"
+[Monday 4:55 PM] Damireddy, Subbaramaiah
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q2_Bigdata"
+[Monday 4:59 PM] Damireddy, Subbaramaiah
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL9_2024_Q2"
+
+================================================================================================================
+
+Quarter Q3_2024 - registration key
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2024_Q3"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_9_2024_Q3"
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q3"
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL9_2024_Q3"
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q3_Bigdata"
+
+
+2024-Q3 RHEL 6, 7 ,8&9 OS Security Patch Bundle Summary (Cut off date: 30-June-2024)
+
+RHEL 9 patch update
+New Kernel Version: kernel-5.14.0-427.22.1.el9_4
+Servers  9.3 and below  will get upgraded to RHEL 9.4 and get latest kernel
+Servers at 9.4 will remain at 9.4 and get latest kernel
+
+RHEL 8.9 patch update
+New Kernel Version: kernel-4.18.0-553.5.1.el8_10
+Servers  8.8 and below  will get upgraded to RHEL 8.9 and get latest kernel
+Servers at 8.9 will remain at 8.9 and get latest kernel
+
+RHEL 7.9 patch update
+New Kernel Version: kernel-3.10.0-1160.119.1.el7
+Servers below 7.9 will get upgraded to RHEL 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+
+RHEL 6.10 patch update
+Kernel Version: Kernel-2.6.32-754.53.1.el6
+Servers below 6.10 will get upgraded to RHEL 6.10 and get latest kernel
+Servers at 6.10 will remain at 6.10 and get latest kernel
+
+Oracle Linux  8.9 patch update
+New Kernel Version:kernel-5.4.17-2136.332.5.2.el8uek
+Servers below 8.8 will get upgraded to Oracle Linux 8.9  and get latest kernel
+Servers at 8.9  will remain at 8.9 and get latest kernel
+
+Oracle Linux  7.9 patch update
+New Kernel Version: kernel-5.4.17-2136.332.5.2.el7uek
+Servers below 7.9 will get upgraded to Oracle Linux 7.9 and get latest kernel
+Servers at 7.9 will remain at 7.9 and get latest kernel
+
+
+Rhel 8 --> 4.18.0-553.5.1.el8_10
+Rhel 7 --> 3.10.0-1160.119.1.el7
+Rhel 6 --> 2.6.32-754.53.1.el6
+
+
+
+
+=========================================================================================================================
+
+subscription-manager repos --enable=*                    (repos was not added auto repo)
+
+
+subscription-manager unregister   (  for unregister for RHEL 6 after patching ) do at end 
+
+===================================================
+
+
+subscription-manager attach --pool=0ef56c917c589e26017d71ebccbd096d
+
+subscription-manager list --available   ------> to check pool ID 
+
+
+===================================================
+
+[9:10 AM] Poddar, Pankaj
+vmware-uninstall-tools.pl --> To uninstall Vmware tools if we are doing manually 
+
+[9:11 AM] Poddar, Pankaj
+Vmtool uninstall RHEL 7 2. Reboot. 3. Install open-vm-tools 
+
+
+
+
+
+===================================================
+
+AD issue (troubleshooting)    ----- ( login to console and check AD id is present or not , if not create a local acc havalako and password )
+
+
+[10:17 PM] M, Pradeep
+id pankaj.poddar --> This will list only uid and primary gid not other group ..and we were unable to login to server via AD
+sssd service was running fine
+cp -p /etc/sssd/sssd.conf /etc/sssd/sssd.conf.<date>
+vi /etc/sssd/sssd.conf
+ad_enabled_domains = bell.corp.bce.ca
+systemctl stop sssd ; rm -f /var/log/sssd/* /var/lib/sss/{db,mc}/* ; systemctl start sssd
+
+
+
+
+===================================================
+
+Havalako password reset 
+
+
+ansible all -m ping -u havalako -k -b -K -i <inventory file>
+
+
+ansible all -m shell -a "echo "Kandan1977" | passwd havalako --stdin && pam_tally2 --user havalako --reset" -u havalako -k -b -K -i <inventory file>
+
+
+
+
+====================================================
+
+
+
+Net backup commands    ( run at end )
+
+
+/opt/VRTSpbx/bin/vxpbx_exchanged start;
+/usr/openv/netbackup/bin/bp.start_all;
+/usr/openv/netbackup/bin/bpps -x;
+
+
+to check version of netbackup
+
+/opt/openv/netbackup/bin/version
+======================
+(for password change)
+
+control+alt+end 
+
+======================
+server name ending with a is application server
+server name starting with c is cloud
+
+======================
+Device Serial Number: 76bad4562337072e4dbb
+
+======================
+heartbeat ip   : -    /etc/hosts
+
+======================
+https://servicemanager.int.bell.ca/index.do
+
+======================
+yum check-update kernel
+
+
+itsm & corporate asset library
+
+ssh servername -l root
+
+any changes in dns resolve.conf
+
+
+oracle noneed of repo file
+
+
+=======================
+
+nslookup *servername*-ilo   -----  console IP
+
+
+
+=======================
+  (To check whether the server is cluster or not )
+
+clustat --> for rhel 6
+
+pcs status --> for rhel 7 and 8
+
+========================
+
+
+ps -ef | grep -i crs
+
+========================
+
+-------> to check whether the proxy is present or not 
+
+env | grep -i proxy
+
+-------> if present and if we have to remove provide this below command 
+
+unset http_proxy
+
+========================
+
+/opt/VRTSpbx/bin/vxpbx_exchanged start;
+/usr/openv/netbackup/bin/bp.start_all;
+/usr/openv/netbackup/bin/bpps -x;
+
+
+ansible all -m shell -a "uname -r" -u saurabh.kulsange -k -b --become-method=su -K -i server
+
+
+========================
+
+whenever " chronyc tracking " is not working or not syncronized 
+
+check for "cat /etc/chronyd.conf" whether the servernames are present or not 
+-----------in one case 'someone by mistake started chronyc in place of ntpd' so at that time we have to check both the 
+           conf files "cat /etc/ntp.conf ;  cat /etc/chronyd.conf" where there servernames are present that service is running
+ 
+
+
+
+
+
+=========================
+
+
+RHEL 7 :
+
+Backout plan :
+--------------
+
+
+
+
+[root@cdopld-136 ~]# awk -F\' '$1=="menuentry " {print $2}' /etc/grub2.cfg
+Red Hat Enterprise Linux Server (3.10.0-514.26.1.el7.x86_64) 7.3 (Maipo) ============> 0
+Red Hat Enterprise Linux Server (3.10.0-327.36.3.el7.x86_64) 7.3 (Maipo) =============>1
+Red Hat Enterprise Linux Server (3.10.0-327.el7.x86_64) 7.3 (Maipo)
+Red Hat Enterprise Linux Server (0-rescue-219132e2950141f3af70461b7c58a70d) 7.3 (Maipo)
+
+
+
+
+grub2-set-default 1 --> Depends on top of the output
+
+
+
+cat /boot/grub2/grubenv |grep saved
+saved_entry=1
+
+
+
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+
+
+reboot
+
+
+
+
+
+
+===============================
+
+Cloud Servers --> https://toroondc27y-010.bell.corp.bce.ca/    -Pa$$w0rd99
+IBM Transistion --> https://dm5ccl.bell.corp.bce.ca/           -1Qazxsw@123
+Bell Media --> https://10.1.43.50/ui
+CGI Build Servers --> https://toroondc199-001.bell.corp.bce.ca
+Ants Vcentre --> https://aia0019.belldev.dev.bce.ca/
+https://blmc73-009.qc.bell.ca/ui
+
+vcentre details: https://toroondc27y-010.bell.corp.bce.ca
+                TOROONDC199-001.BELL.CORP.BCE.CA
+                dm5ccl.bell.corp.bce.ca -> IBM Transitioned
+https://toesxvc501.corp.ctv.ca/ -> agcoux servers
+DLP New vSphere name is : https://dc5cnj-005.qc.bell.ca/
+DLP vSphere name is : https://dc5cnj-005.qc.bell.ca/      Ip details of vCenter Server : 142.117.253.207
+
+ 
+Server manager :      https://servicemanager.int.bell.ca/index.do?lang=en
+
+
+
+Cisco UCS manager Console -->  https://172.24.1.6/app/ucsm/index.html  --> BigData
+							   https://172.24.1.6/app/4_0_4e/index.html 
+                               https://172.24.1.9/app/4_0_4e/index.html#      (  username :  igdcunix     password: igdcunix@123  )  for bigdata                                        
+
+Ansible -->   http://dcobw6-221.qc.bell.ca:8888/     (AD id login)
+
+
+https://172.24.1.6/app/ucsm/index.html#
+https://172.24.1.9/app/4_0_4e/index.html#
+
+
+CITS ---> https://cits.int.bell.ca/corp_lib/server.asp 
+
+CISCO BLADE UCS Console :  Dcoy70-fi.qc.bell.ca     (  CGIAdmin/Bell1357  ) native/bell 
+
+
+https://10.36.133.247:7002/ovm/console  --> oracle VM Manager 
+
+DM2CQR/142.182.194.6 --> once jnlp file is generated --> open with --> more apps --> look for another app --> java/jre7/bin/javaws --> open
+
+https://dc6cfv.qc.bell.ca:7002/ovm/console/faces/login.jspx        ---> dc6cfu-d00
+
+
+username - admin
+password :  Pass2ovm
+
+for oracle servers please use below jumpbox to access the console 
+ 
+142.182.194.6
+142.182.114.27 --> RDP dmoc1a-000
+
+
+
+172.28.209.255  --> dm6cbh-ovm --> Oracle spacewalk server 
+
+
+RILOEAdmin/admin
+RILOE1234/Bell1234
+
+https://dcoy37-fi.qc.bell.ca/
+
+ 
+
+If anyone knows more UCS Manager please add in the list.
+
+Dmoy70-fi.on.bell.ca 
+Dcoy70-fi.qc.bell.ca 
+https://dcoy78-fi.qc.bell.ca 
+https://dcoy77-fi.qc.bell.ca 
+https://dmoy77-fi.on.bell.ca
+https://dmoy37-fi.on.bell.ca/
+https://dcoy37-fi.qc.bell.ca/
+
+
+
+ipmitool lan print  --> this command helps to get the console ip
+
+
+[7:02 PM] Poddar, Pankaj
+[root@DM6CBI ~]# ipmitool lan print
+
+Set in Progress         : Set Complete
+
+Auth Type Support       : NONE MD5 PASSWORD
+
+Auth Type Enable        : Callback : MD5 PASSWORD
+
+                        : User     : MD5 PASSWORD
+
+                        : Operator : MD5 PASSWORD
+
+                        : Admin    : MD5 PASSWORD
+
+                        : OEM      :
+
+IP Address Source       : Static Address
+
+IP Address              : 172.28.208.137
+
+Subnet Mask             : 255.255.252.0
+
+MAC Address             : 08:f1:ea:f7:7e:2e
+
+SNMP Community String   :
+
+BMC ARP Control         : ARP Responses Enabled, Gratuitous ARP Disabled
+
+Default Gateway IP      : 172.28.208.1
+
+802.1q VLAN ID          : Disabled
+
+802.1q VLAN Priority    : 0
+
+RMCP+ Cipher Suites     : 0,1,2,3
+
+Cipher Suite Priv Max   : XuuaXXXXXXXXXXX
+
+                        :     X=Cipher Suite Unused
+
+                        :     c=CALLBACK
+
+                        :     u=USER
+
+                        :     o=OPERATOR
+
+                        :     a=ADMIN
+
+                        :     O=OEM
+
+Bad Password Threshold  : Not Available
+
+[root@DM6CBI ~]# nslookup 172.28.208.137
+
+137.208.28.172.in-addr.arpa     name = dm6cbi-ilo.on.bell.ca.
+[7:02 PM] Poddar, Pankaj
+this is one good commmand Sam have shared which can help us to get the console IP ...
+[7:03 PM] Poddar, Pankaj
+we can save this command for our reference
+
+
+
+===============================
+
+
+for exclusion of packages :
+
+
+yum history
+yum history info 53 | more  --------->   (here 53 is the history cmd no. executed)  ---- ( here, "itself command line" will be there just check where is "exclusion command ")
+
+update --exclude=elasticsearch*,logstash*,kibana* -----> command----> cat /etc/repos
+
+exclude=httpd*,mod_ssl*,mod_ldap*,apache*,tomcat* -----> Application related packages
+
+exclude=httpd*,mod_ssl*,mod_ldap*,apache*,tomcat*
+
+only for excluding kernel and update packages other than kernel version :
+
+yum update --exclude=kernel*
+
+==============================
+
+if proxy is set on a server then we cant subscribe and register the server . Hence, we need to unset the proxy and register the server manually .
+
+
+to check the proxy 
+
+env | grep -i proxy  :
+
+[root@CNCC0V ~]# env | grep -i proxy
+http_proxy=http://fastweb.int.bell.ca:8083/
+[root@CNCC0V ~]#
+
+
+to unset :
+
+unset http_proxy
+
+==============================
+
+Logging in to BELL Transistion servers :
+
+1) search the "server name" in inventory file provided by "c c, narendra" and check in additional information it is written "Transistion from bell"
+2) check in excel file "ssh console details wave1&wave2" under "accessible" check it is via direct putty or some other jump server 
+3) if there is jumpserver login to local account"havalako" and from there login to the server 
+
+
+==============================
+
+pam_tally2 -u username
+pam_tally2 -u username -r
+
+
+
+==============================
+
+
+https://10.36.133.247:7002/ovm/console
+
+https://dc6cfv.qc.bell.ca:7002/ovm/console/faces/login.jspx        ---> dc6cfu-d00
+
+
+username - admin
+password :  Pass2ovm
+
+
+172.28.209.255   ---> OVM  (USERNAME/PASSWORD: RILOEAdmin/RILOE1234)
+
+
+
+BELL.AI.UNIX-Build.in@cgi.com
+igdcUnix03
+
+
+cat /etc/oracle-release  -----> 
+yum list kernel-uek
+
+==============================
+
+Register server via sattelite
+
+
+
+
+===============================
+
+REDHAT CASE credentials
+
+https://access.redhat.com/
+
+BellUnixSupport
+igdcUnix03
+
+
+===============================
+
+Pam Access Direct - CLI
+
+[12:07 AM] M, Pradeep
+142.117.168.213
+
+[12:10 AM] M, Pradeep
+search cgi -skip 35
+
+[12:11 AM] M, Pradeep
+launch 9748 -m hostname
+
+
+===============================
+
+bell Paaswd
+
+[9:47 AM] S, Karthik
+saurabh.kulsange
+Thumhiho@123
+
+
+===============================
+
+Monthly Patching
+
+
+CWYPLD-81 & CDOPLD-72
+
+
+===============================
+
+[11:53 AM] Poddar, Pankaj
+[root@cdopla-223 ~]# systemctl status vmtoolsd.service  --> Name of the service
+● vmtoolsd.service - Service for virtual machines hosted on VMware
+   Loaded: loaded (/usr/lib/systemd/system/vmtoolsd.service; enabled; vendor preset: enabled)
+   Active: active (running) since Thu 2022-07-14 01:56:12 EDT; 27min ago
+
+
+[11:54 AM] M, Pradeep
+/usr/bin/vmware-toolbox-cmd -v   --> current version
+
+[11:56 AM] Poddar, Pankaj
+[root@cdopla-223 ~]# rpm -qa | grep -i open-vm-tool
+open-vm-tools-11.0.5-3.el7_9.3.x86_64
+[root@cdopla-223 ~]# /usr/bin/vmware-toolbox-cmd -v
+11.0.5.17716 (build-15389592)
+[root@cdopla-223 ~]#
+ like 1
+
+
+
+
+===============================
+
+tail -f /var/log/yum.log
+
+tail -f /var/log/yum.log
+
+this cmd helps to give latest pkg update in log files
+
+
+
+==============================
+
+To check firewall status 
+
+systemctl status firewalld
+
+firewall-cmd --state
+
+firewall-cmd --list-all
+
+
+
+==============================
+
+
+DCS self protection  for bigdata
+
+
+john.landrigan@cgi.com
+
+
+CA GEN Antivirus MEPS Bell <Antivirus.MEPSBell.ca@cgi.com>
+
+================================
+
+For killing a process 
+
+
+kill -9 pid
+
+================================
+
+Assigning owner and group 
+
+chown -R user:group /path      ----> R for recursively 
+
+================================
+For SSSD cleanup... Try avoiding gzipping manually... use the below command to rotate logs
+
+logrotate -f /etc/logrotate.d/sssd
+
+
+================================
+
+[root@DCOBW6-146 ~]#
+[root@DCOBW6-146 ~]# ls -ld /usr/local/patchagent
+drwx--x--x 4 root root 4096 Aug  6 01:23 /usr/local/patchagent
+[root@DCOBW6-146 ~]# cd /usr/local/patchagent
+[root@DCOBW6-146 patchagent]# ./patchservice clearDetectLog
+[root@DCOBW6-146 patchagent]#
+[root@DCOBW6-146 patchagent]# df -h .
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       9.8G  6.1G  3.2G  66% /
+[root@DCOBW6-146 patchagent]#
+[root@DCOBW6-146 patchagent]#
+
+
+==================================
+
+Copying files/directories from server to server using scp 
+
+
+
+scp -pr directory/file user@ip:/path
+
+
+===================================
+
+Bell Secure unlock
+
+https://www.bep.int.bell.ca/login/login.jsp?TYPE=33554433&REALMOID=06-83097f8f-e24f-101e-8513-8319796b0cb3&GUID=&SMAUTHREASON=0&METHOD=GET&SMAGENTNAME=$SM$kDNkp2lPdU4w0ac2OhxWW21ALyoPPKUFzogr%2bWIi9lqmiyDZSVwc%2f5EKInBfQ6O7&TARGET=$SM$https%3a%2f%2fmsi01%2eint%2ebell%2eca%3a9443%2fsiss%2findex%2ebep
+
+https://bellaccess.int.bell.ca/identityiq/home.jsf
+
+SecurID Self Serve Support --> to check Vpn access
+
+
+https://bellaccess.int.bell.ca/identityiq/home.jsf
+
+https://insightprod.groupinfra.com/LearningTracker       ----> to check training hrs 
+
+====================================
+
+
+If incase ntp is having issue and there is difference in time then we need to set the time use below cmd 
+
+date --set="$(ssh user@server date)"
+
+date --set="$(ssh saurabh.kulsange@dcobw6-221 date)"
+
+ex:
+
+date --set="$(ssh pankaj.poddar@cdopld-72 date)"
+date --set="$(ssh pradeep.m@dcobw6-221 date)"
+
+
+
+===============================================
+
+
+
+ucmdbu  ALL=(ALL)       NOPASSWD:ALL
+
+
+
+
+===============================================
+
+
+
+[root@cwyplw-135 ~]# ps -ef | grep -i rhsm
+root       1530      1  0 Jul17 ?        00:00:00 /usr/bin/rhsmcertd
+root      91742   1530  0 Oct05 ?        00:00:00 /usr/bin/python2 /usr/libexec/rhsmcertd-worker               --> We had to kill this proces
+root     100756      1  0 07:14 ?        00:00:00 /usr/bin/python2 /usr/libexec/rhsmd
+root     101061 101042  0 07:16 pts/4    00:00:00 grep --color=auto -i rhsm
+[root@cwyplw-135 ~]# kill -9 91742
+[root@cwyplw-135 ~]#
+
+
+================================================
+
+
+Password Reset 
+
+echo "welcome01" | passwd --stdin USERNAME; chage -d 0 USERNAME
+
+
+
+=================================================
+
+
+
+UNIX queue : ITSM->  CGI Support to BC -> Server Management -> UNIX
+
+
+================================================
+
+
+https://bell.service-now.com/sp?id=form_iframe&table=change_request&sys_id=-1&view=QSNormalChange&uri=%2Fchange_request.do%3FWIZARD:action%3Dfollow%26sys_action%3D%26sys_id%3D-1%26sys_target%3D%26sysparm_query%3D%26sysparm_target%3D%26sysparm_view%3DQSNormalChange%26wiz_action%3Dsysverb_new%26wiz_collection%3D%26wiz_collectionID%3D%26wiz_collection_key%3D%26wiz_collection_related_field%3D%26wiz_referring_url%3D%26wiz_view%3D
+
+http://wiki.int.bell.ca/display/SNow/Creating+a+Change+Request
+
+
+
+
+
+
+pam_tally2 -u username 
+
+
+
+=================================================
+
+
+[Monday 7:47 PM] Poddar, Pankaj
+for IBM Hardware servers ... from now on please verify the before reboot output for cat /proc/mdstat ...
+
+[Monday 7:47 PM] Poddar, Pankaj
+ ============== SOFTWARE RAID MD STAT staus ========== Personalities : [raid1]
+md2 : active raid1 sdb3[1](F) sda3[2]
+      10477440 blocks super 1.1 [2/1] [U_]
+      bitmap: 1/1 pages [4KB], 65536KB chunk
+
+md3 : active raid1 sdb4[1](F) sda4[2]
+      254110528 blocks super 1.1 [2/1] [U_]
+      bitmap: 2/2 pages [8KB], 65536KB chunk
+
+md0 : active raid1 sdb2[1](F) sda2[2]
+      10485632 blocks super 1.0 [2/1] [U_]
+      bitmap: 1/1 pages [4KB], 65536KB chunk
+
+md1 : active raid1 sdb1[2](F) sda1[3]
+      16768896 blocks super 1.1 [2/1] [U_]
+
+[Monday 7:48 PM] Poddar, Pankaj
+it should show 2/2 and UU ... if you see this output it is showing 2/1 and U_
+
+
+
+[Monday 7:48 PM] Poddar, Pankaj
+[root@dc5chx ~]# cat /proc/mdstat
+Personalities : [raid1]
+md2 : active raid1 sdb4[2] sda4[0]      10477568 blocks super 1.1 [2/2] [UU]      bitmap: 0/1 pages [0KB], 65536KB chunk
+
+md0 : active raid1 sda3[0] sdb3[2]      524224 blocks super 1.0 [2/2] [UU]
+
+md3 : active raid1 sda5[0] sdb5[2]      263883776 blocks super 1.1 [2/2] [UU]      bitmap: 2/2 pages [8KB], 65536KB chunk
+
+md1 : active raid1 sda2[0] sdb2[2]      16751616 blocks super 1.1 [2/2] [UU]
+
+unused devices: <none>
+[root@dc5chx ~]#
+
+===============================================================================================================================
+
+
+for i in `cat my_patching_list`; do grep -i $i issue_server; done
+
+
+
+
+
+
+
+
+timedatectl
+
+
+
+
+================================================
+
+pwdx <pid>
+
+
+
+confluence
+
+
+
+=================================================
+
+date +%F\
+
+
+=================================================
+
+jeganraj.jeromeraj@cgi.com
+
+
+
+=================================================
+
+pcs status
+pcs resource unmanage PRSILMRB_RG   --> freezing(unmanaged state)
+PRSILMRB_RG
+pcs resource manage PRSILMRB_RG   --> unfreeze(managed state)
+
+
+==================================================
+
+
+ITSM LINK 
+
+cgi.com --> domain name 
+
+
+https://supportportal.cgi.com/arsys/forms/itsm-prod-ars/SHR%3ALandingConsole/Default+Administrator+View/?cacheid=7a837f00
+
+
+
+===================================================
+
+
+The NFS mount is not working on the server cwypld-280 and cdopld-410.  CHG0027886 
+
+[root@cdopld-408 ~]# systemctl is-enabled nfs
+enabled
+[root@cdopld-408 ~]#
+
+Server side ntp was stopped cwypld-280 ... need to retart the nfs service on server cwypld-280
+
+
+
+===================================================
+
+
+Cluster patching
+
+pcs cluster stop --all                 --> to stop the cluster on all nodes
+pcs cluster disable --all              --> to disable the cluster on all nodes
+pcs cluster start --all                --> to start the cluster on all nodes
+pcs cluster enable --all               --> to enable the cluster on all nodes
+df -TPh
+
+For gfs cluster use below commands
+
+pcs cluster disable            --> to disable the cluster on one node 
+pcs cluster stop               --> to stop the cluster on one node 
+sanity reboot
+yum update
+reboot
+pcs cluster start 
+pcs cluster enable 
+pcs status (we need to check every nodes are up and runnig)
+Also confirm which FS is under cluster control and that you need to check post starting of the cluster
+
+Check the FS /data is not readonly and we are able to create a test file and the same file is visible in another node as the FS are in GFS...   AGCOUX074 & AGCOUX075
+
+
+[root@DC1B1R-D01 ~]# pcs status
+Cluster name: PCS_CODE_11969
+Stack: corosync
+Current DC: DC1B1R-D01-node1 (version 1.1.23-1.el7_9.1-9acf116022) - partition with quorum
+Last updated: Tue Sep 19 01:54:02 2023
+Last change: Mon Jan 23 01:11:16 2023 by root via cibadmin on DC1B1R-D01-node1
+
+ 
+
+2 nodes configured
+8 resource instances configured
+
+ 
+
+Online: [ DC1B1R-D01-node1 DC1B1R-D02-node2 ]
+
+ 
+
+Full list of resources:
+
+ 
+
+vmfence1       (stonith:fence_vmware_soap):    Started DC1B1R-D02-node2
+vmfence2       (stonith:fence_vmware_soap):    Started DC1B1R-D02-node2
+Clone Set: dlm-clone [dlm]
+     Started: [ DC1B1R-D01-node1 DC1B1R-D02-node2 ]
+Clone Set: clvmd-clone [clvmd]
+     Started: [ DC1B1R-D01-node1 DC1B1R-D02-node2 ]
+Clone Set: gfs2_res-clone [gfs2_res]
+     Started: [ DC1B1R-D01-node1 DC1B1R-D02-node2 ]
+
+ 
+
+Failed Resource Actions:
+* vmfence1_start_0 on DC1B1R-D01-node1 'unknown error' (1): call=41, status=Error, exitreason='',
+    last-rc-change='Wed Jul 19 22:47:45 2023', queued=0ms, exec=1651ms
+* vmfence2_start_0 on DC1B1R-D01-node1 'unknown error' (1): call=37, status=Error, exitreason='',
+    last-rc-change='Wed Jul 19 22:47:38 2023', queued=1ms, exec=1584ms
+
+ 
+
+Failed Fencing Actions:
+* reboot of DC1B1R-D02-node2 failed: delegate=, client=crmd.2825, origin=DC1B1R-D01-node1,
+    last-failed='Sat Feb 18 23:31:03 2023'
+
+ 
+
+Daemon Status:
+  corosync: active/enabled
+  pacemaker: active/enabled
+  pcsd: active/enabled
+[root@DC1B1R-D01 ~]# pcs resource show gfs2_res-clone
+Clone: gfs2_res-clone
+  Meta Attrs: interleave=true
+  Resource: gfs2_res (class=ocf provider=heartbeat type=Filesystem)
+   Attributes: device=/dev/mapper/vg_gfs2-shared_data directory=/shared_data fstype=gfs2 options=noatime,nodiratime
+   Operations: monitor interval=30 on-fail=fence timeout=120 (gfs2_res-monitor-interval-30)
+               notify interval=0s timeout=60s (gfs2_res-notify-interval-0s)
+               start interval=0s timeout=60s (gfs2_res-start-interval-0s)
+               stop interval=0s timeout=60s (gfs2_res-stop-interval-0s)
+[root@DC1B1R-D01 ~]# df -TPh /shared_data
+Filesystem                      Type  Size  Used Avail Use% Mounted on
+/dev/mapper/vg_gfs2-shared_data gfs2   11T  9.1T 1002G  91% /shared_data
+[root@DC1B1R-D01 ~]#
+
+
+Database Cluster  
+
+ps -ef|grep -i crsd    --> (if Crsd.bin reboot means it's DB cluster) 
+
+
+
+====================================================
+search files in Linux 
+
+
+find / -name filename
+
+
+====================================================
+
+
+
+package-cleanup --oldkernels          ---------------(It will clean all the boot kernels , when /boot is above 90% use this cmd to remove the last kernel version on the server)
+
+uname -r ---> check the current version
+df -h /boot ---> check the available /boot space, if less than 70% no need to delete old kernel
+rpm -qa | grep -i kernel-3. ---> check the available kernel
+package-cleanup --oldkernels --count=2  ---> remove the old kernel   ( --count=1  specify the no. of kernels you want to leave on the system better leave more than 2 kernels)
+df -h /boot ---> verify the /boot space
+
+
+
+uname -r;df -h /boot;rpm -qa | grep -i kernel-3.;
+package-cleanup --oldkernels --count=2
+====================================================
+
+IOORA
+
+cdopla-4017 & DCOBW6-221
+
+
+
+
+====================================================
+
+
+
+yum downgrade <packagename>      ----------( to downgrade the pkg to previous version)
+
+rpm -qa --last <packagename>     ----------( to list the pkg with order which is latest comes in first )
+
+
+====================================================
+
+
+1. Check whether chronyd or ntpd is running.
+systemctl status ntpd
+systemctl status chronyd
+2. Based on step1, we need to stop chronyd or ntpd
+systemctl stop ntpd
+systemctl stop chronyd
+3. timedatectl set-local-rtc 0
+4. hwclock --utc --systohc
+
+
+====================================================
+
+[Tuesday 6:32 PM] M, Pradeep
+
+S6909
+
+pradeep.m / Tomcat@431307
+sudo su - cpass
+NOTE: don't share with anyone
+ansible all -m shell -a "uname -r" -b -i <inventory>
+
+
+====================================================
+Satellite Spacewalk Oracle server sync 
+
+
+  946  02/01/23 00:48:55  spacewalk-repo-sync -c ol7_x86_64_spacewalk27_client
+  947  02/01/23 00:49:07  spacewalk-repo-sync -c ol7_x86_64_addons
+  948  02/01/23 00:49:20  spacewalk-repo-sync -c ol7_x86_64_optional_latest
+  949  02/01/23 00:49:49  spacewalk-repo-sync -c ol7_x86_64_latest
+  950  02/01/23 00:50:31  spacewalk-repo-sync -c ol7_x86_64_uekr6
+  951  02/01/23 00:51:10  spacewalk-repo-sync -c ol7_x86_64_uekr5
+  952  02/01/23 23:57:40  service-status spacewalk
+
+
+
+
+
+spacewalk-repo-sync -c ol7_x86_64_spacewalk27_client
+spacewalk-repo-sync -c ol7_x86_64_addons
+spacewalk-repo-sync -c ol7_x86_64_optional_latest
+spacewalk-repo-sync -c ol7_x86_64_latest
+spacewalk-repo-sync -c ol7_x86_64_uekr6
+spacewalk-repo-sync -c ol7_x86_64_uekr5
+
+
+
+
+===========================================================
+Password reset RHEL 6
+
+In the grub press "e" and type below line to get in emergency mode and "ctrl + x" to save and exit to apply ...
+
+
+systemd.unit=emergency.target
+
+
+============================================================
+
+
+
+rpm -qa|head -n 1
+
+============================================================
+
+to check mount points 
+
+cat /proc/mounts 
+
+============================================================
+
+Identify any duplicates on the system
+
+
+# package-cleanup --dupes
+# yum check
+
+============================================================
+Ntp add .conf
+
+restrict 127.0.0.1
+restrict -6 ::1
+
+
+saurabh@cgi
+============================================================
+Below Command used for dry run for yum
+
+yum update -y --setopt tsflags=test
+
+============================================================
+http://dc5cpz.qc.bell.ca/pub/katello-ca-consumer-latest.noarch.rpm
+
+[root@cwypld-293 ~]# wget https://dc5cpz.qc.bell.ca/pub/katello-ca-consumer-latest.noarch.rpm
+--2023-08-28 05:50:24--  https://dc5cpz.qc.bell.ca/pub/katello-ca-consumer-latest.noarch.rpm
+Resolving dc5cpz.qc.bell.ca (dc5cpz.qc.bell.ca)... 142.117.236.17
+Connecting to dc5cpz.qc.bell.ca (dc5cpz.qc.bell.ca)|142.117.236.17|:443... connected.
+ERROR: cannot verify dc5cpz.qc.bell.ca's certificate, issued by ‘/C=US/ST=North Carolina/L=Raleigh/O=Katello/OU=SomeOrgUnit/CN=dc6cc5.qc.bell.ca’:
+  Self-signed certificate encountered.
+To connect to dc5cpz.qc.bell.ca insecurely, use `--no-check-certificate'.
+[root@cwypld-293 ~]# wget https://dc5cpz.qc.bell.ca/pub/katello-ca-consumer-latest.noarch.rpm --no-check-certificate
+--2023-08-28 05:50:41--  https://dc5cpz.qc.bell.ca/pub/katello-ca-consumer-latest.noarch.rpm
+Resolving dc5cpz.qc.bell.ca (dc5cpz.qc.bell.ca)... 142.117.236.17
+Connecting to dc5cpz.qc.bell.ca (dc5cpz.qc.bell.ca)|142.117.236.17|:443... connected.
+WARNING: cannot verify dc5cpz.qc.bell.ca's certificate, issued by ‘/C=US/ST=North Carolina/L=Raleigh/O=Katello/OU=SomeOrgUnit/CN=dc6cc5.qc.bell.ca’:
+  Self-signed certificate encountered.
+HTTP request sent, awaiting response... 200 OK
+Length: 6580 (6.4K) [application/x-rpm]
+Saving to: ‘katello-ca-consumer-latest.noarch.rpm’
+
+ 
+
+100%[==============>] 6,580       --.-K/s   in 0s
+
+ 
+
+2023-08-28 05:50:42 (181 MB/s) - ‘katello-ca-consumer-latest.noarch.rpm’ saved [6580/6580]
+
+ 
+
+[root@cwypld-293 ~]# ls -ltr
+total 24
+-rw-------. 1 root root 1214 Jun 21  2016 anaconda-ks.cfg
+-rw-r--r--. 1 root root  202 Jun 28  2016 rhel7dvd.repo
+-rw-------. 1 root root 6852 Sep 12  2018 katello-ca-consumer-dc5cpz.qc.bell.ca-1.0-1.noarch.rpm
+drwx--x--x. 2 root root   47 Nov 18  2020 remed-saved
+-rw-------. 1 root root 6580 Oct  4  2022 katello-ca-consumer-latest.noarch.rpm
+[root@cwypld-293 ~]# rpm -Uvh katello-ca-consumer-dc5cpz.qc.bell.ca-1.0-1.noarch.rpm
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:katello-ca-consumer-dc5cpz.qc.bel################################# [100%]
+[root@cwypld-293 ~]#
+
+rpm -Uvh http://dc5cpz.qc.bell.ca/pub/katello-ca-consumer-latest.noarch.rpm     ---> Please use this 
+
+
+===============================================================
+
+
+
+[root@cpcpld-4025 ~]# subscription-manager identity
+This system is not yet registered. Try 'subscription-manager register --help' fo                                                                             r more information.
+[root@cpcpld-4025 ~]# subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL8_8_2023_Q3"
+Validation failed: Name has already been taken (HTTP error code 422: Unprocessable Entity)
+[root@cpcpld-4025 ~]#
+
+
+==============================================================
+
+
+Redhat Satellite
+
+https://dmob1x.on.bell.ca/
+
+username : igdc.unix
+password:Igdcunix@123
+-----------------------------
+
+Userid: igdc.unix
+Pwd: Un!x@15E
+https://dc5cpz.qc.bell.ca/users/login
+
+===============================================================
+delete host from satellite 
+
+[11:27 AM] Damireddy, Subbaramaiah
+hammer host list --search DM5CRB
+[11:27 AM] Damireddy, Subbaramaiah
+hammer host delete --name dm5crb
+
+
+Step 1 delete the old satellite katello
+
+ 
+
+Step 2 install the new satellite capsule
+
+ 
+
+rpm -Uvh http://dmob1x.on.bell.ca/pub/katello-ca-consumer-latest.noarch.rpm
+
+ 
+
+If working ...Proceed to next server .. if failed
+
+ 
+
+Check nslookup working for new satellite (nslookup dmob1x) ..if working means its resolving .and still unable to install then install the old satellite katello
+
+ 
+
+If not resolving .. take a backup of etc hots file and update the file (142.122.4.110  dmob1x.on.bell.ca) then try to install the new satellite .. if still failing ... install the old satellite katello
+
+
+===============================================================
+
+BigData 
+
+F6
+
+
+===========================================================================================
+
+
+
+[root@DC3C87-018 ~]# ip route show | grep -i default
+default via 198.235.121.1 dev ens192 proto static metric 100
+default via 206.172.1.1 dev ens224 proto static metric 101
+[root@DC3C87-018 ~]# ip route del default via 198.235.121.1 dev ens192
+[root@DC3C87-018 ~]# ip route show | grep -i default
+default via 206.172.1.1 dev ens224 proto static metric 101
+
+
+we could see two gateway ip are present so to remove one we can use " ip route del default via 198.235.121.1 dev ens192 "
+
+[root@DC3C87-018 ~]# netstat -rn
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         198.235.121.1   0.0.0.0         UG        0 0          0 ens192
+0.0.0.0         206.172.1.1     0.0.0.0         UG        0 0          0 ens224
+142.112.0.0     198.235.121.1   255.255.248.0   UG        0 0          0 ens192
+
+
+============================================================================================
+
+dc3c87-000	Route Issue; Temporarily added route	ip route add 142.122.4.110/32 via 198.235.88.1
+dc3c87-005	Route Issue; Temporarily added route	ip route add 142.122.4.110/32 via 198.235.88.1
+dmobd4-000	Route Issue; Temporarily added route	 
+dmobd4-005	Route Issue; Temporarily added route	ip route add 142.122.4.110/32 via 142.182.198.1
+dmobd4-010	Route Issue; Temporarily added route	ip route add 142.122.4.110/32 via 142.182.198.1
+dmobd4-015	Route Issue; Temporarily added route	ip route add 142.122.4.110/32 via 142.182.198.1
+
+
+============================================================================================
+
+Cisco cases 
+
+https://cway.cisco.com/csc/
+
+OCCBellSupport1
+IGDC_T1_Hwy_OCC.BAN.INDIA@cgi.com
+
+=============================================================================================
+
+
+ls -ltr | grep 2022 | awk '{ print $9}' | xargs rm -f
+
+xargs --> gives the input or command whatever we want to execute 
+
+
+==============================================================================================
+
+
+ps aux --sort=-%mem | head
+
+
+==============================================================================================
+
+
+
+C:\Users\saurabh.kulsange\AppData\Local\Microsoft\Windows\INetCache\Content.Outlook\ID99UW33
+
+
+
+nc -zv servername portno.
+
+
+===============================================================================================
+mkdir /root/packages-q3-2024;cd /root/packages-q3-2024;subscription-manager unregister;
+
+
+subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL6_10_2024_Q2-3" ;subscription-manager refresh;
+
+
+yum update --> check the package which are getting updated 
+
+yumdownloader
+
+subscription-manager unregister
+
+
+ansible all -m shell -a "ls -l /root/packages-q3-2024/*.rpm |wc -l" -i server -b -o
+
+
+================================================================================================
+
+Check the kernel version rhel6,7,8
+
+cwypla-15
+cwypla-669
+cdopld-4020
+
+================================================================================================
+Mailx -> to send an email from server to outlook
+
+echo "success" | mailx -s "Test Mail" saurabh.kulsange@cgi.com
+
+
+
+================================================================================================
+HISTORY Time Format:
+
+cat /etc/profile
+vi /etc/profile
+export HISTTIMEFORMAT="%d/%m/%y %T "
+:wq
+
+================================================================================================
+Shared Memory for DB
+
+ipcs -m
+
+
+
+
+
+
+
+
+
+
+
+
