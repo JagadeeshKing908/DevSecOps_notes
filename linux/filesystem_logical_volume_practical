@@ -1,0 +1,166 @@
+Logical volume management practical:
+------------------------------------
+
+Physical Volume(PV) ---- > volume group(vg) ----> logical volume (lv)
+
+Add new disk to vm(5gb)
+
+Scan the lun---> echo "- - -"  > /sys/class/scsi_host/host*/scan
+
+fdisk -l (or) lsblk
+
+fdisk /dev/sdd
+
+help -m
+
+New partition --n
+
+partition number --1
+
+first cylinder --1
+
+end cylinder --default
+
+print partition --p
+
+and --change the value of hex code for converting it to Logical volume
+
+list of LVM values -- l
+
+for list -- t
+
+give hexcode--- 8e
+
+print partition table --p
+
+and save it --w
+
+to save the disk without restarting ---partprobe /dev/sdd
+
+fdisk -l
+
+Physical volume craetion :
+-------------------------
+
+pvcreate /dev/sdd1
+
+To check  command ---pvs or pvdisplay
+
+To remove---> pvremove pvname
+
+Volume Group creation: (name = Redhat)
+----------------------
+
+vgcreate redhat /dev/sdd1  (note : instead of creating pv (physical volume )create if we work on the command vg(volume group) create it will work because they are same pv=vg)
+
+To check  cmnd ---vgs or vgdisplay
+
+pvs --(we can see that both pv and vg ) or same
+
+To remove---> vgremove vgname
+
+Logical volume creation :(name=centos)
+-----------------------
+
+lvcreate -L 1GB -n centos redhat (lvcreate --help to display menu for lvcreate -L= size -n= name)
+
+To check  ----> lvs or lvdisplay
+
+we need to format the logical volume to use logical volume---mkfs.ext4 /dev/redhat/centos
+
+create a directory for mounting --- cd / ----> mkdir ubantu
+
+And add the entries in fstab for permanat mounting ---> /dev/redhat/centos     /ubantu        ext4     defaults   0  0
+
+To mount all ---->mount -a
+
+To resize the logical volume(increase size) :
+-------------------------------
+
+lvextend -L +1GB /dev/redhat/centos
+
+It will not update check---->df -h
+
+we need to update that by using the cmnd--->:resize2fs /dev/redhat/centos
+
+It will  update check---->df -h
+
+Pvs,lvs,vgs ---To check
+
+To resize the logical volume(decrease size) :
+-------------------------------
+
+first we need check space ----->df -h
+
+we need to comment cat /etc/fstab entries related to that file----vi /etc/fstab
+# /dev/redhat/centos     /ubantu        ext4     defaults   0  0
+
+we need to unmount the file system ------------>umount /ubantu
+
+we need to organise the data in fixed space i.e given one 1gb for reducing that we need free another 1gb to organise
+the date the step is below
+
+---- e2fsck  -f /dev/redhat/centos
+
+To update that in file system the cmnd is -----resize2fs  /dev/redhat/centos 1G -r (if we -r then it will help us to update the  resize of  file system)
+
+To reduce the logical volume(lv) we will use ------> lvreduce -L -1GB /dev/redhat/centos -r
+
+to check ---df -h
+
+and we need to uncomment the same file  vi /etc/fstab
+
+# /dev/redhat/centos     /ubantu        ext4     defaults   0  0
+
+
+To delete the logical volume(decrease size) :
+-----------------------------------------
+
+first we need to comment the line in or delete -----------> vi /etc/fstab
+# /dev/redhat/centos     /ubantu        ext4     defaults   0  0
+
+unmount the directory --------umount /ubantu
+
+to delete the logical volume we need to do ---------> lvremove /dev/redhat/centos
+
+To delete volume group:
+-----------------------
+vgs 
+
+To remove volume group------>vgremove redhat
+
+To delete physical volume :
+---------------------------
+
+To remove physical volume  ----- pvremove /dev/sdd1
+
+To create physical extent:(This is because without having any data loss.)
+--------------------------
+to craete physical extent without having a single chunk of data loss -->vgcreate (name of vg) (-s is for creating extent) (size of disk in mb) (location)
+
+----------------->vgcreate redhat -s  5120  /dev/sdd1
+
+To check ---->vgs (or) vgdisplay
+
+To create to logical extent:
+---------------------------
+to craete physical extent without having a single chunk of data loss -->lvcreate (-l is for creating extent) (size of disk in mb) (-n is for name of logical volume) (vgname)
+
+----------------->lvcreate -l 1023 -n centos redhat
+
+To check -------->lvs (or) lvdisplay
+
+mkfs.ext4 /dev/redhat/centos
+
+and uncomment ---------->vi /etc/fstab
+
+mount -a
+ 
+
+
+
+
+
+
+
+
