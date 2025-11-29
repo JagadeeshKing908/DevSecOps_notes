@@ -1,0 +1,156 @@
+Booting process and kernal parameters:
+1)BIOS (Basic input output system)
+2)MBR(master boot record)
+3)Grub(Grand unified boot loader)
+4)kernel
+5)init
+6)Runlevel
+
+
+Linux booting:
+
+It is a process to initiate a laptop or desktop with os.
+
+when you press the power button then internally some process is going so, that is known as booting process.
+
+booting process is follows some steps internally. below are the steps
+
+1 Bios basic input & output (It will do the system integrity check)
+
+  post (power on self test)
+
+  hardware ram,rom,cd-rom
+
+2 MBR (master boot recorder)
+
+3 GRUB (grand united boot leader)
+
+4 Kernal taker care of os Ram
+
+5 INIT process
+
+   0 halt
+  
+   1 single usermode
+  
+   2 multiuser
+  
+   3 full multiuser mode
+  
+   4 unused
+  
+   5 graphical mode
+  
+   6 reboot
+
+6 run level /etc/rc.d/rco.d or rc1.d
+
+1)BIOS:
+
+the first stage of booting process when you on/restart your machine the power is supplied to SMPS (switched mode power supply) which converts AC to DC. the DC power is supplied to all device connected to that machine such as processor, RAM, CD-ROM, mouse, keyboard, etc.. The most intelligent device in computer is processor(CPU).
+
+when power supplied it will start running it's sequence of instructions stored in the memory.
+
+The instruction it will run is to pass control to BIOS
+
+in BIOS 2 operations are going 
+
+a) POST (power on self test)
+
+b) selecting first boot device
+
+post is process of checking H/W availability.
+
+BIOS will have list of all devices
+
+In post process it will send an electric pulse to each and every device. if an electric pulse is returned from that device .
+it conclude the h/w working fine and ready for use it.
+
+if it does not receive signal from that device. it will treat that device is not working.
+
+2)MBR:(512 bytes ,part -1-primary boot loader info,part-2-64 - Partition tabel info i.e partprobe info ,part -3- mbr validition check,
+
+The MBR is the first sector of the computer hard drive that tells the computer how to load the operating system, how the hard drive is partitioned.
+ A master boot record (MBR) is the 512-byte boot sector that is the first sector of a partitioned data storage device of a hard disk.
+ 
+ MBR loads and executes the GRUB.
+
+3)GRUB: cat /boot/grub/gub.conf (or) cat /etc/grub.conf   (softlink)	--->from here it will show the default kernel(it stores the image over here.
+
+It is a multi boot loader package. that supports multiple operating systems on a computer. During boot-up, the user can select the operating system to run. 
+if you are not specified it loads the default kernel.
+
+4) KERNEL:
+
+kernel is the core part of the operating system. once control is given to kernel which is the control part of all your OS & act as a mediator between h/w & s/w.
+kernel once loaded into RAM it always resides on RAM until the machine is shutdown. once the kernel start it's operates the first thing it do is executing INIT Process.
+
+5) INIT: 
+
+After OS started initial process is starting. it is parent process of the all processes in Os. in "/etc/inittab" in this config file we have the 
+default initialize process is their. It is the first process to start when a computer boots up, and it runs until the system shuts down
+
+0 halt
+
+1 single usermode
+                                               (chkconfig  --list ----------------->it will show the what services are running)
+2 multiuser                                   (initrd  -->initial ram disk it works as a temprory file system  for / i.e.. root file system as kernel booted up as real file system is looaded)
+
+3 full multiuser mode                          (runlevel --->it is like a background process which is responsiable to run services.
+                                                (After changing from entries in cat /etc/intab---->To switch again it to from cli to GUI the command is ---->startx
+4 unused
+
+5 graphical mode
+
+6 reboot
+
+6) RUN LEVEL: 
+
+when the linux system is bootup, you might see various services getting started.those are run level programs, executed from run level directory as
+defined by your runlevel depending on your INIT level settings,the system executed the program from one of the following directions.
+
+Runlevel 0- /etc/rc.d/rc.d/
+
+1-/etc/rc.d/rc1.d/
+
+2-/etc/rc.d/rc3.d/
+
+3- /etc/rc.d/rc3.d/
+
+4-/etc/rc.d/rc4.d/
+
+5-/etc/rc.d/rc5.d/
+
+6-/etc/rc.d/rc6.d/
+
+Runlevel	Systemd Target	Description
+0	poweroff.target	Shutdown
+1	rescue.target	Single-user mode
+2	multi-user.target	Multi-user, no GUI
+3	multi-user.target	Multi-user with networking
+4	multi-user.target	Same as runlevel 3 (customizable)
+5	graphical.target	Multi-user with GUI
+6	reboot.target	Reboot
+
+
+
+Troubleshooting steps :
+-------------------------
+
+
+when we reboot (or) power on system if it goes directlty to the emergency mode .and if we are able to login to the root then we need to check 
+the errors and warnings.
+
+To check use :
+
+ It will show all the system logs :---->journalctl -xb
+ For filters of warnings and errors use :--->journalctl -p err..alert -b
+ 
+To check whether the services are failed :
+    
+  --->systemctl --failed
+
+To check particular services are failed use : journalctl -u <service name>
+
+
+1)NFS error in fstab----->commented it and system is working fine.
