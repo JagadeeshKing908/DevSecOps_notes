@@ -1,0 +1,65 @@
+oNE AGENT:
+It is a monotoring tool (dynatrace i.e like in clusters )
+
+Appalication team will ask these ports are owned by different process please stop them to start appalication if we stop then appalication team will start
+the appalication and there after we need to start the services same .
+
+
+for checking :
+
+[root@cdopla-196 ~]# ps -ef | grep -i oneagent
+root      4545  2948  0 09:05 pts/1    00:00:00 grep --color=auto -i oneagent
+[root@cdopla-196 ~]#
+
+[root@cdopld-417 log]# systemctl status oneagent
+
+[root@cdopld-417 log]# systemctl stop oneagent
+
+[root@cdopld-417 log]# systemctl start oneagent
+
+
+for RHEL6
+
+[root@cdopla-5 ~]# service go-audit status
+go-audit (pid  21539) is running...
+[root@cdopla-5 ~]#
+
+
+
+-->File beat and audit beat:
+
+first to check what beats are running:
+
+[root@cdopld-417 log]# ps -ef |grep -i beat
+root        1390       1  0 Sep15 ?        00:00:40 /usr/share/socfilebeat/bin/filebeat -c /etc/socfilebeat/filebeat.yml -path.home /usr/share/socfilebeat -path.config /etc/socfilebeat -path.data /var/lib/socfilebeat -path.logs /var/log/socfilebeat
+root        1486       1 17 Sep15 ?        05:22:50 /usr/share/socauditbeat-app/bin/auditbeat -c /etc/socauditbeat-app/auditbeat.yml -path.home /usr/share/socauditbeat-app -path.config /etc/socauditbeat-app -path.data /var/lib/socauditbeat-app -path.logs /var/log/socauditbeat-app
+root     2815098 2769637  0 08:39 pts/2    00:00:00 grep --color=auto -i beat
+
+
+[root@cdopld-417 log]# systemctl status filebeat.service
+● filebeat.service
+   Loaded: loaded (/usr/lib/systemd/system/filebeat.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2024-09-15 02:10:30 EDT; 1 day 6h ago
+ Main PID: 1390 (filebeat)
+    Tasks: 16 (limit: 306878)
+   Memory: 39.9M
+   CGroup: /system.slice/filebeat.service
+           └─1390 /usr/share/socfilebeat/bin/filebeat -c /etc/socfilebeat/filebeat.yml -path.home /usr/share/socfilebeat -path.config /etc/socfilebeat -path>
+
+Sep 15 02:10:30 cdopld-417 systemd[1]: Started filebeat.service.
+
+[root@cdopld-417 log]# systemctl status audit
+Unit audit.service could not be found.
+[root@cdopld-417 log]# systemctl status auditbeat.service
+● auditbeat.service - Audit the activities of users and processes on your system.
+   Loaded: loaded (/usr/lib/systemd/system/auditbeat.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2024-09-15 02:10:31 EDT; 1 day 6h ago
+     Docs: https://www.elastic.co/products/beats/auditbeat
+ Main PID: 1486 (auditbeat)
+    Tasks: 19 (limit: 306878)
+   Memory: 327.3M
+   CGroup: /system.slice/auditbeat.service
+           └─1486 /usr/share/socauditbeat-app/bin/auditbeat -c /etc/socauditbeat-app/auditbeat.yml -path.home /usr/share/socauditbeat-app -path.config /etc/>
+
+Sep 15 02:10:31 cdopld-417 systemd[1]: Started Audit the activities of users and processes on your system..
+lines 1-11/11 (END)
