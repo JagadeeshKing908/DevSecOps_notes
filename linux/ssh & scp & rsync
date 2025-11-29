@@ -37,6 +37,44 @@ Generating ssh key pair : For generating ssh key we need to use command ---->ssh
  5)it will not ask for password.
  
  *** sshd -t ----------> it will show if we have any login errors in the servers.
+
+Manual Method :-
+
+groupadd fidsisux
+
+useradd -md /home/fidsisux -g fidsisux -c "FID for Sitescope-WO0000008015939" fidsisux
+
+//useradd -md /home/fidsisux -c "FID for Sitescope-WO0000008015939" fidsisux
+
+mkdir -p /home/fidsisux/.ssh
+
+chmod 755 /home/fidsisux
+
+chmod 700 /home/fidsisux/.ssh
+
+chown fidsisux:fidsisux /home/fidsisux
+
+chown fidsisux:fidsisux /home/fidsisux/.ssh
+
+cd /home/fidsisux/.ssh
+
+
+
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDD3Bu280WTyrYRkqmuEzDYjuq/Mgn86Px796NrMl/mwfZcf0JjjuUlGjmjx/YvDiHSWnH63QoMR+wpgD5fDWa34+0A8sV1tnaIdMryKb4o+v3WcR5n78pVo8D3pycnStDeUlZmZ6i2ZDBsIAXR5jfuSfv/FMxwqvN6QHkaZA09Svxd1bwhaDykLFba50zOOkTfVi2Mmd1DdpbG2OLXNjaIf2uLGajmflpsCMv30fBbTq3uiyCBIdEdyG0eTip2DVU49lXuQrejlVPmfPu3MFX1pLlJs//AbzGzJ9/tXcqxT5cWkPBA2l7R2yOYp89InuyP+ZCHhqKFXTosKctjrur5" >/home/fidsisux/.ssh/authorized_keys
+
+
+chown fidsisux:fidsisux authorized_keys
+
+chmod 600 authorized_keys
+
+cd /etc/sudoers.d/
+
+vi 10_fidsisux
+# Added as part of IT Cloud Portal provisioning
+# Managed by Ansible
+%fidsisux ALL=(ALL) NOPASSWD: ALL
+
+visudo -c
  
  
 SCP(secure copy) :
