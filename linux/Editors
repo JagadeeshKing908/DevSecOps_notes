@@ -1,0 +1,93 @@
+Editors :
+
+Vi : visual display editor.
+
+It will show all lines in black and white colour . It is a older editor it will come by default to the system.
+
+vim : visual display editor improved:-
+
+It will shows all the lines with some colours.It is an upgraded it will come by defaultly to some systems. If we 
+we need to install this with package.
+
+It has 3 modes .
+
+1)Command mode :
+
+ whenever we are opeaning any of file by default we will in command mode .
+ 
+some commands in command mode :-
+
+gg - whenever we try to come first line first we use gg.
+shift + g = G - It helps to come to end of page.
+w - If we want to move word by use w to farward. 5w (It moves 5 words forward) nw ie. nword forward
+b - If we want to move word by use b to backward.5b (It moves 5 words backward) nb ie. nword backward
+u - to undo the last change.
+ctrl+R  - to redo the change
+yy - to copy the lines ; 100yy to copy 100 lines. nyy
+dd - to delete the lines ; 100dd meand to delete the 100 lines. ndd  to delete n no of lines.
+p - to paste the lines below the line.
+shift+p - to paste the line above the cursor.
+dw - To delete a particular word .
+x - To delete a particular character.
+
+
+/ (or) ? -->To find a word.
+:/%s/private/public/g'  To replace word
+
+/ -is used to search the word.
+
+if we want to find how many time the word is occuring press ---n
+
+
+2)Insert mode:-
+ with the help of this we just write what we want to write.
+
+3)Extended command mode:-(ESC) i.e .. (collan mode :)
+
+ESC+ :W ---To save the changes
+ESC+ :q ---To quit without saving.
+ESC+ :wq ---To save and quit.
+ESC+ :wq! ---To save and quit forcefully.
+ESC+ :q! --->To quit forcefully without saving.
+ESC+ :se nu -->to set the line number to file.
+
+
+commands :-
+--------
+
+Move by characters:
+  Ctrl + F     → Move forward (right)
+  Ctrl + B     → Move backward (left)
+
+Move by words:
+  Alt + F      → Move forward by one word
+  Alt + B      → Move backward by one word
+
+Move to line ends:
+  Ctrl + A     → Jump to start of line
+  Ctrl + E     → Jump to end of line
+
+Delete text:
+  Ctrl + D     → Delete character under cursor
+  Ctrl + U     → Delete from cursor to start of line
+  Ctrl + K     → Delete from cursor to end of line
+  Ctrl + W     → Delete previous word
+  Alt + D      → Delete next word
+
+Clipboard actions:
+  Ctrl + Y     → Paste last deleted text
+  Ctrl + _     → Undo last change (sometimes Ctrl + Shift + -)
+
+History & navigation:
+  ↑ / ↓        → Browse previous or next commands
+  Ctrl + R     → Search command history
+  !!           → Repeat last command
+  !<text>      → Run last command starting with <text>
+  Ctrl + L     → Clear screen (same as 'clear')
+
+Other useful:
+  Tab          → Auto-complete command or filename
+  Ctrl + C     → Cancel current command
+  Ctrl + Z     → Suspend process (use 'fg' to resume)
+
+
