@@ -1,0 +1,44 @@
+Need to register with new quarter key
+
+[root@cdopla-196 ~]# subscription-manager register --org="CGI" --activationkey="CGI_ESA_RHEL7_9_2024_Q3"
+
+
+[root@cdopla-196 ~]# yum update
+Loaded plugins: product-id, search-disabled-repos, subscription-manager
+rhel-7-server-extras-rpms                                                                                                             | 3.4 kB  00:00:00
+rhel-7-server-optional-rpms                                                                                                           | 3.2 kB  00:00:00
+rhel-7-server-rh-common-rpms  
+
+
+Temporory exclusion(or) one time exclusion :
+
+[root@cdopla-196 ~]# yum update --exclude=glibc*
+
+
+To check :yum update
+
+for Permenant exclusion :
+
+[root@cdopla-196 ~]# cat /etc/yum.conf
+
+[root@cdopla-196 ~]# vi yum.conf
+
+
+[root@cdopla-196 etc]# cat yum.conf
+[main]
+cachedir=/var/cache/yum/$basearch/$releasever
+keepcache=0
+debuglevel=2
+logfile=/var/log/yum.log
+exactarch=1
+obsoletes=1
+gpgcheck=1
+plugins=1
+installonly_limit=3
+
+exclude=glibc*
+
+wq!
+
+
+To check :yum update
