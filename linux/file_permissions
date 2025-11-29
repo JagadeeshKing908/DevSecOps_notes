@@ -1,0 +1,70 @@
+FILE Permissions :-
+
+touch file1.txt
+
+-rw- |r--|r-- . 1  root root 0 
+  O  |  G| Ot
+  
+Here
+   O- owner
+   G- group
+   ot-other
+   r= read
+   w=write/add/delete/edit
+   x=execute/run scripts
+   
+PERMISSIONS CAN SET BY TWO WAYS:
+------------------------------
+1)Symbolic method(ugo) :
+Here we use 
+
+chmod u=rwx,g=rw,o=rx filename.txt
+
+
+2)Absolute method :
+   Read=4
+   write=2
+   execute=1
+ 
+ chmod 644 demo.txt
+ 
+*****
+UMASK :-
+-------
+umask=user file creation mask.
+
+The default umask value is 022.
+
+The default permissions for a directory is 755.
+
+The default permissions for a file is 644.
+
+The mechanism inside this default values are umask values.
+
+umask for root is 0022.
+
+we can set umask value by umask 027. For permenant change add these ---> .bashrc, .bash_profile, or .profile for bash
+
+We can create a directory on full permissions by using .
+
+----->mkdir -m 777 directoryname
+
+
+Troubleshooting 
+
+Q)How th default values are comming ?
+
+The full permissions of a file is = 666
+the umask value is                =-022
+                                 -------
+					Total    =		644	   
+                                --------
+								
+								
+The full permissions of a directory is = 777
+the umask value is                     =-022
+                                       -------
+					     Total    =		755   
+                                      ---------								
+								
+								
