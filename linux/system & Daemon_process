@@ -1,0 +1,87 @@
+System and demon Process :
+-------------------------
+Process : It is a program running in the linux system it also know as service or demon.
+
+1)interactive processes :
+
+ These are process created by user.
+ eg : we are installing and running.
+ 
+2)system process or demon :
+ 
+ These are background process when a syetem is installed it will be genertaed automatically.
+ eg : ftp ,dhcp.
+ 
+3)Automatic or batch :
+  batch procees these are execueted when we are are scheduling the process at set of time .
+  
+  EG :cronjobs.
+  
+  
+Child and parent process : Every process have a child wrt that parent process running for the same .except for init process.
+-------------------------
+When ever we are running a process that process we can have main process called child process and another parent process.
+if we need to stop then we need to kill both the process.
+
+
+ps -a --->is used to know the present running process on the system.
+
+ps -u username ---It will show list of process with username.
+
+ps -x
+
+ps -aux
+
+Signals :
+--------
+kill -l ---->will show the list of processes.
+
+
+If your system uses systemd, chkconfig is not available. Instead, you can use:
+
+
+List of running services at differnet runlevels :
+-------------------------------------------------
+
+systemctl list-unit-files --type=service     ---> It will show list of processing running
+systemctl list-units --type=service --state=running ---------->It will show list of processing running 
+
+Niceness value /nice values :
+------------------------------
+ 1)CPU will execute a process.
+ 2)The range of nice value is -20 t0 19.
+ 3)if the vale is -20 is high priority. If it is 19 it is lowest prority.
+ 4)we have two commands to set one is --->nice and renice
+ 
+ 
+To set :
+-------
+nice -n -5 cat > file4.txt
+It will run as we give the time limit 
+
+To check with process id in other terminal it will show---->ps -elf 
+
+To change the process execution :
+-----------------------------
+renice 5 pid
+
+to check --->ps -elf
+
+uptime command :
+----------------
+
+[root@server ~]# uptime
+09:16:41 up 2:41  3 users,  load average: 1.00 , 5.00 ,15.00
+[root@server ~]#
+
+load average : 1.00= is for last 1min ; 5.00= last 5min ;15.00 =last 15 min 
+
+running process to see :
+
+[root@server ~]# top
+
+
+
+
+
+port : 
