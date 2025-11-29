@@ -1,0 +1,137 @@
+Filters :
+
+1)Less:
+  
+  If we want to see opp line wise or page wise we use less commands.
+   a)Next page we will use - d.
+   b)previous page will use - b.
+   c)To search use - /word
+   d)To quit - q   
+  
+2)more :
+  
+  It is exactly the same as more command.
+         a)Next page we will use - d.
+		b)previous page will use - b.
+		c)To search use - /word
+		d)To quit - q 
+3)head :
+   It is going to display top 10 lines of the file by default. we can use them like how many lines we want.
+   
+   head -n /etc/passwd --->Here n means no of lines.
+   
+   
+4)Tail :
+  It is going to display bottom 10 lines of the file by default. we can use them like how many lines we want.
+  
+     tail -n /etc/passwd --->Here n means no of lines.
+	 
+	 If we want to see the current running logs then we will use -f.
+	 
+	 tail -f /var/log/messages
+	 
+5)Sort :
+
+     It is used to see the output in alphabetical or numerical order.
+	 
+6)Cut :
+
+     If we want to extract some column in file then we will use cut filter.
+	 
+	  cut -d : -f1 /etc/passwd > output.txt
+	  
+	  d : delimeter .. Is nothing but comma's , semicollan ,collan
+	 -f1:first column
+	 
+	 If we use (>)grater than symbol with file name then will be redirected to that file.
+	 
+	 
+7)Sed :
+
+    It stands for stream editor.
+	
+	sed 's/max/john/g' /etc/passwd
+	
+	Here s : stands for search.
+	     max : what name we are replacing.
+		 john : it stands for what name we are replacing.
+		 g : It stands for replacing.
+		 
+To print 5-9lines----->sed -n '5,9p' filename
+ 
+    -n  -->supress automatic printing
+	p -->print
+	
+	awk "NR >= 5 && NR ,=9 ' file.txt
+	NR-->line number
+	
+	
+To select columns -->awk
+
+  $0 -->whole line
+  $1 -->first column
+  $2 -->second column
+  
+  awk '{print $2}' filename.txt
+  awk '{print $1 ,$3}' filename
+  	awk "NR == 5 || NR ==9 {print $1, $2}' file.txt
+	
+8)find:
+
+     To find anything from under root we will use find command.
+	 
+syntax : find /underroot -option filename.
+
+       / - we are searching it under root directory file or directory
+	   
+ -name : It is used search a file with its name.
+ -inum : for searching a file with particular inode number.
+ -type : for searching a particular type of file.
+ -user : for searching a file with respect to its user.
+ -group: for searching a file which belongs to particular group.
+ 
+ 
+ -user :
+ 
+  find / -user max
+
+ -group :
+	   find / -group max
+	   
+	 
+9)Locate:
+
+    It is also work same as find command.
+	
+syntax : locate filename.
+	
+	Some time it will show some wrong directories as well.
+
+
+Trouble shooting :
+
+ If we deleted a file and after the deletion of file in file system if it not be able to create any file in file system this is because of
+ inode problem.To over come that follow the below.
+ 
+ for searching file :---> find . -inum 148669 -exec {} \; 
+ for removing file : ---> find . -inum 148669 -exec rm -i {} \; 
+ 
+ If we want to remove same type of files in any directory we use find command.
+ 
+ --->find / -type f -name "*.log" -exec ls -ltrh {} \;
+ ---> to remove : find / -type f -name "*.log" -exec rm -rf {} \; 
+ 
+ 
+ Here 
+     exec : executing
+ 
+     {}
+		  This placeholder is used to represent the current file found by the find command.
+		  When find locates a file that matches the criteria, it substitutes {} with the path of that file when executing the command specified by -exec.
+     \;  
+           This sequence indicates the end of the command that follows -exec. The backslash (\) is used to escape the semicolon (;) 
+		   so that it is interpreted correctly by the shell rather than by the find command. This tells find that the command has concluded, 
+		   and it can move on to the next file.
+ 
+ 
+	
