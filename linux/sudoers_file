@@ -1,0 +1,72 @@
+SUDO : (substitue user do / super user do) :
+--------------------------------------------
+we can perform tasks same like as root user by the help of sudo command.
+
+configuration file : cat /etc/sudoers  (root configuration for commands will be avaliable here.
+
+--->To edit the sudoers file use (cmnd --->visudo) bacause it prevents to users login at same time and edit the file.
+
+advantages :-
+
+   1)we can restrict the users with the help of these file.
+   2)the commands executed by sudo user will be stored under cat /var/log/secure
+   3)we can create own log for sudo users by creating the file in /etc/sudoers At end give below command .
+     --->   Defaults logfile=/etc/log/sudo.log
+	 
+	 
+1)Allow normal user privelliage like root?
+ 
+A) a)In visudo file under root add same previllages like root--->jagadeesh  ALL=(ALL)    ALL 
+   b)But every time it will ask for password
+   
+   C)for seeting a normal user with out password in same file --->jagadeesh  ALL=(ALL) NOPASSWD:ALL
+   
+   Note but everytime we need to use sudo infort. --->sudo fdisk -l
+   
+2) Allow user to run one or two commands like root ?
+   
+A)  a)In visudo file under root add same previllages like root--->jagadeesh  ALL=(ALL)    sbin/fdisk,sbin/parted 
+    b)so with this we will execute only two commands 
+	
+	Ex :[jagadeesh@server ~]$ sudo fdisk -l
+	    [jagadeesh@server ~]$ sudo parted
+
+3)Allow group to execute networking commands like root privelliage like root ?
+ 
+A) a)uncomment the line cmnd_Allias Networking .
+
+   b) And give---> %family  ALL=(ALL)  Networking
+   
+   And chek with group of people whether is working or not
+   
+4)How we can use customized commands to use users .
+----------------------------------------------------------
+
+to give permission for particular directory :--
+
+oraasm ALL=(ALL) NOPASSWD: /asm01/app/19.0.0.0/grid/bin/crsctl
+
+---------------------------------------------------------------------
+A) go to visudo file ---->visudo 
+
+ ## custom
+ Cmnd_Alias CUSTOM =/sbin/service ,/bin/rpm  (Instead of giving comma , after every command we will use alias name and give more commands and use the alias name )
+   
+   %family ALL=(ALL) NOPASSWD=CUSTOM
+   
+   
+   
+  
+   
+Cmnd_Alias  CMD_EXCLUDE= /bin/su - root,/bin/su - ,/bin/su root,/usr/bin/su root,/usr/bin/su - root,/bin/sudo -i, /usr/bin/vi /etc/sudoers, 
+/usr/bin/vi /etc/sudoers.d/*, /sbin/visudo, /usr/bin/sudo -s, /usr/bin/passwd, /usr/bin/crontab -e, /usr/bin/crontab –l, /bin/umount, 
+/bin/mount, /sbin/reboot, /sbin/init, /sbin/shutdown, /sbin/userdel, /sbin/usermod, /sbin/useradd, /usr/bin/vi /etc/shadow, /bin/passwd, 
+/usr/bin/su -, /sbin/ifdown, /sbin/ifup, /bin/sh, /bin/bash, /bin/dash, /bin/tcsh, /bin/csh, /bin/ksh, /usr/bin/dzsh, /usr/local/bin/RootShell
+
+
+Trouble shooting Steps :
+-----------------------
+1) If we have any error in /etc/sudoers (or) any files under /etc/sudoers.d 
+  Then we will be  unable to swith root and we are not able to execute othe commands with---> sudo as well
+  
+Sol : need to login as root directly and check in the files which file we are getting error and comment that line.
