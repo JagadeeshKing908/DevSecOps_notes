@@ -1,0 +1,137 @@
+YUM AND RPM :- To manage the software in linux ,two utilites are used.
+-----------
+YUM : yellow dog updater modified.
+RPM : Redhat package manager.
+
+RPM :-
+----
+RPM is a powerful software managementtool for installing ,uninstalling,verifying, querying and updating software packages.
+It will not resolve dependencies.
+
+commands :
+
+---->To check all the installed package in the system-----#rpm -qa
+     Here q--query
+	      a--all
+
+---->To check a particular package is installed or not-----#rpm -qa vsftpd
+
+---->To check a package is consistent or not------#rpm -qa --test
+
+---->To install a package using by rpm command-----#rpm - ivh 
+Here 
+  i-install
+  v-verbose
+  h-hashcode
+
+---->To remove a package or uninstalling the package---- #rpm -e
+       e---erase
+
+---->To see the information about the package------#rpm -qip
+
+---->To see the information about the installed package-----#rpm -qi
+
+---->To check the package of a particular command-------#which cat
+    
+	 Even commands are also comming form packages only To check them use
+	   1)which cat  /bin/cat --->To check from which location the command is comming
+	   2)rpm -qf  /bin/cat---->It will give you from which package we using that command
+	   3)if we want to install a package forcefully we need to use this path.
+
+---->To see the configuration files of the installed package------#rpm -qlc 
+
+---->To install a package without installing dependencies------- #rpm -ivh  --nodeps
+
+---->To update a particular package ----- ,#rpm -Uvh 
+
+
+YUM : (yellowdog updater modified) :
+------------------------------------
+yum is a powerful software management tool for installing ,uninstalling,verifying, querying and updating software packages.
+It will resolve dependencies.
+
+Two configure YUM server there are two ways :-
+
+Repository : It is a place/Area where we are going to store .rpm packages in our (virtual) machine.
+
+1)To configure yum locally :--
+
+     a)Make sure that ISO is connected for virtual machine in settings for (CD/DVD SATA).
+	 b)check with  It will show that ISO image mounted on ---->/run/media/username/RHEL-8-0-0-BaseOS-x86_64(ISO Image) 
+       df -hT---->dev/sr0  mounted on----/run/media/username/RHEL-8-0-0-BaseOS-x86_64(ISO Image)
+	 c)Then enter into /etc/yum.repos.d 
+	 d)create a new file--> vi local.repo
+	 
+	 [rhel8_AppStream]
+	 name=rhel8_AppStream
+	 baseurl=file:/run/media/username/RHEL-8-0-0-BaseOS-x86_64/AppSteram
+	 enabled=1
+	 gpgcheck=0
+	 
+	 [rhel8_BaseOs]
+	 name=rhel8_BaseOs
+	 baseurl=file:/run/media/username/RHEL-8-0-0-BaseOS-x86_64/BaseOs (we need to copy this url from switching the path (/run/media/username/RHEL-8-0-0-BaseOS-x86_64/AppSteram (and)/run/media/username/RHEL-8-0-0-BaseOS-x86_64/BaseOs)
+	 enabled=1
+	 gpgcheck=0
+	 
+	 e)check with-----> yum repolist .(it will show the package details)
+	 
+	 f)check with package installation With yum ---->yum install vsftpd
+	 
+
+
+===================================================================================================================================
+*we have a global server which is having                                                  *
+user name and password and connected with                                                  
+redhat server i.e satellite                        -------------------------------
+
+
+====================================================================================================================================
+
+2)To configure YUM server globally :
+   
+   *check the system is registred with RHN network if not then register.
+       ----->subscriction-manager status
+	   ------>subscriction-manager register.
+	   ----->It will ask for username and password i.e connected to redhat site.\
+	   
+   *check status of system after regustration.
+       ----->subscriction-manager status
+   *subscribe the system with redhat network.
+       ----->subscriction-manager subscribe
+	   
+   *clear the cache by using --->yum clean all..
+   *update the repository with yum list command.---->yum repolist
+   
+   
+It will show more pacakeges as compared to local repository because it is fetching the data from redhat site directly.
+   
+   
+
+
+
+---->To list available package in the repository ----#yum list
+
+---->To list all the installed packages in the system----#yum list installed
+
+---->To check a particular package is installed or not----#yum list installed
+
+---->To install a package using by yum command------ #yum install
+
+---->To remove a package or uninstalling the package using yum command -----#yum remove
+
+---->To update the package using yum command----#yum update
+
+---->To see the information about the installed package.-----#yum info
+
+---->To list and install a group of package------#yum grouplist
+
+---->To remove a group of package------#yum groupremove
+
+
+
+
+
+
+
+
