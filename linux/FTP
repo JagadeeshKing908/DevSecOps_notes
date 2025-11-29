@@ -1,0 +1,138 @@
+FTP (File transfer protocol):- (Port :20,21)
+-------------------------------
+
+Downloading of content or uploading of content from one server(local machine) to other server(remote machine) we call it is as 
+file transfer protocol.It use tcp .(ftp is used for uploading and downloading the files)
+
+Disadvantages : directories can't be uploaded or downloaded
+-------------
+
+package :vsftpd
+
+daemon :vsftpd( very secure ftp daemon)
+
+script :/etc/initd/vsftpd
+
+configuration files :
+    /etc/vsftpd/vsftpd.conf
+	/etc/vsftpd/user_list
+	/etc/vsftpd/ftpuser
+	/etc/pam.d/vsftpd
+	
+Document root : /var/ftp
+
+home directory :/var/ftp
+  
+
+i.e. local machine <----------> Remote machine 
+             20
+-------   -------->       --------
+client |      21           | server  |
+-------    <---------      ---------   
+
+port 20 : It is used to establish the connection between the client and the server.  (command control)
+port 21  :It is used establish the data connection between the client and server.(data connection) 
+
+There are two types of FTP :
+
+1)Active mode ftp :
+When we are going to downloading  something on internet active connection will happen. If exits both then active.
+             20
+-------   -------->       --------
+client |       21          | server  |
+-------    <---------     --------- 
+
+
+2)passive mode ftp :
+
+When we are going to   upload something on internet then passive connection will happen.if exits only one .
+             20
+-------   -------->       --------
+client |      21          | server  |
+-------   -------->       --------- 
+
+
+CONFIGURING FTP SERVER :-
+-----------------------
+8---->  1)install vsftpd.
+        2)vsftpd allows only anynomous users to login by default.To allow authinicated users to login .edit /etc/vsftpd/vsftpd.conf
+          local.enable=yes
+6-
+for Uploading a file.
+
+1)check whether the firewall is off or not for connection of another system.(systems are in same configuration)
+2)check that system is installed with vsftpd . systemctl status vsftpd ; systemctl start vsftpd
+3)And check what are run levels it is configured with and mark all run levels are on .------>systemctl enable vsftpd 
+     Rhel6---->chkconfig --list  vsftpd
+	     ------>chkconfig  --level 0123456 vsftpd on
+		 
+4)and go to cd /var/pub ---And here create some files
+
+5)and check that in ftp server whether it is working or not 
+
+6)cd /data --->create one directory /
+
+7) jump to directory cd /var/ftp/pub/ --->give cd - (for this we need to switch the path where we are going to download the files first then we need to get the files after switching this path)
+
+8)after jump to ftp by using --->ftp servername
+
+9)  get filename to download.
+
+and download it by using---> get filename 
+    for downloading multiple files --->mget file1 file2 file3
+
+for downloading a files:
+    1)create a dierctory upload. and create some files in cd /data --touch file1.txt
+	2)Change group permission of directory to ftp.----chgrp ftp
+	3)and give full pemission to directory chmod 777 upload.
+	4)IN configuration file we need to enable the anonymous_upload_enable=yes
+	5)restart the service vsftpd.
+	6)allow selinux to-->ftp anon_write on---->setsebool -P allow_ftpd_anon_write on.
+	7)we need to do rw permissions to ditectory we need to change it to admin by default is is public. ls -ldz
+	 ----->chcon -t public_content_rw_t upload.
+	 
+FTP part :
+   
+     1)ftp localhost
+	 2)username &passwd =ftp
+	 3)and now it will be mounted on /root we need to change it upload -->cd /upload.
+	 4)To list the files !ls 
+	 5)To upload -->put file1.txt
+	 6)for comming out--->bye
+	 7)check go to upload and ---ls
+	 
+	 
+Client configuration :
+     1)check ip -->and ping same machine and server machine.
+	 2)we need to copy and paste the server and client machines ip's to resolve each other in ---->cat /etc/hosts <---------- and paste same in ftp server
+	 3)install ftp.
+	 4)And connect with ftp server---->ftp serverip
+	 5)cd /upload and --->!ls
+	 6)put any file from that ---->put filename.
+	 
+	 7)check in server--->cd /var/ftp/upload ;ll
+
+     Download :
+	 1)ftp ip  and login.
+	 2)!ls
+	 3)cd /pub ;ls
+	 4)get filename.
+	 5)bye
+	 
+	 6)check cd / ;ls ---->check whether the file is there are not.
+	 
+	 
+
+
+Trouble shooting :--
+
+if it shows not logged login unsuccessfull  then we need stop ,disabel and start the vsftpd service.
+route not found meand we need to add the ip and server name in cat /etc/hosts
+
+
+
+
+
+
+
+
