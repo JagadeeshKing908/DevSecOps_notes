@@ -1,0 +1,81 @@
+Disk Partition and file system:
+
+Partition :
+
+Dividing physical (raw) hardisk into multiple logical(C-Drive,D-drive,E_drive) disk we call it as disk partition.
+
+Why Partition :
+Partitioning is a useful strategy for managing disk space, improving performance, securing data, and maintaining a flexible and organized system.
+While it can introduce some complexity, the benefits often outweigh the drawbacks, especially in environments where data management and system performance are critical.
+
+
+Disk partition criteria:
+
+MBR : member boot record(1 sector assume it as a circle)
+* bootable files are stored here.
+
+P: primary partition(2nd sector is primary)
+*we can create max 3 primary partitions .
+with the help of this we can create file systems
+
+Extended partition :(e)
+*this is the virtual partition.
+*under this we have logical partitions.(L)
+*we can create extended partition into logical partitions.we can create 16 logical patiotions
+
+combination is like
+3p
+2p+1e
+1p+1e
+
+Naming convections for disks are like names of the disks i.e sda1,sdb1 etc..
+
+Disk Identification:
+EX: /dev/hda ---hard disk.
+IDE :Integrated drive electronics. 
+
+/dev/sda --scsi disk
+SCSI - small computer system interface.
+
+/dev/vda - virtual drive.
+
+File system :
+file system is nothing but storing of data manner in disks.
+
+Types of file systems.
+
+ext2
+*it stands for extended secondary file system
+*ext2 does not have jounouling feature.
+*maximum individulal file size from 16gb to 2 TB.
+
+ext3
+*it stands for extended secondary file system
+*ext2 does supports jounouling feature.(main feature update)
+*maximum individulal file size from 16gb to 2 TB.
+
+ext4
+*it stands for extended secondary file system
+*ext2 does supports jounouling feature.supports individual file size and overall file system size.
+*maximum individulal file size from 16gb to 16 TB.
+
+xfs
+*it stands for extension of extended file system. 
+*it  supports 64 bit  jounouling file system feature.
+*maximum individulal file size starts from 8 exbibytes for 64 bit file system.
+
+
+**we can convert ex2 to ext3 to ext4 
+
+
+Mounting :(it is for visiability will craete one dirtectory and will craete file system for that directory)
+
+Attaching a directory or file system in order to access the patition and its file system is know as mounting.
+
+Types of mounting:
+We have two types of mounting.
+1)cat /etc/fstab--It is called permanant mouting after booting also it will be avalibale.
+2)cat /etc/mtab---It is called temperory mouting after booting also it will not be avalibale.
+
+
+
