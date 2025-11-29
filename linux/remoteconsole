@@ -1,0 +1,10 @@
+if it is a phy server we can use this command "nslookup servername-ilo" to get the console ip 
+ 
+[root@dc6cmp ~]# nslookup dc6cmp-ilo
+Server:         142.182.48.105
+Address:        142.182.48.105#53
+ 
+Name:   dc6cmp-ilo.qc.bell.ca
+Address: 172.24.198.124
+ 
+[root@dc6cmp ~]#
