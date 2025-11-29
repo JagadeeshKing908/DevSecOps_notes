@@ -1,0 +1,43 @@
+Q) How to identity Redhat Cluster and DB RAC Cluster ?
+
+
+Redhat cluster:
+
+pcs staus - grater than 7 
+clutstat  - less than 7
+
+RAC cluster :
+
+[root@cncc0c ~]# ps -ef | grep -i crsd.bin | grep -v grep
+root     17835     1  0 Aug10 ?        04:27:09 /asm01/app/19.3.0/grid/bin/crsd.bin reboot
+[root@cncc0c ~]# cat /etc/host
+cat: /etc/host: No such file or directory
+[root@cncc0c ~]# cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+##Public IP
+10.121.200.33         cncc0c.int.bellmedia.ca        cncc0c
+10.121.200.34         cncc0d.int.bellmedia.ca        cncc0d
+
+## Virtual IP
+10.121.200.40         cncc0c-vip.int.bellmedia.ca   cncc0c-vip
+10.121.200.41         cncc0d-vip.int.bellmedia.ca   cncc0d-vip
+
+##Private IP
+192.168.168.80            cncc0c-priv.int.bellmedia.ca  cncc0c-priv
+192.168.168.81            cncc0d-priv.int.bellmedia.ca  cncc0d-priv
+
+
+[root@cncc0d ~]# ps -ef | grep -i crsd.bin | grep -v grep
+root     22914     1  0 Aug10 ?        05:12:38 /asm01/app/19.3.0/grid/bin/crsd.bin reboot
+[root@cncc0d ~]#
+
+
+To freeze the cluster :
+
+----->pcs resoure unmanage resourcegroupname
+
+To start the cluster :(unfreeze)
+
+---->pcs resoure manage resourcegroupname
