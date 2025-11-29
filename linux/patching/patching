@@ -1,0 +1,31 @@
+
+In patching it is not only update the packages it will clean all unwanted packages and install new packages and upgrade all packages .
+
+* To check all the packages that is installed ----->rpm -qa (or) yum list installed
+* To check the OS release ------>cat /etc/os-release 
+*From where we are downloading the packages is cat /etc/yum.repos.d/redhat -rhui
+• For checking what all the packages need to be installed in update ------>yum check-update (or)  yum list updates
+• Need to check kernal version ----->uname -r
+. For checking system is upto date -------->yum repolist 
+• To update the packages ---------->yum update 
+ • To check the kernel version ----->yum check-update 
+ • And do reboot the the system ---> reboot
+ • Check the packages again with ---->yum check-update
+ • if it shows kernal version we need to install again else we are done
+ • To check the kernel module file generated or not if it generated there is no kernal panic---->ls /lib/modules/current module name/modules.dep
+ • rpm -qa --last | grep -i kernal
+
+Pre checks: 
+
+*Mount all mount points -----> mount -a
+• And take the back-up of it -------->df -hTP >> /home/mount _points
+• And take the back-up of host files --->cat /etc/hosts >> /home/hosts_backups
+
+Post checks:
+
+*Check the kernel version ---> uname -r
+
+*With the help of diff command will validate the past back and new files
+Ex : diff  /etc/hosts_bkp  /etc/hosts
+
+If any difference it will show else not shows
