@@ -1,0 +1,77 @@
+To create blackout DB:-
+-----------
+1)Create a blackout in OEM to ignore the DB maintenance mode alerts for all databases part of maintenance in MOP
+
+host > monitoring > blackout > create > blackout > create > Add(target) > Onhost (search the server name) > search > select the target name of host > select > set the blacout time according the to deployment timings > submit
+
+STOPPING of DB:-
+--------------
+
+Stop DB instances running on CPCPLD-4006
+
+Ps -ef|grep pmon
+Ps -ef|grep tns
+Ps -ef|grep mrp
+Df -kh
+Check wallet status and sync check
+Select name,open_mode,database_role from v$database;
+Show pdbs;
+ 
+Note: before shutting down Db, make sure no backup should run
+ 
+Stop listeners :
+lsnrctl stop <listener_name>
+Stop database :
+shut immediate;
+
+Start DB :--
+--------
+ 
+Start DB running on CPCPLD-4006 and check database Sync with Primary and perform DB Sanity
+Remove all the blackout settings from OEM created in pre-deployment step of all DB’s.
+
+
+Start database : startup;
+Start listeners : lsnrctl start <listener_name>
+ 
+ 
+Ps -ef|grep pmon
+Ps -ef|grep tns
+Ps -ef|grep mrp
+Df -kh
+Check wallet status and sync check
+Select name,open_mode,database_role from v$database;
+Show pdbs; 
+
+END Blackout :-
+-------------
+
+search server name, right click > oracle database > control > end blackout
+
+
+IF They are physical servers:-
+
+Create a blackout in OEM to ignore the DB maintenance mode alerts for all databases part of maintenance in MOP
+
+1)Start DB:-
+
+Stop database instances on server - DC4C9V 
+To stop database
+Sudo su – oraasm
+$ps -ef|grep d.bin
+$crsctl stat res -t
+$crsctl check crs
+$crsctl stop crs
+
+
+
+B) Start database on server DC4C9V and perform DB Sanity and verify the data guard sync
+To start database (perform on both nodes)
+Sudo su – oraasm
+$ps -ef|grep d.bin
+$crsctl stat res -t
+$crsctl check crs
+$crsctl start crs
+ 
+Remove the all blackout settings from OEM created in pre-deployment step of all DB	
+
