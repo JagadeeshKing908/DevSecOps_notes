@@ -1,0 +1,211 @@
+User and Group Administration :
+
+Some important points related to user and groups
+
+1)user and groups are used to control access to files and the resources.
+
+
+
+There are three types of users in linux administration :
+
+
+1)super user : whenever we are creating  a software the first user created is root user.         
+username : root          
+UID : 0             
+GID : 0         
+home directory : /root        
+default shell : /bin/bash
+
+
+2)system user : when ever we are installing a software (or) appalications some user id's got created automatically those id's are called system users.
+
+username : ftp,ssh, apache ,nobody
+UID : 1-499           
+GID : 1-499          
+home directory : /var/ftp        
+default shell : /sbin/nobody  
+
+
+3)Normal users : These are normal users which where created by root users .
+username : 
+UID : 500-60000           
+GID : 500-60000          
+home directory : /home/username       
+default shell : /bin/bash
+
+
+Cat /etc/passwd ------All user related information will be shown here.
+
+This file contains of seven fields .
+
+root:x:0:0:root:/root:/bin/bash
+
+root---username
+
+x:is the link shows password exist in some other file passwd
+
+0:uid--user ID
+
+0:gid--group id
+
+root---comment
+
+/root-home directory
+
+/bin/bash--is defaut shell bash
+
+cat /etc/shadow-------password related information will be shown here .
+
+willet : wqpped5$yyeeggdd^^****&:18387:0:99999:7:::
+
+here
+
+willet : Is a username
+
+wqpped5$yyeeggdd^^****& :password in encryptued format (oR) MD5 algorithm
+
+18387-----Days since the password was last changed.
+
+0------Days after password must be changed.
+
+99999------Days before the password is to expire that user that user is warned.
+
+7---Days after the password is expires that the user is diabled
+
+A resolved field.
+
+
+
+
+*******************************************************************************************************************************
+
+
+All the password related information and ageing policies uid ,gid are comming from the file called login.defs------------->cat /etc/login.defs
+
+for adding user useradd (or) adduser ---->useradd -c "creating user demotest" -d /var/demotest demotest
+
+for modifying the existing user------------ usermod -d /home/demotest -s /sbin/nologin demotest
+
+when we are creating the user the default group will be created , When we are creating a user with an existing group then there will be group
+
+Adding of user in an existing group:-
+----------------------------------
+To add user to an existing group (primary group)-----------> groupadd -g gid username
+To add user to an existing goup (secondary)------->usermod -aG groupname username
+
+Password setting:
+---------------------
+when there are no password set for user it shows as (!!--exclamanation mark)
+
+To set the password-------------->passwd username 
+
+
+user settings :
+----------------
+
+To change the existing username ----------->usermod -l newname existingname
+
+To lock a user account-------------->usermod -L username
+
+To check the userid is locked ---->cat /etc/shadow (or) paaswd -S username (i) If the user passwd section shows exclamanation symbol in first character then it is locked.
+
+ 
+To Unlock------>usermod -U username
+
+Password Settings:
+-------------------
+
+chage username  (or) chage <option> <value> username
+
+chage username ----->it shows list of options avaliable
+
+To set expiration date -------->chage -E 2024-09-03 <willet .i.e.username> 
+
+To check------->chage -l willet
+
+To set password parameters :
+
+chage <username>
+
+minimum password age : 0
+
+max password age :90
+
+last password change (YYYY-MM-DD) : 2024-09-04
+
+password expiaration warning [7] : 10
+
+password inactive [-1]: 90
+
+Account Expiaration date (YYYY-MM-DD) : 2024-12-04
+
+To check ------------>chage -l username 
+
+to set it to account non expiration ---->chage -E -1 willet (here -1 is never expiary date )
+
+To set the password to non expiary--->we user max password age as = -1.
+
+To delete user---->userdel username (It will not delete the home directory)
+
+To delete with home directory---->userdel -r username (It will delete the home directory)
+
+To delete selinux user--->userdel -Z username (It will delete se linux user from selinux user mapping)
+
+
+Group administration:(cat /etc/group file)
+-----------------------
+
+All groups will be present in------------->cat /etc/group file
+
+the values in this file are ---->groupname  : X(grouppasswd) :1032(gid) :users of the group
+
+The group passwords are avaliable in the file ---->cat /etc/gshadow
+
+To create a new group ---->groupadd (groupname) 
+
+To set a password for group--->gpasswd groupname
+
+To add specific groupid for user -------->groupadd -g 1040 grouptest2
+
+To check --->cat /etc/group
+
+To modify groupid ---->groupmod -g 1050 grouptest2
+
+To check --->cat /etc/group
+
+for changing the groupname ---->groupmod -n  testgroup  grouptest2 
+
+
+Adding and modifying the users to groups:
+-----------------------------------------
+
+To add secondary group--------------->usermod -G <groupname>  <username> (-G --->is for secondary group)
+
+To add multiple user to a group we can add n number of users with this----------->gpasswd  -M <username1> ,<username2>....<username--n> <groupname>  
+
+
+
+for removing user from a group:
+------------------------------
+
+gpasswd -d tomato(username) vegetable(groupname) ---->(-d is for deletion of group)
+
+
+How to change owner and group to a file :
+--------------------------------------
+
+chown jagadeesh1:jagadeesh2 filename (Here jagadeesh1 is owner changing jagadeesh2 is group changing)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
