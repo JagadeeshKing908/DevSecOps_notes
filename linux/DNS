@@ -1,0 +1,348 @@
+DNS(DOMAIN NAME SYSTEM) :
+------------------------
+1)It resolves mainly ip to hostname and hostname to ip.
+
+2)It going to convert the human FRIENDLY HOST NAME TO NUMERICAL IP address computers are machines required to communicate with each other.
+
+3)the DNS is the largest  and most important database in the world on by serving billions to the public ip address.
+
+4)the DNS server are provided by ISP(internet service provider) and some commercial companies but the private DNS service can also used for
+home network
+
+DNS tree :-
+----------
+                              Root(unnamed)
+							    |
+								|
+								|
+	----------------------------------------------
+    |         |      |       |           |        |  <-------   (Top level Domain)
+	org      net    com     ca           us      uk
+	|                 |
+	|                 |
+	|                 |
+---------------       |
+|        |    |       -----------
+|        |    |           |     |
+Linux    Kde   GNU        |     |
+    |                 redhat    SUSE   <--Second level domain
+    |
+ www <--Host computer
+ 
+ 
+ EX:-- www.google.com
+ 
+ Here www --->computer
+      Domain---->Google
+	  Second level--->redhat,windows etc
+	  Top level domain---->com.
+	  
+	  
+1)DNS is a database.
+  The things required for DNS database are 
+  a)TTL --
+  b)PTR (host domain name and host identified by Ip address) (Cname -->canonical name it the alias name given to that computer i.e.. additional name)
+  c)mx---Host or domain mail exchanger
+  d)ns--host or domain name a server
+  e)soa--It indiactes authority for domain
+  f)txt--generic text recod
+  g)srv--service location record
+  h)rp--responsiable person
+  i)hinfo--host information record 	cpu type and operating system.
+  
+  
+DNS PACKAGE : BIND(berkely internet name domain)
+
+
+Profile of DNS Server:
+---------------------
+Use: to resolve IP into hostname and vice- versa
+► Package: bind, caching-name I
+► Script: /etc/init.d/named
+► Port: 53
+► Configuration: /etc/named.conf
+► Document root: /var/named
+► Daemon: named
+
+
+DNS SERVER :
+-----------
+1)Install packages bind,caching -->yum install bind*  -y
+2)In /etc/sysconfig/network file make it as -->vi /etc/sysconfig/network and give
+
+NETWORKING=yes
+HOSTNAME=www.server.com (Fully qualifiled domain name (like thiswww.google.com ) )
+wq!
+
+3)we need configure /etc/host file it works as a local DNS for server. for this file make it as (ip to fqdn)
+
+vi /etc/host
+192.168.186.131 www.server.com
+wq!
+
+4)Take a backup /etc/named.conf ->cp /etc/named.conf /tmp/named_bkp.conf 
+
+After that make changes In options
+         
+          vi /etc/named.conf		 
+          
+		  listen-on port 53 {127.0.0.1; 192.168.186.131; }   ( 192.168.186.131 -->we are making this server as DNS/named server)
+		  
+		  allow-query  { localhost; 192.168.186.0/24; } (It is a network query where client can query the name server)
+
+5)We need to configure /etc/named.rfc.1912.zones (In this file we need add the forward look up zone and reverse lookup zone )
+   
+   1) cp /etc/named.rfc.1912.zones /tmp/named.rfc.1912.zones_bkp   
+ 
+   2)vi /etc/named.rfc.1912.zones -->copy the below lines and paste it at last and do configure.
+   
+		zone "localhost.localdomain" IN {
+		   type master;
+		   file "named.localhost";
+		   allow-update { none; }
+		   
+	}
+	
+	zone "localhost.localdomain" IN {
+		   type master;
+		   file "named.localhost";
+		   allow-update { none; }
+		   
+	}
+	
+	configuration :
+	---------------
+	zone "Server.com" IN {
+		   type master;
+		   file "server.flz";
+		   allow-update { none; }
+		   
+	}
+	
+	zone "186.168.192.in-addr.arpa" IN {
+		   type master;
+		   file "server.rlz";
+		   allow-update { none; }
+		   
+	}
+
+6)And jump into /var/named directory ---->cd /var/named
+
+7)In this :
+    a)cp named.localhost server.flz
+	b)vi server.flz   (It is for forward lookup zone)
+	
+	$TTL 86400
+	@       IN www.Server.com.          root.linuxterminal1.com. (
+															201111091    	;serial(YYYYMMDDNN)( A two-digit sequence number (00 to 99) that allows you to indicate multiple updates made on the same day.)
+															1D              ;refresh(
+															1H				;retry
+															1W				;expire
+															3H)				;minimum
+            NS      www.server.com.
+wwww        A       192.168.186.131
+            AAAA    ::1
+
+	
+	c)cp server.flz server.rlz
+	d)vi server.rlz
+	
+		$TTL 86400
+	@       IN SOA lt1adm.Server.com.          root.linuxterminal1.com. (
+															201111091    	;serial
+															1D              ;refresh
+															1H				;retry
+															1W				;expire
+															3H)				;minimum
+            NS      www.server.com.
+wwww        A       192.168.186.131
+131         PTR     www.server.com.
+
+
+
+8) To check :
+
+Use the command --->for forward lookup zone---->named-checkzone server.com server.flz
+                    for reverse lookup zone---->named-checkzone server.com server.rlz
+					
+9)Do some modifications in these file ----> vi /etc/resolv.conf
+search server.com
+nameserver 191.168.186.131
+
+10)restart named service
+
+11)To make this changes into effect reboot the server ---->init 6
+
+12) To check :
+  
+  a)dig www.server.com --->we will get output like question and answer then it's working fine 
+  b)dig -x 192.168.186.131--->we will get this same format.
+  c)nslookup server (hostname )       {************************we will get new ip if it works fine like 52.8.126.80}
+  d)nslookup www.server.com (fqdn)
+  e)nslookup 192.168.186.131
+  
+
+In the Above forward and reverse lookup zone :
+
+ZONE file :  A file that contains mappings of domain names to their corresponding IP addresses and other information.
+
+TTL(time to live) : The duration that DNS records are cached by resolvers before they need to be refreshed.
+      Sets the default Time to Live for the records in the zone file to 86400 seconds (1 day).86400--It means one day in seconds
+
+   
+SOA(start of Authority):
+
+Contains administrative information about the zone, including the primary name server and email of the domain admini-
+strator.
+
+Serial (201111091):
+
+This is a version number for the zone file, typically formatted as YYYYMMDDNN. It helps secondary (slave) DNS servers know if there’s a new 
+version of the zone file. Incrementing this number each time you update the zone file ensures that changes are propagated to other servers.
+
+Refresh (1D):
+
+
+This specifies how often secondary DNS servers should check with the primary (master) server for updates. In your case, 1D means every day. 
+If a secondary server hasn't checked for updates in this time, it will query the primary server to see if the zone has changed.
+
+Retry (1H):
+
+This defines the time a secondary server should wait before retrying to contact the primary server after a failed refresh attempt. Here,
+1H means one hour. If the secondary server cannot reach the primary server during a refresh, it will wait one hour before trying again.
+
+Expire (1W):
+
+This indicates how long a secondary server will consider its cached data valid if it cannot contact the primary server for updates. In this
+case, 1W means one week. After this period, if the secondary server still cannot reach the primary server, it will stop serving data for the
+zone.
+
+Minimum (3H):
+
+This setting defines the minimum TTL (Time to Live) for records in this zone. It indicates the shortest time that other DNS resolvers can 
+cache the records. Here, 3H means three hours. If a record has a TTL set lower than this minimum, it will still be cached for at least three
+hours.
+
+
+EXAMPLE:-
+
+$TTL 86400 ; Default TTL (1 day)
+@   IN  SOA     lt1adm.server.com.  root.linuxterminal1.com. (
+            201111091   ; Serial (YYYYMMDDN)
+            1D          ; Refresh (1 day)
+            1H          ; Retry (1 hour)
+            1W          ; Expire (1 week)
+            3H          ; Minimum TTL (3 hours)
+            )
+
+; Name Servers
+@   IN  NS      lt1adm.server.com.
+
+; A Records
+lt1.adm   IN  A   192.168.186.95      ; A record for the lt1.adm subdomain
+
+; AAAA Record
+@   IN  AAAA    ::1                   ; IPv6 loopback address (optional)
+
+
+Here :-
+
+NS (Name Server): Specifies the authoritative name servers for the domain.
+
+A Record: Maps domain names to IPv4 addresses.
+
+AAAA Record: Maps domain names to IPv6 addresses.
+
+CNAME Record: Creates an alias for a domain.
+
+MX Record: Indicates the mail server for the domain.
+
+TXT Record: Holds text information for various purposes, like SPF for email authentication.
+
+
+client configuration:
+---------------------
+ 1)we need to make entry in reverse lookup zone for the same client.
+  
+2)Edit the /etc/resolv.conf file: (It is for temprory)
+
+
+3)vi /etc/resolv.conf
+Add your DNS server addresses: You can add lines for the DNS servers you want to use. For example, to use Google DNS:
+
+
+nameserver 8.8.8.8      # Primary DNS
+nameserver 8.8.4.4      # Secondary DNS
+
+
+For permenant :
+----------------
+Step 1: Identify Your Network Interface
+First, find out the name of your network interface:
+
+
+ip addr
+Look for an interface name like eth0, ens33, or similar.
+
+Step 2: Edit the Configuration File
+Open the terminal.
+
+Edit the configuration file for your network interface. Replace ifcfg-<interface> with your actual interface name:
+
+sudo nano /etc/sysconfig/network-scripts/ifcfg-<interface>
+
+For example, if your interface is eth0, the command would be:
+
+
+sudo nano /etc/sysconfig/network-scripts/ifcfg-eth0
+Add or modify the following lines in the file to specify your DNS servers:
+
+DNS1=8.8.8.8
+DNS2=8.8.4.4
+Step 3: Save and Exit
+In nano, press CTRL + O to save and CTRL + X to exit.
+
+Step 4: Restart the Network Service
+To apply the changes, restart the network service:
+
+
+sudo systemctl restart network
+Step 5: Verify DNS Configuration
+You can verify that the DNS configuration is working by checking the /etc/resolv.conf file:
+
+
+cat /etc/resolv.conf
+
+
+2ND Method :
+-----------
+
+Open the terminal.
+
+Set DNS servers for your connection. Replace <connection-name> with your actual connection name (you can list connections with nmcli connection show):
+
+sudo nmcli connection modify <connection-name> ipv4.dns "8.8.8.8 8.8.4.4"
+Set DNS to automatic:
+
+sudo nmcli connection modify <connection-name> ipv4.ignore-auto-dns yes
+
+Restart the connection:
+
+sudo nmcli connection down <connection-name>
+sudo nmcli connection up <connection-name>
+
+Testing Your Configuration
+After applying the changes, you can test DNS resolution:
+
+dig google.com
+
+nslookup google.com
+
+
+
+Troubleshooting :
+
+1)make sure that (. - Dot is kept properly in /var/named file --If not will show some errors like www.server.com.server.com has no records (A or AAAA)
+2)After configuring all correctly if it shows error (Server can't find www.server.com :serverfail)
+ sol :reboot the system --init 6
+3) if it shows same in client system as well then we need to do same i.e reboot the client--->init 6
