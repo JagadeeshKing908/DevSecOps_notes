@@ -1,0 +1,100 @@
+SELinux (Security enhanced Linux) : It is security enhance to a linux that allows a user and administrator more control over which user and appalication 
+can access rich resources such as standard linux access control file mode are modifable by the users and appalications
+
+2)It is like a policy for systems
+
+3)It is mainly implemented for security.
+
+concepts :
+1)SELinux security concepts.
+2)Important SELinux configuration files below (Both are same files one soft link is pointing towards both the configuration files)
+  a)/etc/sysconfig/selinux
+  b)/etc/selinux/config
+  
+  
+b)/etc/selinux/config 
+EX:This file controls the state of selinux on the system.
+    i)enfororcing :selinux security policy is enforced.
+	ii)permissive:selinux prints warning instead of enforceing.
+	iii)disabled : No selinux policy is loaded
+	
+SELinux : It can take one of these two values.
+     i)Targeted : Targeted process are protected.
+	 ii)mls :multi level security system.
+
+3)modes of SELinux :
+  a)Enforcing :
+  
+  b)Permissive (It is same as debugging mode if we want to debug some thing then it	will be a permissive mode the rules are appalied to subject and object
+but actions like Access denied. Logs and error messages  are generated based on selinux policies.)
+
+  c)Disabled : we are turning of selinux to be diabled so logs cannot be generated.
+ 
+  
+
+
+To check the system is in which mode cmnd is : 
+
+[root@linuxterminal ~]#getenforce
+enforcing
+
+To see the status of selinux :
+
+[root@linuxterminal ~]#sestatus
+SELinux status   : enabled
+SELinux mount    :/selinux
+current mode      :enforcing
+mode from config file : enforcing
+policyversion			:24
+policy from configfile	:targeted
+
+To set the value of selinux to permissive mode :
+
+[root@linuxterminal ~]# setenforce 0 (1 is for enforcing mode ,0 is for permissive mode)
+ 
+[root@linuxterminal ~]#sestatus
+SELinux status   : enabled
+SELinux mount    :/selinux
+current mode      :permissive
+mode from config file : enforcing
+policyversion			:24
+policy from configfile	:targeted
+
+If it needs to works then we need to do :
+[root@linuxterminal ~]#/etc/init.d/selinux restart ---->if it not works then we need to reboot the system to work.
+
+To check the boolean values for FTP servers:
+
+[root@linuxterminal ~]# getsebool -a |grep ftp
+allow_ftpd_anon_write-->on         ------------>(if it is on then only will transfer the files from ftp server)
+allow_ftpd_full_access-->off
+
+To set the boolean values :
+[root@linuxterminal ~]#setsebool allow_ftpd_anon_write off
+
+[root@linuxterminal ~]# getsebool -a |grep ftp (it will turn off state)
+allow_ftpd_anon_write-->off
+allow_ftpd_full_access-->off
+
+To check the SELinux context of file : and it is accessiable to the public from admin so that everyone can access.
+
+[root@linuxterminal ~]# ls -Z filname
+
+
+
+[root@linuxterminal ~]# ps -efZ | grep httpd 	 	
+
+
+To change the context of a file :
+
+To check --->[root@linuxterminal ~]#ls -ldz filename
+
+To change [root@linuxterminal ~]# chcon  -t public_content_t filename
+
+To check --->[root@linuxterminal ~]#ls -ldz filename
+
+To restore-->[root@linuxterminal ~]#restorecon -v filename
+
+To check --->[root@linuxterminal ~]#ls -ldz filename
+
+
