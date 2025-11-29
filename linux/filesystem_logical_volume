@@ -1,0 +1,30 @@
+Logical volume management (LVM):
+
+With the help of this logical management we can reduce and increase the size of logical volume.
+
+Architecture :
+
+physical volume --->volume group --->logical volume.
+
+/dev/sdd     -->     VG001       --->lv001
+
+Physical extent :
+
+Extent is the block  the is used to store the data -->default size =4mib for RHEL6 --->pvdisplay--->cmnd
+ 
+physical volume :
+
+Set of extents is called the physical volume.
+
+Volume Group:
+volume group is same as physical volume.
+
+Logical Volume:
+------------
+Splitting of volume group into multiple logical volumes we call it as logical group
+
+Logical Extent:
+
+Extent is the block  the is used to store the data.
+
+
