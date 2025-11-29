@@ -1,0 +1,49 @@
+CronJobs :-
+---------
+1)These are  used to schdule tasks/jobs.
+
+To check the list of cronjobs use ----- > crontab -l
+
+To set up a cron job ----->crontab -e
+
+e ------ for edit
+
+m h dom mon dow  command
+
+Here 
+
+ m -- minutes
+ h -- hours
+dom -- day of month 
+mon --- month
+dow --- day of week
+command ---It will take a command to do
+
+@daily ,@hourly like that we can use .
+
+*It will take system time.
+
+==========================================
+
+If we want to schedule a job for particular user like root.
+
+crontab -u root -e 
+
+=============================================
+
+logs :--
+cat /var/log/syslog |grep -i cron
+
+============================================
+
+We can set cronjob for nologin users as well
+
+crontab -u www-data -e 
+
+=====================================
+we can generate the cron job by using 
+
+chrome or any thing by using---> cronjob generate
+
+
+
