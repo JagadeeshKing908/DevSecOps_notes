@@ -1,0 +1,9 @@
+Firewall :
+
+To Add a route in firewall use :
+
+sudo firewall-cmd --permanent --add-port=587/tcp
+
+We are reloading the firewall to make the change .
+
+sudo firewall-cmd --reload
