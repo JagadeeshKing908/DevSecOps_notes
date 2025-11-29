@@ -1,0 +1,56 @@
+Managing Installed services :
+
+Services : These services are programs which is called daemons.
+
+daemons : These are the background the processes that once started run countineously in the background and ready for input and monitor changes 
+          in our computer and respond to them.
+		  
+		  Ex: tomcat - 8080
+		  nginix -80
+		  https -443
+		  
+List all services and their statuses:
+
+systemctl list-units --type=service (systemctl httpd) (systemctl list-units --type=target)
+systemctl --level 012345 off
+		  
+Internet:--(Chat gpt)
+
+  
+  Service:
+
+A service is a program or process that runs in the background to provide specific functionality to other applications or users, often managed by an operating system. Services can be part of a larger application or system (e.g., a web server, database server).
+In many modern systems, services are typically controlled using service management frameworks like systemd or init.d.
+Daemon:
+
+A daemon is a type of background process that runs independently of user control. Daemons often start when the system boots and handle tasks like managing hardware, logging system events, or providing network services.
+The term "daemon" is often used in Unix and Linux environments.
+Differences
+Context of Use:
+
+Services are often referred to in the context of service-oriented architecture or application services.
+Daemons are generally associated with lower-level system processes.
+Management:
+
+Services are typically managed using system management tools (e.g., systemctl for systemd).
+Daemons may be started and stopped manually, but they can also be managed by service management frameworks.
+User Interaction:
+
+Services may require user configuration and may have user interfaces (e.g., web interfaces).
+Daemons usually do not have a user interface and run silently in the background.
+Commands
+The commands used to manage services and daemons can vary depending on the operating system and its service management framework. Here are examples for Linux systems using systemd:
+
+For Services
+Start a service: systemctl start <service-name>
+Stop a service: systemctl stop <service-name>
+Restart a service: systemctl restart <service-name>
+Enable a service to start at boot: systemctl enable <service-name>
+Check the status of a service: systemctl status <service-name>
+For Daemons
+Daemons are usually managed as services, so the same systemctl commands apply. However, for traditional daemons, you might see commands like:
+
+Starting a daemon: /etc/init.d/<daemon-name> start (for SysVinit)
+Stopping a daemon: /etc/init.d/<daemon-name> stop
+			 
+			 
