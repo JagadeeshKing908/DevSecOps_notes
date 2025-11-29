@@ -1,0 +1,89 @@
+Q)What is a Process?
+
+A process is an instance of a running program. Each process has a unique Process ID (PID) assigned by the system.
+
+Command	Description
+ps aux			Lists all running processes.
+top				Shows real-time process information.
+htop			Interactive process viewer (if installed).
+pidof <process_name>	Finds the PID of a running process.
+kill <PID>				Terminates a process using its PID.
+kill -9 <PID>			Forcefully terminates a process.
+pkill <process_name>	Kills a process by name.
+systemctl status <service>	Checks the status of a service.
+
+
+
+
+How to identify which process is running on which port
+
+[root@cdopla-196 ~]# netstat -tunlp | grep "22"
+tcp        0      0 10.36.101.48:33522      0.0.0.0:*               LISTEN      4477/java
+tcp        0      0 192.168.122.1:53        0.0.0.0:*               LISTEN      2445/dnsmasq
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1699/sshd
+udp        0      0 127.0.0.1:34224         0.0.0.0:*                           23589/BIBusTKServer
+udp        0      0 192.168.122.1:53        0.0.0.0:*                           2445/dnsmasq
+udp        0      0 192.168.122.1:123       0.0.0.0:*                           1294/ntpd
+[root@cdopla-196 ~]# lsof -i:3306
+
+Here 
+t--Show TCP ports
+U--Show UDP ports
+n--Show port numbers instead of service names
+l--Show listening ports
+p--Show process using the port
+
+0 - 1023	    Well-known ports      (Reserved for system services)	SSH (22), HTTP (80), HTTPS (443), FTP (21)
+1024 - 49151	Registered ports      (Used by applications)	MySQL (3306), PostgreSQL (5432)
+49152 - 65535	Dynamic/private ports (Used temporarily)	Ephemeral connections
+
+[root@cdopla-196 ~]# lsof -i:22
+COMMAND   PID     USER   FD   TYPE    DEVICE SIZE/OFF NODE NAME
+sshd     1699     root    3u  IPv4     34526      0t0  TCP *:ssh (LISTEN)
+sshd     2911     root    3u  IPv4 246753095      0t0  TCP cdopla-196.bell.corp.bce.ca:ssh->DCOBW6-221.qc.bell.ca:57442 (ESTABLISHED)
+sshd     2917    cpass    3u  IPv4 246753095      0t0  TCP cdopla-196.bell.corp.bce.ca:ssh->DCOBW6-221.qc.bell.ca:57442 (ESTABLISHED)
+sshd    28439     root    3u  IPv4 245702422      0t0  TCP cdopla-196.bell.corp.bce.ca:ssh->cdopwa-190.bell.corp.bce.ca:61619 (ESTABLISHED)
+sshd    28451 fidsisux    3u  IPv4 245702422      0t0  TCP cdopla-196.bell.corp.bce.ca:ssh->cdopwa-190.bell.corp.bce.ca:61619 (ESTABLISHED)
+[root@cdopla-196 ~]#
+
+Example :
+
+[root@cdopla-196 ~]# netstat -a
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 0.0.0.0:45483           0.0.0.0:*               LISTEN
+tcp        0      0 localhost:46219         0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:32972           0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:corelccam       0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:37037           0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:41998           0.0.0.0:*               LISTEN
+
+
+Active UNIX domain sockets (servers and established)
+Proto RefCnt Flags       Type       State         I-Node   Path
+unix  2      [ ACC ]     STREAM     LISTENING     16223    @/tmp/dbus-qMa1hcxF4x
+unix  3      [ ]         DGRAM                    18437    /run/systemd/notify
+unix  2      [ ]         DGRAM                    18439    /run/systemd/cgroups-agent
+unix  2      [ ]         DGRAM                    16912    /run/systemd/shutdownd
+unix  2      [ ACC ]     STREAM     LISTENING     40952    @/tmp/.ICE-unix/3031
+unix  2      [ ACC ]     STREAM     LISTENING     18457    /run/systemd/journal/stdout
+unix  5      [ ]         DGRAM                    18460    /run/systemd/journal/socket
+
+
+How to Open or Close a Port in Linux Firewall ?
+
+To check the firewall rules list --->sudo firewall-cmd --list-all
+
+How to Open or Close a Port in Linux Firewall ? 
+
+Open a port (e.g., 8080)
+
+sudo firewall-cmd --add-port=8080/tcp --permanent
+sudo firewall-cmd --reload
+
+To close Port :
+
+sudo firewall-cmd --remove-port=8080/tcp --permanent
+sudo firewall-cmd --reload
+
+
