@@ -1,0 +1,27 @@
+[cpass@DCOBW6-221 jagadeesh]$ vi inventory
+
+[cpass@DCOBW6-221 jagadeesh]$ ansible all -i inventory -m shell -a "uname -r"
+Dcobfo | CHANGED | rc=0 >>
+3.10.0-1160.119.1.el7.x86_64
+lsp1app111 | CHANGED | rc=0 >>
+3.10.0-1160.119.1.el7.x86_64
+cdopld-417 | CHANGED | rc=0 >>
+4.18.0-553.5.1.el8_10.x86_64
+
+[cpass@DCOBW6-221 jagadeesh]$ ansible all -i inventory -m shell -a "uname -r" -o
+Dcobfo | CHANGED | rc=0 | (stdout) 3.10.0-1160.119.1.el7.x86_64
+lsp1app111 | CHANGED | rc=0 | (stdout) 3.10.0-1160.119.1.el7.x86_64
+cdopld-417 | CHANGED | rc=0 | (stdout) 4.18.0-553.5.1.el8_10.x86_64
+
+[cpass@DCOBW6-221 jagadeesh]$ ansible all -i inventory -m shell -a "uname -r" -o -b
+Dcobfo | CHANGED | rc=0 | (stdout) 3.10.0-1160.119.1.el7.x86_64
+lsp1app111 | CHANGED | rc=0 | (stdout) 3.10.0-1160.119.1.el7.x86_64
+cdopld-417 | CHANGED | rc=0 | (stdout) 4.18.0-553.5.1.el8_10.x86_64
+[cpass@DCOBW6-221 jagadeesh]$
+
+
+i--->inventory
+m ---->for shell
+a----->arguments i.e--commands
+o----->single line output
+b----->switch to root(become to root)
