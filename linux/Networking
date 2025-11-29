@@ -1,0 +1,177 @@
+Network confuguration and trouble shooting :-
+-------------------------------------------
+
+Networking :-
+
+The communication between two systems(.i.e.,ip's) we call it as a network.
+
+The basic requirements for network are 
+
+1)NIC
+
+2)media
+
+3)Topology 
+
+4)protocol
+
+5)IP address
+
+6)Gateway /Router
+
+*** for One computer we can have only one(unique) MAC address ***************
+
+1)NIC:
+------
+NIC (nic card i.e . they are eth0 ,eth1 ,eth2 different interfaces if one interface down other will be up)
+we need to give bonding for that.
+
+2)media:
+--------
+It means medium is the one it specifies that how we are going to connect to the internet (i.e. rj45 cable,wireless ...)
+
+3)Topology :(How the systems are connected)
+------------
+It will be a bus topology or star or etc any thing for troubleshooting.
+
+4)protocol :( TCP or UDP)
+-----------
+It is set of rules which has been in one machine to communicate with other machine.
+
+TCP: (Transmission control protocol )
+
+It is a connection oriented like wires.
+If we are connected via lan cable the TCP works .
+less data loss.
+If we send 100 packets of data there will 100 packets recieved to other.
+In tcp the connection will be slow . Here per every packet there will be a ackonowledgement from other layers as well (i.e. OSI)
+the protocol no for TCP is 6
+
+Eg:-FTP, SMTP, TCP,HTTP  (realtime eg...recordings like serials etc..)
+
+UDP : (User datagram protocol)
+
+It is connection less.
+like what we are using.
+Here we have data loss.
+If we send 100 packets of data there will approx 80 packets recieved to other
+In UDp the connection will be high i.e fast
+the protocol no for TCP is 17
+the protocol no for ICMP is 1
+
+EG: DNS ,DHCP etc..(real time : live cricket matches ..etc..
+
+5)IP address : This is the unique identification for communication between two systems.
+-------------
+
+for public network mostly will start with 192. rest will be private 
+
+6)Gateway :(it is like visa when goes for other country we need visa for that county)
+------------
+It network point that provides entance to other network.it provides security to oragnasition (Router : It is a divice which  routes network)
+
+
+All The network related information will be present in directory----------> cd /etc/sysconfig/network-scripts
+
+
+for creating a new ethernet---->cd /etc/sysconfig/network-scripts and create file---->vi filename
+
+And restart it by ---/etc/init.d/network restart (or) service network restart , service network stop , service network start
+
+To change host name (cat /etc/sysconfig/network and change the hostname over there)
+
+--------------->IN ifconfig -----
+inet addr-(192.168.222.128)
+It is ip address of system.
+Bcast:-192.168.222.225
+It refers to a special ip address that is used to send a message or packet to all devices on the network. Broadcast address are commonly used for network.
+management tasks.such as sending out configuration updates or discovery requests.
+
+Loop back address:-
+If we want to see the operating system networking is working or not there we will check with loop back address.
+With this we can check local network.
+
+
+Ethernet configuration :
+
+------>[root@localhost ~]# cd /etc/sysconfig/network-scripts
+
+configurirng of eth1 :
+
+----->vi ifcfg-eth1
+
+DEVICE="eth1"
+BOOTPROTO="dhcp"
+HWADDR="00:0C:29:9E:93:90"
+IPV6INIT="yes"
+ONBOOT="yes"
+TYPE="Ethernet"
+
+--wq!
+
+restart the network by using -->
+
+1)/etc/init.d ifcfg-eth1 restart
+2)service network restart.
+
+
+2)/etc/sysconfig/network----->this file will keep the information about the hostname and information about the system. To change the hostname permanatly
+
+vi /etc/sysconfig/network
+NETWORK="yes"
+HOSTNAME="virtualterminal"
+
+
+3)If we want to communicate with other hosts with same network range or differnet network range we want to map it host with ip to host and host to ip
+
+If we want to resolve ip to hostname and host name to ip we need to map.
+---->cat>>/etc/hosts
+192.168.222.238  virtualmachine
+
+when we need to see ip to hostname and hostname to we need to use dig command--> dig hostname , dig -x hostname
+
+we can jump from cli to GUI for configurirng of network setting by using command ---->setup ,system-config-network
+
+RUNLEVELS :
+
+for checking of run levels we will use the command ---->chkconfig --list network  
+
+for checking of what runlevel the system is booting up ---> runlevel
+
+for checking of system runlevels -------->cat /etc/inittab
+
+for checking of particular nic card is working or not ----->ethtool eth0 ---->in this if the link detected it shows no then the link is down .
+
+PORTS:
+
+To check the what ports are using what we use command----->netstat -anp |grep (port no or app name or service name)
+
+ssh configuration file------> cat /etc/ssh/sshd_config---There we need to change the connector port.
+
+Q)how do change the connection procees of particular port.
+Ans)for every appalication or service we have dedicated configuration file we need to go there and we need to change the connector port.
+
+
+IP address Explanation:-->xxx.xxx.xxx.xxx i.e (
+It is divided into 5 i.e.(class A,B,C,D---multicast, E--->experimental and research)
+
+Class A :
+---Range is(0.0.0.0 to 127.255.255.255)
+---It supports 16 million hosts.Large networks
+class B:
+---Range is(128.0.0.0 to 128.255.255.255)
+---It supports 65000 hosts.medium sized networks (eg:companies etc
+class c:
+---Range is(192.0.0.0 to 223.255.255.255)
+---It supports 254 hosts.small sized networks(eg :home networks ..)
+class D:
+---Range is(224.0.0.0 to 239.255.255.255)
+---It supports 254 hosts.small sized networks(Eg :multicast address group ..)
+class E:
+---Range is(224.0.0.0 to 254.255.255.255)
+---It supports 254 hosts.small sized networks(eg :used for future and research ..)
+
+
+
+
+
