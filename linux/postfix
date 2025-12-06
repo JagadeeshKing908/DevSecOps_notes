@@ -1,0 +1,70 @@
+install mailx and postfix on server
+
+What Is mailx? (Mail User Agent – MUA)
+mailx = Mail sending command / Email client
+
+mailx provides the mail command, which lets YOU send mail from the terminal or scripts.
+
+✔ Command-line tool to compose/send emails
+✔ Used in automation scripts
+✔ Used to test mail delivery
+✔ Works on top of Postfix
+
+
+Postfix = Mail Server / Mail Delivery Engine
+
+Postfix is responsible for sending the email OUT from your Linux server.
+
+✔ Sends emails to Gmail, Outlook, SMTP servers
+✔ Handles queueing, retries, authentication
+✔ Encrypts mail using TLS
+✔ Receives mail (if configured)
+
+Think of Postfix as the “delivery boy” who actually takes the letter and delivers it.
+
+Pre-checks :-
+-----------
+
+1) - Check DNS resolution  ---> nslookup smtp.gmail.com
+2) - Check connectivity using telnet --> telnet smtp.gmail.com 587 25 2525 465
+3) - Check connectivity using nc  --> Need to install nmap-ncat, but only that:
+     a) yum install -y nmap-ncat
+     b) nc -v smtp.gmail.com 587
+
+
+Installing and configuring part:-
+---------------------------------
+✅ Step-1 :— yum install -y mailx postfix
+
+✅ Step-2 :— vim /etc/postfix/main.cf ( In our current org they are defining only inet_protocols and relay host rest are already defined)
+
+inet_protocols = ipv4
+relayhost = [smtp.gmail.com]:587
+
+smtp_use_tls = yes
+smtp_tls_security_level = encrypt
+smtp_tls_CAfile = /etc/ssl/certs/ca-bundle.crt
+
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+
+✅ Step-3 :— Create your Gmail password file
+
+sudo vi /etc/postfix/sasl_passwd
+
+[smtp.gmail.com]:587 yourgmail@gmail.com:YOUR_APP_PASSWORD
+
+YOUR_APP_PASSWORD :-- generate from the below link ( if it is gmail for my personal use if it is for company not required)
+
+https://myaccount.google.com/apppasswords
+
+✅ Step-4 :—
+
+sudo postmap /etc/postfix/sasl_passwd (here we will get some duplicates comment them )
+
+sudo systemctl restart postfix
+echo "Gmail SMTP working!" | mail -s "Test Email" yourgmail@gmail.com
+
+
+
