@@ -1,0 +1,27 @@
+To create aws Instance using shell scripts.
+1) Make sure aws cli installed on it.
+2) And role or IAM role need to be added to it. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Through command-->  aws ec2 run-instances --image-id ami-05561ceba311a6c7b --instance-type t2.micro --key-name New_key --query "Instances[*].InstanceId"
+
+#!/bin/bash
+
+AMI_ID="ami-0d176f79571d18a8f"      # Amazon Linux 2 (example)
+INSTANCE_TYPE="t2.micro"
+KEY_NAME="New_key"
+
+echo "Creating EC2 instance..."
+
+INSTANCE_ID=$(aws ec2 run-instances \
+    --image-id $AMI_ID \
+    --count 1 \
+    --instance-type $INSTANCE_TYPE \
+    --key-name $KEY_NAME \
+    --query "Instances[0].InstanceId" \
+    --output text)
+
+echo "Instance created successfully: $INSTANCE_ID"
+
+To see list of instances---->aws ec2 describe-instances   --query "Reservations[*].Instances[*].[InstanceId, InstanceType, State.Name, PrivateIpAddress, PublicIpAddress, Tags[?Key=='Name'].Value|[0]]"   --output table
+To delete Instances --->aws ec2 delete-instances --instance-id instanceid
