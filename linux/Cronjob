@@ -1,5 +1,12 @@
 CronJobs :-
 ---------
+Installation:-
+-------------
+yum install cronie -y 
+systemctl start crond.service
+systemctl enable crond.service
+
+
 1)These are  used to schdule tasks/jobs.
 
 To check the list of cronjobs use ----- > crontab -l
@@ -45,5 +52,18 @@ we can generate the cron job by using
 
 chrome or any thing by using---> cronjob generate
 
+
+Access for users :-
+-----------------
+If we want to restrict the access for users we need keep username in /etc/cron.allow
+[root@ip-172-31-5-217 etc]# cat cron.allow
+#jagadeesh
+[root@ip-172-31-5-217 etc]#
+
+
+[jagadeesh@ip-172-31-5-217 tmp]$ crontab -e
+You (jagadeesh) are not allowed to use this program (crontab)
+See crontab(1) for more information
+[jagadeesh@ip-172-31-5-217 tmp]$
 
 
