@@ -602,12 +602,20 @@ Day-7 :--
 -------
 
 vpc :-- creating a private cloud inside a pubic cloud
+
+1) virtual private cloud is used to create private cloud within public cloud. Mainly it provides Isolation.
+2)Every VPC has it own IP addresses , InternetGateways, Route tables
+3)We can control access to it using Security groups and Network control access lists.
+
 subnet :-- Dividing a large network into small 
 
-1)pubic subnet
-2)private subnet
+1)pubic subnet :
+  public subnet resources can be accessiable from Internet
+2)private subnet :
+  private subnet resources not able to access it from Internet but can be able to accessble using loadbalancers or NAT gateways 
+  which are present in public sunet
 
-NAT (network translator Gateway --> It will help us to access app private.
+NAT (network  address translator Gateway --> It will help us to access app private.
 IGW (internet gateway)----> it allows internet to access vpc                                  internet ---->Internet gateway -->vpc--->iptables--->public app --->NAT-->iptable (routetable)--->
 iptables(route tables) --> these are route tables these allow us to access internet)
 
