@@ -1,22 +1,16 @@
 DAY:-1:-
 -------
 
-Terraform : (IAAC--Infrastructure as a code)
-
+Terraform : (IAAC--Infrastructure as a code) :-
+-----------------------------------------------
 It is a tool that is used for infrastructure as a code.
-
 the tools that are same as teraform in cloud we use services IF we are use :
- 
 Aws-- CFT (cloud formation template ) 
-
 Azure -->ARM( Azure resource management )
-
 Google -->GRM(google resource management)
 
 *)Terraform was developed by HASHICORP It supports multicloud infrastructure.
-
 *) It will be in HCL lanaguage it is in json language.
-
 *)Terraform is free and open source.
 
 Ansible           TERAFORM
@@ -25,10 +19,8 @@ Target            provider
 variables         variables
 Tasks             Resources
 
-Installation :-	
 Installation :-
 --------------------
-
 sudo yum install -y yum-utils shadow-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install terraform
@@ -211,6 +203,11 @@ protocol = "-1"
 cidr_blocks = ["0.0.0.0/0"]
 }
 
+terraform init    --->it will initilize and download the resources related to aws.
+terraform fmt     ---> It will give the indentation
+terraform plan    --->It will plan and check the errors.
+terraform apply   ---> it will create an instance.
+terraform destory ---> it will delete the instance.
 
 
 
@@ -244,6 +241,11 @@ type = list(string)
 default =  ["t2.medium" , "t2.micro"]
 }
 
+terraform init    --->it will initilize and download the resources related to aws.
+terraform fmt     ---> It will give the indentation
+terraform plan    --->It will plan and check the errors.
+terraform apply   ---> it will create an instance.
+terraform destory ---> it will delete the instance.
 
 
 Day-3:-
@@ -258,82 +260,72 @@ locals : when we want to assign particular  t
 
 vim main.tf
 
-
-
 resource "aws_security_group" "mysg" {
-
 name = "Terraform-sg"
 description = "this id dynamic block"
-
 dynamic "ingress" {
-
 for_each = var.ports
-
 content {
-
 form_port = ingerss.value 
 to_port = ingress.value
 protocol = "tcp"
 cidr_blocks = ["0.0.0.0/0"]
-
 }
-
-
 }
-
 }
-
 variable "ports" {
 type = list(any)
 default = [22, 8080, 80, 9000]
-
+}
 }
 
-}
+terraform init    --->it will initilize and download the resources related to aws.
+terraform fmt     ---> It will give the indentation
+terraform plan    --->It will plan and check the errors.
+terraform apply   ---> it will create an instance.
+terraform destory ---> it will delete the instance.
 
 Task : create two instances aon two different regions .
 -------------------------------------------------------------
-
 
 vim task.tf
 
 provider "aws" {
 region = "us-east-1"
 }
-
 provider "aws" {
 region = "ap-south-1"
 alias = "mumbai"
 }
 resource "aws_instance" "myserver1" {
-
 tags = {
 Name = "NV-server"
 }
 ami = "NV ami"
 instance_type = "t2.micro"
-
 }
-
 resource "aws_instance" "myserver2" {
-
 provider = "aws.mumbai"
 tags = {
 Name = "MI-server"
 }
 ami = "MI ami"
 instance_type = "t2.micro"
-
 }
 
 output "output" {
 value = [aws_instance.myserver1.public_ip, aws_instance.myserver1.private_ip, aws_instance.myserver2.public_ip]
-
 }
 
+terraform init    --->it will initilize and download the resources related to aws.
+terraform fmt     ---> It will give the indentation
+terraform plan    --->It will plan and check the errors.
+terraform apply   ---> it will create an instance.
+terraform destory ---> it will delete the instance.
 
-Importing instances 
 
+Importing instances:-
+--------------------
 vim main.tf
 
 provider "aws" {
@@ -366,18 +358,22 @@ prod = "t2.large"
 }
 }
 resource "aws_instance" "myserver" {
-
 tags = {
 Name = "${terraform.workspace}-server"
 }
 
-
 ami = ""
 instance_type = local.instance_types[terraform.workspace}
-
 }
 
-
+terraform state show aws_instance.myserver[0] ---> it will show over all list of this server
+terraform apply --auto-approve | grep public_ip --->to show the outputs
+teraform import aws_instance.mustafa instance_id
+terraform workspace list ---->to see list of workspaces
+terraform workspace new dev ---->to create workspace
+terraform workspace select default ----> to switch work space
+terraform workspace show --->to see present work space 
+$terraform.workspace --->to print current workspace
 
 
 Day-4 :--
