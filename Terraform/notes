@@ -637,13 +637,13 @@ Steps to create VPC :-
 6)Attach internet gw to public RT & NAT gateway to private RT.
 7)subnet association
 
-Security Group :-
+Security Group(Instance firewall) :-
 -----------------
 1)Works at EC2 instance level.
 2)Stateful (reply traffic is allowed automatically).
 3)Only ALLOW rules.
 4)Used for day-to-day instance security.
-NACL (Network ACL):-
+NACL (Network ACL) (subnet firewall):-
 -----------------
 1)Works at subnet level
 2)Stateless (must allow inbound & outbound separately)
