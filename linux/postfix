@@ -64,7 +64,7 @@ https://myaccount.google.com/apppasswords
 sudo postmap /etc/postfix/sasl_passwd (here we will get some duplicates comment them )
 
 sudo systemctl restart postfix
-echo "Gmail SMTP working!" | mail -s "Test Email" yourgmail@gmail.com
+echo "Gmail SMTP working!" | mail -s "Test Email" jagadeeshcloud0@gmail.com
 
 
 
