@@ -90,4 +90,11 @@ Other useful:
   Ctrl + C     → Cancel current command
   Ctrl + Z     → Suspend process (use 'fg' to resume)
 
+Quick summary
 
+Search forward	------>/text
+Search backward--------->	?text
+Next match--------->	n
+Previous match----->	N
+Go to line	--------------> :line_number
+Show line numbers-------------->	:set number
