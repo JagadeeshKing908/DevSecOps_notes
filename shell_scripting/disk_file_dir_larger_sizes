@@ -1,0 +1,91 @@
+#!/bin/bash
+
+threshold=10
+
+echo "FileSyetem is above threshold on $(hostname)_$(date +%F) . Below are the details..."
+
+df -hTP | awk 'NR>1 {print $1, $7 ,$6}' | while read fs mountedon usage
+do
+        use=${usage%\%}
+        if [[ $use -ge $threshold ]] ; then
+
+            {
+                echo "======================================================="
+                echo -e "\tFileSyetem\t:\t$fs "
+                echo -e "\tMountPoint\t:\t$mountedon"
+                echo -e "\t Usage \t : \t$usage"
+                echo -e "\tHostname\t:\t$(hostname)"
+                echo "======================================================="
+                echo "### df -hTP $mountedon #####"
+
+                df -hTP $mountedon
+
+                echo "===========TOP 10 Directories on $mountedon =================="
+                cd "$mountedon" || exit
+                du -ah --max-depth=1 $mountedon | sort -rh | head -10
+
+                echo "=============TOP 10 files under $mountedon ======================"
+                cd "$mountedon" || exit
+                find $mountedon -type f -exec du -h {} + 2>/dev/null | sort -rh | head -10
+
+                cd "$mountedon" || exit
+
+                du -sh * 2>/dev/null | sort -rh | head -5
+
+        } | mail -s "DISK SPACE ALERT on host $(hostname)-($(date +%F)) " "jagadeeshcloud0@gmail.com"
+
+        fi
+done
+
+*/2 * * * * /bin/bash /root/script.sh >> /var/log/cron.log 2>&1
+
+==================================================
+
+Please find below not understandable
+
+\n --->next line
+\t ---> tab space
+
+
+cd "$mountedon" || exit --> It will enter into directory 
+
+--max-depth=1,0
+  1-->It will check subdirectories as well
+  0 --> It won't check subdirectories
+
+1️⃣ 2>/dev/null
+
+This is I/O redirection, specifically for stderr (standard error).
+
+0 → standard input (stdin)
+1 → standard output (stdout)
+2 → standard error (stderr)
+
+2>&1 ----> it will store error messages with respect to output
+
+Send all error messages produced by command to /dev/null (i.e., discard them).
+
+2️⃣ -exec du -h {} +
+
+This part executes a command for each file that find locates.
+  
+-exec → execute a command
+du -h → disk usage in human-readable format (K, M, G)
+{} → placeholder for the current file found by find
++ → batch multiple files in one command (more efficient than \; which runs once per file)
+
+  🔹 1️⃣ What is /dev/null?
+  
+/dev/null is a special device file in Linux.
+It is often called the “bit bucket” or “black hole”.
+
+Many commands may generate unwanted error messages, like:
+
+If you don’t care about these errors, you can hide them:
+
+du -h /root 2>/dev/null
+2> → redirect stderr (error messages)
+/dev/null → discard them
+This keeps your script output clean, only showing what matters.
+
+  
