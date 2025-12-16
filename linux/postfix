@@ -70,4 +70,22 @@ echo "Gmail SMTP working!" | mail -s "Test Email" jagadeeshyeddula90888@gmail.co
 ✅ Step-5 :— To delete previous mails
    postqueue -f
 
+METHOD 1 (RECOMMENDED): Delete ALL queued mails
+
+Use this after fixing SMTP issues.
+
+postsuper -d ALL
+
+✅ METHOD 2: Delete a SPECIFIC mail (best practice)
+
+If you want to delete only one mail:
+
+postsuper -d 5ECC3A43E3
+
+
+(Replace with actual Queue ID)
+
+✅ METHOD 3: Delete ALL deferred mails only
+postsuper -d ALL deferred
+
 
