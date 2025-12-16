@@ -1,0 +1,1161 @@
+Basic Shell scripting (Collection of Commands) :
+
+(Abishek linux)
+
+Shell scripting (Collection of Commands)
+Basics of shell scripting:-         ([https:// www. freshertube.com o(r)https:// www.freshertube.in)
+
+1) using multiple commands
+2) Creating a script file
+3) Displaying messages
+4) Using Variables
+5) Redirecting input & output
+6) Employing pipes
+7) performing math's
+8) Executing the script
+7) Lab
+
+
+Using Structured Commands:-
+
+1) working with the if then statement
+2) Exploring the if then statement
+3) Nesting file
+4) Trying the test Command
+  i) using numeric Comparison
+  ii) Using string comparison
+  iii) Using file Comparison
+5) Considering compound testing
+6)working with advanced if then feature 
+7) Considering the Case Command
+8) Lab
+
+
+more structured Commands:
+
+1) Looking at for Command
+2) Trying C-style for Command
+3) Exploring the while command
+4) Using the Until Command
+5) Nesting Loop
+6) Looping on the file data.
+7) Controlling the Loop.
+9) processing the output of loop
+10)Lab
+
+Handling user Input:- 3
+1) passing parameter
+2) using Special parameter Variable
+3) Being shifty
+4) working with option
+5) standardize option.
+6) Getting user input
+7 Lab
+
+
+
+understanding input and output:
+Using multiple Commands:-
+Using of multiple Commands  together and execute in a single script script called shell scripting. 
+
+1) Creating a script file: # pond :
+
+1) Create a file with any editor. Ex (vim test.sh)
+2) on first line Give default shell. i.e. echo $SHELL Ex: #!/bin/bash/
+3) And  write the commands what's need to a single line alter one command give (;) Semi Collen
+Eg :-
+#!/bin/bash
+ date
+ who
+(Or)
+
+#!Kbin/bash 
+date; who
+
+4) And give execute chmod 777 test.sh permission to the file
+5) And execute the sh test.sh
+
+3) Displaying messages 
+:- with the help "echo" will display messages
+4) Using Variables
+Environment Variables - The Variables that  already present in the system Called Environment variables 
+
+Ex:
+                 Echo $SHELL
+                   echo $PATH
+                   echo $ UID  
+                   echo $Home
+
+ Using Variables:
+ The Variables that is defined by scripts is Called environment Variables 
+
+Ex :
+#!/bin/bash
+#
+days=10
+guest = Jagadeesh
+echo $days and & guest
+
+* Command substitution-
+ Assigning the command output to a Variable Called as Command Substution.
+Ex: testing = $(date)
+Redirecting input and output:-
+input redirection (<):-
+To redirect input into other Call it as input re-direction. Command we
+Ex's :wc < date
+Output re-direction:- (3)
+To re-direction command output into another file is called as output redirection
+Ex: date > file.txt
+(>>) Append : To append one text to the other Called  as append the text.
+Employing pipes:- 
+
+Using pipes for a larger input we Call it as Employing pipes.
+Ex: rpm -qa | Sort | more ----->basicex
+
+Performing MATH:
+@Using expr Command:
+In this Command we can do only some basic operations. 
+Ex : expr 1+5--->6  output .but,
+          1*5---> error
+
+2) Using bracket operations:- By using of Brackets will perform some Calculations.
+Ex: create script file:
+EX:-
+Var1= 100
+Var2= 50
+Var3=20
+ Var4= $ [Var1 ($Var2- Var3))
+echo "Final result is $Val 4"
+The final result 500
+
+3) Floating point solution:- (bc)
+
+for floating point bash shell uses built in Calculator.
+Ex:
+ Var1 = $(echo "Scale = 4; 3.445/5" | bc)
+echo tr The result is $ Var1'
+output: The result is. 06880.
+* Exiting the script (echo $?) :
+* Checking the exit status
+* The exit Command
+
+Var1=100
+Var2= 100
+echo " The output is $var3'
+exit 5
+output: →  The output is 400
+
+→ echo $? -5
+Age Calculator:-
+#!/bin/bash
+#
+date1= "feb 21, 1993"
+date 2: "Jan 26, 2024"
+time 1= $(date -d "$date1" +%s)
+time 2=$ (date -d "$date2" + %s)
+diff =$ (expr $time2 - $time1)
+Secondsinday = $(expr 24\*60\*60) days = $ (expr $diff /secondsinday)
+
+echo "This is difference between $date2 and $date1 $days days ".
+
+
+Using structure commands: 
+* working with the (if then) statement:-
+Syntax:-
+
+If (stmt)
+then
+echo "I worked"
+Fi
+echo "we are outside of the if stmnt" 
+If else:
+Ex2 :
+test_user = Abhishek 
+if (grep $testuser /etc/passwd)
+Then
+echo" The userhas in the home directory of $testuser are!"
+ls /home/$testuser/*
+else 
+    echo "exit The wear  $testuser doesn't exist on the system.
+fi
+   echo "we are outside of if statement"
+
+
+
+Nested if 's :
+
+If grep  $testuser /etc/passwd
+then
+echo " The user $testuser account not exist on system "
+else
+echo" The user $testuser does not exist on this system .”
+ If ls-d /home/$testuser
+ Then
+ echo" However, $testuser has a directory"
+ fi
+ echo “we are outside of if-else statement"
+
+Test Command :
+
+if the condition is going true then code will execute with 0. If the code will exit with non zero then it will be a failure.
+
+1) Numeric comparison:
+Comparison                          Description 
+
+n1 -eq n2       --------->     Check if n1 is equal to n2  
+n1 -ge n2       --------->     To check if thy is grater than  or equal to n2
+n1 -gt n2       ---------->     To Check if n1 is grater than n2
+n1 -le n2      ---------->     TO check if n1 is less than n2
+n1-lt n2        --------->     To check if n2, is less than n1
+n1-ne n2        --------->     To check it on, is not Equal lone
+
+String Comparison :
+str1 = str2       ---->        str1, is same as str2
+str != str2      ----->       str1, not same as str2
+String order :
+str1 < str2      ------>        str1, less than str2  (Note : In string comparison we can't use > symbol directly it will show wrong output instead of it we can use \)
+str1 > stra2     ------>       str1 grater than str2
+-n str1          ----->        To Check if str1, has length grater than o
+-Z Str1          ------>      str1, has length grater than o
+
+
+File Comparision :
+
+1) -d file -- check if file exist and is a directory.
+
+     vi chkdirectory.sh
+     
+     #!/bin/bash
+     #Look before you leap
+     #
+     chkdirectory=/home/ansiable
+     #
+     if[ -d $chkdirectory ]
+     then 
+        echo "the directory $chkdirectory exists !!!"
+        cd $chkdirectory
+        ls
+        
+     else
+       echo " the directory $chkdirectory not exists !!!"
+       
+     fi
+	 
+2) -e file /-f file -- check if file exist inside a directory ---(object)
+ 
+    vi chkfileindir.sh
+	
+	#!/bin/bash
+	#
+	#check if file exists in directory are not
+	#
+	location=$home
+	filename="sentinal"
+	#
+	#
+	if[-d $location ]
+	then 
+	   echo " we have $location directory exists !!!"
+	   echo "Now checking the file exists or not !!!"
+	   
+	   if[ -e $location/filename ]
+	   then
+	     echo "we have file avaliable in $location and file is $filename!!!"
+		 echo "updating the file"
+		 date >> $location/$filename
+	   else 
+	      echo "No file found "
+	   fi
+     
+	 else 
+	    echo "No directory found"
+		
+    fi
+	
+	
+3) -r file --check if file exists and is readble
+
+    vi chkreadacces.sh
+	
+	#!/bin/bash
+	#
+	#check wheather we have read access for a file
+	#
+	pwfile=/etc/shadow
+	#
+	if[ -f $pwfile ]
+	then 
+	  echo "we are able to see the file"
+	  echo "checking for read access"
+	  
+	  if[ -r $pwfile ]
+	  then 
+	    echo "we are able to see the file output !!"
+		tail $pwfile
+	  else
+	    echo " we are not able to see the file"
+	  fi
+	else
+	  echo "$pwfile access denied for reading file"
+	  
+	fi
+	
+4)-s file ---To check if the file exists and is empty or not
+       
+	   vi chkfilenotempt.sh
+	   
+	   #!/bin/bash
+	   #
+	   #checking the file exist and data is avaliable in it or not
+	   #
+	   location=$HOME
+	   filename=sentinal
+	   #
+	   #
+	   if [ -f $home/$sentinal]
+	   then 
+	     echo "the file $filename exists!!!"
+		   if[ -s $filename ]
+		   then 
+		     echo "The file contains data "
+			 cat $filename |more
+		   else 
+		      echo "the file empty removing the file"
+			  rm $filename
+		 
+	   else 
+	     echo "oops the file $filename doesnot exist"
+		 
+	   fi
+	   
+5)-w  ---To check whether the file is writable or not
+
+      vi chkwrite.sh
+	  
+	  #!/bin/bash
+	  #
+	  #To check wheather the file is writable or not
+	  #
+	  file=$home/sentinal
+	  #
+	  if[ -f $file ]
+	  then 
+	    echo " The file exist "
+		
+		echo "checking the file is writeable or not ?"
+		
+		if [ -w $file ]
+		then 
+		 echo "then file is writeable"
+		else
+		 echo "Then file if not writable to change it to writable use command chmod 020"
+		fi
+		  
+	  else 
+	    echo "the file does not exist"
+		
+	  fi
+	  
+6)-x ---To check the file is executable or not
+
+     vi chkexec.sh
+	 
+	 #!/bin/bash
+	 #
+	 #To check the file is having executable permissions 
+	 #
+	 filename=$home/sentinal
+	 #
+	 if[ -f $filename ]
+	 then 
+	    echo "the file $filename exists"
+		echo "checking the file having executable permissions"
+		
+		if [ -x $filename ] 
+		Then
+		 echo "the file is having executable permissions"
+		 ll filename
+		 
+		else 
+		 echo "oops the file does not have executable permissions the make it executable use chmod 001 $filename"
+		fi
+		 
+	 else
+	    echo "the file $filename does not exist"
+	 fi
+	 
+7)-O ---To Check ownership of file
+
+    vi chckownershipfile.sh
+	
+	#!/bin/bash
+	#
+	#To check the ownership of a file
+	#
+	filename=/etc/passwd
+	#
+	if[ -O $filename ]
+	then
+	  echo "We are the owner of the $filename "
+	else 
+	  echo "We are not the owner of the file $filename"
+	fi
+	   
+	 
+8) -G -- It will check whether the file exists and group owner is same as owner.
+
+    Note Here we are checking the script executer and group that is for the user are same or not.
+
+    vi chkgroupdefltmembr.sh
+	
+	#!/bin/bash
+	#
+	#To check wherther the default group user
+	#
+	if [ -G $HOME testgroupfile ]
+	then 
+	  
+	  echo "you are in the same test group as"
+	  echo "the $HOME/testgroupfile files group"
+	  
+	else
+	   echo "Sorry ,your default group and $HOME/testgroupfile"
+	   echo  "file groups are different"
+	   
+	fi
+	
+9)file1 -nt file2 --->To check if file1 is newer than file2
+
+10)file1 -ot file2 ---->To check file1 is older than file2
+
+
+
+
+Project :
+
+TO check which package is installed on system and whether it is linux or debian
+
+	vi chkredhatordebian
+     
+	 #/bin/bash
+	 #
+     #
+	 echo "TO check whether it is a linux or debian"   (Note : Here 1=true, 0= false)
+	 #
+	 echo "REDHAT CHECK"
+	 
+	 if (which rpm &> /dev/null)
+	 then 
+	   item_rpm=1
+	   
+	    echo "You have the basic rpm utility!!!"
+	else
+	  item_rpm=0
+	  echo "There is no rpm package"
+	  
+	 fi
+	 
+	 ###
+	 
+	if (which dnf &> /dev/null)
+	then 
+	   item_dnf=1
+	   
+	    echo "You have the basic dnf utility!!!"
+	elif (which yum &> /dev/null)
+	then 
+	   item_dnfyum=1
+	   
+	echo " you have yum pacakger installed"
+	 
+	else
+	  item_dnfyum=0
+	  echo "There is no dnfyum package"
+	  
+	 fi
+
+########
+
+ #/bin/bash
+	 #
+     #
+	 echo "TO check whether it is a linux or debian"   (Note : Here 1=true, 0= false)
+	 #
+	 echo "Debian CHECK"
+	 
+	 if (which rpm &> /dev/null)
+	 then 
+	   item_rpm=1
+	   
+	    echo "You have the basic rpm utility!!!"
+	else
+	  item_rpm=0
+	  echo "There is no rpm package"
+	  
+	 fi
+	 
+	 ###
+	 
+	if (which dnf &> /dev/null)
+	then 
+	   item_dnf=1
+	   
+	    echo "You have the basic dnf utility!!!"
+	elif (which yum &> /dev/null)
+	then 
+	   item_dnfyum=1
+	   
+	echo " you have yum pacakger installed"
+	 
+	else
+	  item_dnfyum=0
+	  echo "There is no dnfyum package"
+	  
+	 fi
+
+
+	if (which flatpak &> /dev/null)
+    then
+      item_flakpak=1
+	  echo "you have flatpack appalication container"
+    else
+      item_flakpak=0
+    fi
+    
+
+    redhatscore=$[$item_rpm+$item_dnfyum+$item_flakpak ]
+	
+###############Debian checks ###################
+
+echo "checking for debian based pacakages"
+
+     if (which dpkg &> /dev/null)
+	 then 
+	   item_dpkg=1
+	   
+	    echo "You have the basic dpkg utility!!!"
+	else
+	  item_dpkg=0
+	  echo "There is no dpkg package"
+	  
+	 fi
+	 
+	 if (which apt &> /dev/null)
+	then 
+	   item_apt=1
+	   
+	    echo "You have the basic apt utility!!!"
+	elif (which apt-get &> /dev/null)
+	then 
+	   item_aptgetapt=1
+	   
+	echo " you have packager pacakger installed"
+	 
+	else
+	  item_aptaptget=0
+	  echo "There is no dnfyum package"
+	  
+	 fi
+	 
+	 if (which snap &> /dev/null)
+	 then 
+	   item_snap=1
+	   
+	    echo "You have the basic dpkg utility!!!"
+	else
+	  item_snap=0
+	  echo "There is no dpkg package"
+	  
+	 fi   
+	 
+	 debianscore=$[$item_apt + $item_apt + $item_snap ]
+	 
+#############################
+
+    if [$debianscore -gt $redhatscore ]
+    then
+	  echo "your linux distrubition likely to have redhat"
+	  
+	else 
+	   echo "your linux distrubition most likely to have debian"
+	   
+	fi
+
+LOOPING Statements :-
+
+   whenever we want execute a task more than one time then make use of for loop.
+     
+	 *Reading values in a list .
+	 *Reading complex values in list.
+	 *Reading a list from variable
+	 *Reading values from commands
+	 *Changing feild sepertaor. -------------->IFS = $'\n' ==>when we had given an extra space or any the bash shell will not understand it
+	 *Reading a directory using wild cards.
+	 
+
+Syntax :
+
+   for var in list
+   do
+     
+	 commands
+	 
+   done
+   
+Examples :
+
+1)  Vi testingfor.sh
+   
+   #!/bin/bash
+   #
+   for test in banglore hyderbad mumbai indore varansai gujarat  
+                                                                 											                 
+   do
+    
+	echo the next city $test
+    
+	done
+
+2)Note : we can use a varible and we can assign it to varible then we can do same )
+	 like :, list = banglore, hyderbad,chennai )
+	an use ( for city in $list)
+	
+	
+   #!/bin/bash
+   #
+   for city in $list 
+                                                                 											                 
+   do
+    
+	echo the next city $city
+    
+	done
+
+
+
+3)Reading values from file ;
+
+
+   vi
+
+   vi readvalues.sh
+   
+   #!/bin/bash
+   #
+   file="city.txt"
+   
+   for city in $(cat $file)
+   do
+     
+	 echo " Have your ever visited the beautiful $city "
+	 
+   done
+
+
+
+4)*Changing feild sepertaor :
+
+	IFS = $'\n' ==>when we had given an extra space or any the bash shell will not understand it directly when we will give this ifs then it 
+	will understand.
+	
+5)Reading a directory using wild cards: for checking whether the file is directory or file
+   
+   vi Readingfiledirectory.sh
+   
+   #!/bin/bash
+   #
+   for file in /etc/*
+   do 
+     if [-d "$-file"]
+	 then
+	 
+	 echo "this is a $file file"
+	 
+	 elif [-f "$file"]
+	 then
+	   echo "this is a $file file "
+	 else
+	 
+	  echo "This is not a file nor directory"
+	  
+	  
+WHILE LOOP :-
+------------
+
+syntax:-
+
+       while varible commands
+	   do
+
+				commands
+	   done
+	   
+	   
+	   EX :-
+	   
+	   vi basicwle.sh
+	                            output : 10,9,8,7,6,5,4,3,2,1
+	   #!bin/bash
+	   
+	   var1=10
+	   
+	   while [ $var1 -gt 0 ]
+	   do
+	     echo $var1
+		 var1= $[$var1 - 1]
+		
+	   done
+	   
+Using multiple test commands in while loop:-
+
+    vi multitest.sh
+	   
+	   #!bin/bash
+	   
+	   var1=10
+	   
+	   while  echo $var1           10,9,8,7,6,5,4,3,2,1,-1
+	   [ $var1 -gt 0 ]
+	   do
+	     
+		 var1= $[$var1 - 1]
+		 echo "you are inside loop "
+		
+	   done
+	   
+	   
+UNTIL LOOP :- It is opposite of while loop if the condition is equal to true then it will not print that value.
+-------------
+   
+     vi untex.sh
+	  #!/bin/bash
+	  
+	  var1=100
+	                                            output : 100,75,50,25
+	  until [ $var1 -eq 0 ]
+	  do
+	     echo $var1
+		 
+		 var1= [ $var1 - 25 ]
+		 
+	 done 
+
+
+Nested Loops : -
+
+    vi nestfor.sh
+	
+	#!/bin/bash
+	
+	
+	for (a =1;a<=3;a++)
+	do 
+	   echo "Starting of loop: $a"
+	   
+	  for(b=1;b<=3;b++)
+	  do
+	    echo "         inside loop: $b"
+
+      done
+	  
+	 done
+	 
+	 
+	 vi nestwhilefor.sh
+	 
+	 var1=5
+	 
+	 while [ $var1 -ge 0 ]
+	 do
+	  echo " Outer loop : $var1 "
+	  
+	  for (var2=1;var2<3;var2++)
+	  do
+	    var3= $[ $var1 * $var2 ]
+		
+		echo "   Inner loop $var2 * $ var1 = $var3 "
+		
+	  done
+	  
+	  var1= $[ $var1 -1 ]
+	  
+	 done
+	  
+UNTIL & While :-
+
+    vi untilwhil.sh
+    
+    #!/bin/bash
+
+     var1=3
+     
+     until [ $var1  -eq 0 ]
+
+     do 
+       echo " outer loop: $var1"
+	   var2=1
+	   while [ $var2 -lt 5 ]
+        do
+          var3= $(echo "scale=4;$var1/$var2	| bc )  (bc--bash calculator it is for flooating point calculator)
+          echo "inner loop $var1/$var2=$var3
+          var2=$[$var2 + 1]
+        done
+		var1=$[$var1-1]
+    done
+	
+	 
+More Structure scripts:
+
+Controlling the loop :
+	1)break commands
+	2)continue commands
+processing output of a loop:
+	1)Real time projects
+    2)craeting multiple user Accounts.
+Break;
+	
+	vi Break.sh
+	
+	#!/bin/bash
+	
+	for var1 in 1 2 3 4  5 6 7 8 9 10
+	do
+	  
+	  if[ $var1 -eq 5 ]
+	  then
+	     break
+      fi
+	  
+	  echo "Iteration number: $var1"
+	  
+	done
+	echo "loop hs completed"
+	
+Continue: It is a extension of a break that what ever the comands we put under continue that will  break and rest will be executed.
+
+    vi conti.sh
+	
+	vi #!/bin/bash
+	
+	for ($var1=1;$var1<=15;$var1++)
+	do
+	  
+	  if [$var1 -gt 5] && [$var1 -lt 10]
+	  then 
+	    continue
+	  fi
+	  
+	  echo "Iteration number : $var1"
+	  
+	done
+	
+*** output Redirection
+
+     vi redirectoutput.sh
+	 
+	 for ($i=1;$i<10;$i++)
+	 do
+	   echo "the number is: $a"
+	   
+	 done >output.txt
+	 
+	 
+	 
+	 
+	 
+	 
+	
+Note :
+
+  if we got string like they'll like that it will not not consider as a single script .we need to give the entire string in double quotes 
+  it will work.
+  
+ 
+Projects :
+
+**** executable files in /bin/bash ---with this we can check executable files for normal user and super user
+
+     vi executablefile.sh
+
+     #!/bin/bash
+
+     IFS =:
+     for folder in $PATH
+     do
+      echo $folder	 
+      for file in $folder
+	  do
+	   if [ -x $file ]
+	   then
+	      echo "$file"
+		fi
+	   done
+	 done
+
+***  Creating multiple users using scripting :
+
+    #!/bin/bash
+	
+	input=users.csv
+	while IFS="," read -r loginname name
+	do
+      echo "adding user : $login name"
+      useradd -c "$name; name@gmail.com" -m $loginname"
+    done < "$input"	  
+
+Handelling User Input :-
+----------------------
+
+Passing parameter.
+	1)Reading the script name.
+	2)Reading the script name.
+	3)Testing parameters.
+Using Special parameter variable:
+	1)counting parameter
+	2)Grabbing all the data
+Being shifty
+
+1)Reading parameter:-
+---------------------
+  special variable -------------->positional parameter
+  
+    $0           ----     Script name
+		$1          ------  First parameter for user input
+		$2          ------ Second parameter for user input
+		$3          ------ Third  parameter for user input  
+		$9        --------- ninth parameter for user input  (we have upto 9 parameters)
+		
+		
+		vi readingpara.sh
+		
+		#!/bin/bash
+		
+		product=$[ $0 * $1 ]
+		
+		echo "First number is : $0"
+		echo "second number is:  $1"
+		echo "product of 2 numbers is :$product"
+		
+		[root@rhel9 ~]# sh readingpara.sh 4 5
+		
+		echo "First number is : 4"
+		echo "second number is:  5"
+		echo "product of 2 numbers is :20"
+		
+
+2)Reading the script name:It helps when we are handelling more functions or logs.
+    
+	
+        vi reading.sh
+        
+        #!/bin/bash
+        
+        name= $($basename $0)
+        
+        echo "the name of script is : $name"
+        
+        
+        output : the name of script is : reading.sh
+
+3)Testing parameters :
+
+       vi testpara.sh
+	   
+	   #!/bin/bash
+	   
+	   if [ -n $1 ]
+	   then 
+	   
+	     factorial=1
+		 for(( number=1 ;number<=$1;number++)
+		 do
+		   factorial= $[$factorial*$number]
+		  
+		 done
+		 
+		 echo "The factorial of $1 is $factorial "
+	   else
+	   echo "You have not provided any parameter.
+	   fi
+	  exit
+	 
+Using Special parameter variable:
+
+   Special parameter variables :
+   ----------------------------
+   $ -- The variable that holds current set of options in current shell.
+   
+1)counting parameter :
+   
+   $# -- (It will count the no words in a string from given input) when variable conatins the number of command line parameters included when script was run.
+   
+			vi countingpara.sh
+			
+			#!/bin/bash
+			
+			if [ $# -eq 1 ]
+			then 
+			   fragments = "parameters are :"
+			else
+			   fragments = "parameters were:"
+			fi
+			echo $# $fragments supplied
+			
+			output :
+			
+			sh countingpara.sh hi hello
+			
+			2 parameters supplied
+
+2)Grabbing all the data :
+			   
+    $* -- variable takes all the parameters supplied on the command line as a single word. (sentance as same word)
+   
+    $@ -- variable takes all the parameters supplied on a command line as a seperate word in tha same string. (senatnce -->seperate words )
+
+    
+           vi grabbingdata.sh
+           
+           #!/bin/bash
+           
+           
+           echo "using the $* meathod :"
+           
+           echo "using the $@ mathod: "
+           
+           sh grabbingdata.sh alpha beeta theeta gama
+    
+Being shifty : It will shift the variable or  number to before number or variable. ($3-->$2--->$1)
+
+      
+        vi shifty.sh
+		
+		#!/bin/bash
+		
+		count=1
+		
+		which [ -n $1 ]
+		do
+		  echo "parameter #$count= $1"
+		  count=$[ $count + 1 ]
+		  shift
+		  
+		done
+		
+		echo
+		exit
+		
+  Reading User input :
+-------------------------
+Some basic commands :
+
+Option                 Description
+ 
+-a                 : shows all the objects
+-c                 : produces the count
+-d				   : specifies a directory
+-e 				   : expands an objects
+-f 				   : specifies a file to read data from
+-h 				   : displays help message for the commands
+-i 				   : ignores text case
+-l 				   : produces a long format of output
+-n 				   : uses a non interactive batch mode 
+-o       		   : Specifies a file to which all output is redirected.
+-q				   : Runs in quiet mode
+-r                 : process files and directories recursively
+-s 				   : Runs in silent mode 
+-v 				   : produces verbose output
+-x 				   : execludes an objects
+-y				   : Answers yes to all questions
+
+
+STANDARDIZING OPTIONS :
+-----------------------
+1) Getting user Input
+2)Timing out
+3)Reading with no displays
+4)Reading from file
+
+
+1) Getting user Input : with the help of read command we will get the input from user after execution of script.
+
+option (-n) : with the help of this option will will not get input in same line will get in next line .
+
+      Vi userinputp.sh
+	   
+	   #!/bin/bash
+	   
+	    echo -n "enter name of the person :"name
+	   read 
+	    echo "hi $name welcome to the script"
+   
+	   exit
+	   
+Option (-p) :It will help us to get the input in same line.
+
+       Vi userinputp.sh
+	   
+	   #!/bin/bash
+	   
+	   read -p "please enter your age: " age
+	   days=$[$age * 365]
+	   echo "the no of days is $days"
+	   exit
+	   
+	   
+		
+2)Timing out : It will terminate the process if the scripts executes more time.
+     
+	 vi Asknametime.sh
+	 
+	 #!/bin/bash
+	 
+	 if read -t 5 -p "Enter your name : " name
+     then 
+       echo  "welcome $name ,This is a time out script"
+
+     else 
+        echo " Sorry no longer waiting for the name"
+    fi
+
+    exit	
+	
+3)Reading with no displays : 
+
+option (-s) : will not display any thing on command line 
+
+    vi nodisplay.sh
+		
+	read -s -p "Enter password :" passwd
+
+    echo "your passwd is $passwd"
+    exit
+	
+
+4)Reading from file :
+
+   vi readfile.sh
+   #!/bin/bash
+   
+   cat /scripts/test.sh | 	while read line
+    
+	do
+	 echo "Line $count:$line"
+	 count=$[$count +1 ]
+	done
+	echo"finished processing the file"
+	exit
+	
+
+
+
+
+
+
+Bracket	Purpose	Example
+[ ]	Basic condition	[ $a -gt 10 ]
+[[ ]]	Advanced condition	[[ $a -gt 10 ]]
+{ }	Group commands	{ echo hi; }
+( )	Subshell	(cd /tmp)
+$()	Command output	$(hostname)
+$(( ))	Arithmetic	$((a+1))
