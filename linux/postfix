@@ -52,6 +52,7 @@ smtp_sasl_security_options = noanonymous
 ✅ Step-3 :— Create your Gmail password file
 
 sudo vi /etc/postfix/sasl_passwd
+chmod 600 /etcpostfix/sasl_passwd
 
 [smtp.gmail.com]:587 jagadeeshyeddula90888@gmail.com:xrzpfqbftsjtukml
 
@@ -66,5 +67,7 @@ sudo postmap /etc/postfix/sasl_passwd (here we will get some duplicates comment 
 sudo systemctl restart postfix
 echo "Gmail SMTP working!" | mail -s "Test Email" jagadeeshyeddula90888@gmail.com
 
+✅ Step-5 :— To delete previous mails
+   postqueue -f
 
 
