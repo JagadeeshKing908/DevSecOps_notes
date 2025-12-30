@@ -89,3 +89,21 @@ postsuper -d 5ECC3A43E3
 postsuper -d ALL deferred
 
 
+some times it may not work use the below command and create new password and check it will work
+
+The REAL fix (this is what changed)
+✅ We did three critical actions together
+1️⃣ Rebuilt the SASL database properly
+rm -f /etc/postfix/sasl_passwd.db
+postmap /etc/postfix/sasl_passwd
+
+
+📌 This ensured:
+
+No stale .db
+
+No mismatch between text and hash
+
+Postfix reads fresh credentials
+
+
