@@ -67,6 +67,22 @@ chown fidsisux:fidsisux authorized_keys
 
 chmod 600 authorized_keys
 
+mkdir -p /home/jagadeesh/.ssh
+chmod 700 /home/jagadeesh/.ssh
+echo "ssh-rsa AAAA..." >> /home/jagadeesh/.ssh/authorized_keys
+chmod 600 /home/jagadeesh/.ssh/authorized_keys
+chown -R jagadeesh:jagadeesh /home/jagadeesh/.ssh
+
+vim /etc/ssh/sshd_config
+
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+
+ssh username@IP
+
+ works ok else try with ------->systemctl restart sshd
+
 cd /etc/sudoers.d/
 
 vi 10_fidsisux
