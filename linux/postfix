@@ -54,7 +54,7 @@ smtp_sasl_security_options = noanonymous
 sudo vi /etc/postfix/sasl_passwd
 chmod 600 /etcpostfix/sasl_passwd
 
-[smtp.gmail.com]:587 jagadeeshyeddula90888@gmail.com:xrzpfqbftsjtukml
+[smtp.gmail.com]:587 jagadeeshyeddula90888@gmail.com:kxshyxlslxzrtyqx
 
 YOUR_APP_PASSWORD :-- generate from the below link ( if it is gmail for my personal use if it is for company not required)
 
