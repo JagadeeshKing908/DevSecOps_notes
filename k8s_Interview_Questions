@@ -1,0 +1,10 @@
+1Q)You have a deployment in git with 5 replicas hardcoded in the yaml you are using argocd to deploy the app and self heal is enabled . later you have attached a HPA to manage 
+based on CPU load a traffic spike hits and the HPA tries to scale the deployment to 10 replicas ? what happens immeadietly ?
+options :-
+
+1)The HPA scales the app to 10 (HPA takes priority)
+2) ArgoCD detects drift and reverts count back to 5
+3) the app enters a crash loop backoff state.
+4)ArgoCD automatically diables self heal
+
+Answer : 2) ArgoCD detects drift and reverts count back to 5 . HPA doesnot take that>
