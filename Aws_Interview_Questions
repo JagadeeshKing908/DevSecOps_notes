@@ -66,7 +66,26 @@
 
 34Q)How do private subent instance access over the internet? And how do public instances access over the inetrnet? Access S3 over private subnet
 
-35Q)
+35Q) Your ec2 root disk is 100% full how do you trouble shoot it without down time?
+
+36Q)your appalication needs more storage but your ec2 instance is running what should you doi?
+
+37Q)How do you ensure data is not deleted when ec2 instance is running ?
+
+38Q)Appalication performance is two slow due to high disk I/O how to trouble shoot and fix it?
+
+39Q)Ec2 instance is running , but unable access it with ssh . what steps do you follow ?
+
+40Q)An ec2 instance is deleted accidentally . How do you recover the data?
+
+41Q)You need same data in another availability zone .what is your apparoach?
+
+42Q)Two ec2 instances need to access the same data simultanesouly-how do you design it?
+
+43Q)your aws bill is high due to EBS how do you optimize the cost?
+
+44Q)Traffic suddenly jumps to 10x - how do you handle scaliability-scaling?
+
 
 
 
