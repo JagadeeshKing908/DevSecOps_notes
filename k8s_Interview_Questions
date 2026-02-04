@@ -1,4 +1,43 @@
-1Q)You have a deployment in git with 5 replicas hardcoded in the yaml you are using argocd to deploy the app and self heal is enabled . later you have attached a HPA to manage 
+1Q) pod vs deployment vs service - when do you use each?
+
+2Q) what is crashloop backoff and how do you troubleshoot it ?
+
+3Q)how does k8s handeles self-healing?
+
+4Q)ConfigMap vs secret ?
+
+5Q)Node port vs loadbalancer vs ingress vs clusterip vs none
+
+6Q) what happens when a node goes down ?
+
+7Q)How do rolling updates work?
+
+8Q)How do you trouble shoot a pod not starting?
+
+9Q)what is HPA and how does autoscaling works?
+
+10Q)How do you achieve zeo down time deployments?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+You have a deployment in git with 5 replicas hardcoded in the yaml you are using argocd to deploy the app and self heal is enabled . later you have attached a HPA to manage 
 based on CPU load a traffic spike hits and the HPA tries to scale the deployment to 10 replicas ? what happens immeadietly ?
 options :-
 
