@@ -1,0 +1,65 @@
+1Q) what is docker ?
+
+Docker is basically an open source containerization platform . It enables developers to package appalications into containers.
+--->I use docker basically to create containers images and push registaries.
+
+2Q) How is container differnet from virtual machine?
+
+conatiners are light weight in nature  because they do not have complete OS like virtual machines . but they have very dependencies that are mandatory which is used to run 
+appalications .for example if i am running a java appalication so what i need my appalication i need java run time dependencies to run appalication i need system libraries to run app.
+
+that's they are light weight i nature . where come to instances or vms they need fixed memory and ram containers do not require that they use host operating system.
+
+3Q) what is docker lifecycle?
+
+Users would create a Dockerfile with set of instructions or commands that defines a docker image .For example which base image to choose what are the dependencies should install 
+to run appalications etc..
+Docker images act as set of instructions to build a docker container it can be compared like snapshot like vm
+
+            build                run                     push
+Dockerfile-------->Docker image ------>dockercontainer------->registary
+
+4Q) what are the Different docer componenets/architecture ?
+
+Docker client/CLI :- these is the one which helps to run commands .
+Docker host :-- The place where the docker is installed
+Docker registary :- Thisthe place where the images are stored.
+
+5Q) what is differance between ADD and COPY ?
+
+copy :- It helps us to copy files from our host to contanier
+ADD :- It helps us to copy files from our host to contanier as well as from internet too.
+
+6Q) what is differance between CMD and entry point?
+
+CMD :- it used to executes commands in conatiner.
+ENTRYPOINT :- It is used to run commands on container it overides CMD.
+
+7Q) what are the networking types in docker and what is default ?
+There are five typesof network in docker and default network in docker is bridged network .
+a) Bridged:- 
+  --------
+  A private internal network on a single host
+  Containers can talk to each other using container names
+  Uses NAT to access the outside world
+b)Host :-
+  Container shares the host’s network stack
+  No isolation between container and host networking.
+c)None:-
+  No networking at all.
+  Container is completely isolated.
+d)Overlay:-
+  A network that spans multiple Docker hosts
+  Containers communicate as if on the same LAN
+  Uses encrypted VXLAN tunnels
+e)Macvlan :-
+  Gives containers real IPs on your local network
+  Containers appear as physical devices on the LAN
+
+8Q)what is a multistage build in docker?
+  
+9Q) what are distroless images in docker?
+
+Distroless images contain only appalication and run time dependencies with a very minimum operating system libraries. They do not contain package managers shells or any other 
+programs you would in in normal linux distrubition .they are very small and light weight.
+
