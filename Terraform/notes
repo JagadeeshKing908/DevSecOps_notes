@@ -378,10 +378,21 @@ $terraform.workspace --->to print current workspace
 
 Day-4 :--
 ------
-lifecycle -->create before destroy , prvent_destroy , ignore_changes
-hashicrop world
-vault.
-run time values
+1)lifecycle -->
+
+Terraform lifecycle is a meta-argument used to control the behavior of resources during infrastructure creation, modification, and deletion operations.
+It helps manage how Terraform handles resource changes by using rules such as:
+
+create_before_destroy
+prevent_destroy
+ignore_changes
+
+Terraform lifecycle is used to customize how Terraform manages resources during apply, update, or destroy operations.
+
+
+2)hashicrop world
+3)vault.
+4)run time values
 
 
 
@@ -1014,7 +1025,11 @@ while running the commands install efs service.---->go to official doccument and
 
 Day-12:-
 -------
-modules : terraform module is a container where we can create mutiple containers. IT is used to create a terraform files in directory structures.
+A Terraform module is a collection of Terraform configuration files grouped together to create reusable and modular infrastructure components.
+
+Real-Time Example
+
+For example, instead of writing EC2, VPC, and Security Group code multiple times, we create separate Terraform modules and reuse them across dev, test, and production environments.
 Statefile locking :--> If changes are appalied by two persons at same time then terraform state file will be courropted .to overcome this we make use of state file locking.
 
 mkdir  terraform
@@ -1156,5 +1171,51 @@ tflint --filter .
 --chdir --> chaild directory
 
 	
+
+Drift detection in terraform ?
+
+If we had created any server by using terraform and manually some one had made some changes terraform don't know if any changes occur
+1) If we use terraform refresh or terraform plan then we can see in terraform 
+2)
+
+How should you do to avoid it?
+
+we used a lifecycle module in terraform to prevent this .
+
+
+Day-13:-
+------
+Terraformer
+WAF-->web appalication firewall
+
+
+ --> Terraform install
+ --> Terraformer install
+
+Terraformer: It is the tool that if we want to import n number of instance we can import by using this.
+
+commands----> 1)terraformer import aws --resources=ec2_instances --regions=us-east-1
+              2)terraformer state replace-provider -- -/aws hashicorp/aws
+			  
+WAF:-- It is going to restrict access to our app for particular ips to block or restrict access.
+---
+
+
+Backup :- (aws backup service)
+------
+
+backup-plans---->create on-demand backup and create .
+
+	
+
+Drift detection in terraform ?
+
+If we had created any server by using terraform and manually some one had made some changes terraform don't know if any changes occur
+1) If we use terraform refresh or terraform plan then we can see in terraform 
+2)
+
+How should you do to avoid it?
+
+we used a lifecycle module in terraform to prevent this .
 
 
