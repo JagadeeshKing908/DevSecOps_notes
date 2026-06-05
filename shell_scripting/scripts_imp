@@ -1,0 +1,400 @@
+mail
+=============
+
+sudo yum update
+sudo yum install postfix mailx -y
+Internet Site
+timeout 5 sudo systemctl status postfix
+sudo systemctl enable postfix
+sudo postconf -e "inet_protocols = ipv4"
+sudo postconf -e "relayhost = [smtp.gmail.com]:587"
+sudo postconf -e "smtp_sasl_auth_enable = yes"
+sudo postconf -e "smtp_tls_security_level = encrypt"
+sudo postconf -e "smtp_sasl_password_maps = hash:cat "
+sudo postconf -e "smtp_sasl_security_options = noanonymous"
+sudo echo "[smtp.gmail.com]:587 jagadeeshyeddula90888@gmail.com:tikjpabtnpzkepbs" | tee /etc/postfix/sasl_passwd
+postmap /etc/postfix/sasl_passwd
+systemctl restart postfix
+echo "Gmail SMTP working!" | mail -s "Test Email" rajesh.bellam@cgi.com
+apt install cronie -y
+mkdir -p /root/.cache
+chmod 700 /root/.cache
+
+
+=========================================================================
+
+#!/bin/bash
+
+threshold=10
+
+HOST=$(hostname)
+DATE=$(date +%F)
+
+echo "Filesystem usage report on ${HOST}_${DATE}"
+
+df -hTP | awk 'NR>1 {print $1, $7, $6}' | while read -r fs mountedon usage
+do
+    use=${usage%\%}
+
+    if [[ "$use" -ge "$threshold" ]]; then
+
+        {
+            echo "======================================================="
+            echo -e "\tFileSystem\t:\t$fs"
+            echo -e "\tMountPoint\t:\t$mountedon"
+            echo -e "\tUsage\t\t:\t$usage"
+            echo -e "\tHostname\t:\t$HOST"
+            echo "======================================================="
+
+            echo "### df -hTP $mountedon #####"
+            df -hTP "$mountedon"
+
+            echo
+            echo "=========== TOP 10 Directories (with Owner/Group) =========="
+
+            du -h --max-depth=1 "$mountedon" 2>/dev/null | sort -rh | head -10 | while read -r size path
+            do
+                owner=$(stat -c '%U' "$path" 2>/dev/null)
+                group=$(stat -c '%G' "$path" 2>/dev/null)
+
+                printf "%-8s %-20s Owner:%-10s Group:%-10s\n" "$size" "$path" "$owner" "$group"
+            done
+
+            echo
+            echo "=========== TOP 10 Files (with Owner/Group) =========="
+
+            find "$mountedon" -type f \
+                -not -path "$mountedon/proc/*" \
+                -not -path "$mountedon/sys/*" \
+                -not -path "$mountedon/dev/*" \
+                -exec du -h {} + 2>/dev/null | sort -rh | head -10 | while read -r size file
+            do
+                owner=$(stat -c '%U' "$file" 2>/dev/null)
+                group=$(stat -c '%G' "$file" 2>/dev/null)
+
+                printf "%-8s %-50s Owner:%-10s Group:%-10s\n" "$size" "$file" "$owner" "$group"
+            done
+
+            echo
+            echo "=========== TOP 5 Items (Quick View) =========="
+
+            cd "$mountedon" || exit
+            du -sh * 2>/dev/null | sort -rh | head -5 | while read -r size item
+            do
+                owner=$(stat -c '%U' "$item" 2>/dev/null)
+                group=$(stat -c '%G' "$item" 2>/dev/null)
+
+                printf "%-8s %-20s Owner:%-10s Group:%-10s\n" "$size" "$item" "$owner" "$group"
+            done
+
+            echo "======================================================="
+
+        } | mail -s "DISK SPACE ALERT on ${HOST} (${DATE})" "yeddula.jagadeesh@cgi.com"
+
+    fi
+
+done
+
+apt install cronie -you
+
+   58  pwd
+   59  crontab -l
+   60  crontab -e
+   61  mkdir -p /root/.cache
+   62  chmod 700 /root/.cache
+
+*/2 * * * * /bin/bash /root/scripts/disk.sh >> /var/log/cron.log 2>&1
+
+==================================================
+
+Please find below not understandable
+
+\n --->next line
+\t ---> tab space
+
+
+cd "$mountedon" || exit --> It will enter into directory 
+
+--max-depth=1,0
+  1-->It will check subdirectories as well
+  0 --> It won't check subdirectories
+
+1️⃣ 2>/dev/null
+
+This is I/O redirection, specifically for stderr (standard error).
+
+0 → standard input (stdin)
+1 → standard output (stdout)
+2 → standard error (stderr)
+
+2>&1 ----> it will store error messages with respect to output
+
+Send all error messages produced by command to /dev/null (i.e., discard them).
+
+2️⃣ -exec du -h {} +
+
+This part executes a command for each file that find locates.
+  
+-exec → execute a command
+du -h → disk usage in human-readable format (K, M, G)
+{} → placeholder for the current file found by find
++ → batch multiple files in one command (more efficient than \; which runs once per file)
+
+  🔹 1️⃣ What is /dev/null?
+  
+/dev/null is a special device file in Linux.
+It is often called the “bit bucket” or “black hole”.
+
+Many commands may generate unwanted error messages, like:
+
+If you don’t care about these errors, you can hide them:
+
+du -h /root 2>/dev/null
+2> → redirect stderr (error messages)
+/dev/null → discard them
+This keeps your script output clean, only showing what matters.
+
+
+====================================================================================================================
+
+
+#!/bin/bash
+
+CPU_THRESHOLD=70
+
+COUNT=0
+LIMIT=5   # 5 minutes
+
+EMAIL="jagadeeshcloud0@gmail.com"
+HOST=$(hostname)
+
+while true
+do
+    # Get CPU usage
+    CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}')
+    CPU=${CPU%.*} 
+
+    if [[ "$CPU" -ge "$CPU_THRESHOLD" ]]; then
+        ((COUNT++))
+        echo "High cpu usage detected ($COUNT/$LIMIT)"
+		echo "CPU: $CPU%"
+		sleep 60
+    else
+        COUNT=0
+    fi
+
+    # If 5 continuous checks (5 mins)
+    if [[ "$COUNT" -eq "$LIMIT" ]]; then
+
+        {
+            echo "ALERT: CPU usage is above ${CPU_THRESHOLD}% for 5 minutes"
+            echo "Hostname: $HOST"
+            echo "CPU Usage: $CPU%"
+            echo "Time: $(date)"
+            echo
+
+            echo "===== TOP 5 CPU CONSUMING PROCESSES ====="
+            ps -eo pid,user,%cpu,%mem,cmd --sort=-%cpu | head -6
+
+        } | mail -s "CPU ALERT above ${CPU_THRESHOLD}% for 5 minutes on $HOST" "$EMAIL"
+
+        COUNT=0   # reset after alert
+    fi
+
+    sleep 60   # wait 1 minute
+
+done
+
+*/2 * * * * echo "=====$(date)=====" >> /var/log/cron.log 2>&1 && /bin/bash /root/scripts/cpu.sh >> /var/log/cron.log 2>&1
+
+========================================================================================================
+
+#!/bin/bash
+
+MEM_THRESHOLD=70
+
+COUNT=0
+LIMIT=5   # 5 minutes
+
+EMAIL="yeddula.jagadeesh@cgi.com"
+HOST=$(hostname)
+
+while true
+do
+    # Get Memory usage
+    MEM=$(free | awk '/Mem:/ {printf("%.0f"), ($2-$7)/$2 * 100}')
+
+    
+
+    if [[ "$MEM" -ge "$MEM_THRESHOLD" ]]; then
+        ((COUNT++))
+        echo "High memory usage detected ($COUNT/$LIMIT)"
+		echo "Memory Usage: $MEM%"
+		sleep 60
+    else
+        COUNT=0
+    fi
+
+    # If 5 continuous checks (5 mins)
+    if [[ "$COUNT" -eq "$LIMIT" ]]; then
+
+        {
+            echo "ALERT: Memory usage is above ${MEM_THRESHOLD}% for 5 minutes"
+            echo "Hostname: $HOST"
+            echo "Memory Usage: $MEM%"
+            echo "Time: $(date)"
+            echo
+
+            echo "===== TOP 5 MEMORY CONSUMING PROCESSES ====="
+            ps -eo pid,user,%cpu,%mem,cmd --sort=-%mem | head -6 
+
+        } | mail -s "MEMORY ALERT on $HOST" "$EMAIL"
+
+        COUNT=0   # reset after alert
+    fi
+
+    sleep 60   # wait 1 minute
+
+done
+
+*/2 * * * * echo "=====$(date)=====" >> /var/log/cron.log 2>&1 && /bin/bash /root/scripts/mem.sh >> /var/log/cron.log 2>&1
+
+stress --vm 1 --vm-bytes 490M --vm-keep --timeout 300
+
+==================================================================================================
+
+
+#!/bin/bash
+
+INTERFACE="ens5"
+THRESHOLD=5    # MB/s (change based on your need)
+COUNT=0
+LIMIT=5        # 5 minutes
+
+EMAIL="jagadeeshcloud0@gmail.com"
+HOST=$(hostname)
+
+while true
+do
+    # Get RX bytes
+    RX1=$(cat /sys/class/net/$INTERFACE/statistics/rx_bytes)
+    TX1=$(cat /sys/class/net/$INTERFACE/statistics/tx_bytes)
+
+    sleep 60
+
+    RX2=$(cat /sys/class/net/$INTERFACE/statistics/rx_bytes)
+    TX2=$(cat /sys/class/net/$INTERFACE/statistics/tx_bytes)
+
+    # Calculate usage in MB/s
+    RX_RATE=$(( (RX2 - RX1) / 1024 / 1024 ))
+    TX_RATE=$(( (TX2 - TX1) / 1024 / 1024 ))
+
+    TOTAL=$((RX_RATE + TX_RATE))
+
+    echo "Network Usage: ${TOTAL} MB/s"
+
+    if [[ "$TOTAL" -ge "$THRESHOLD" ]]; then
+        ((COUNT++))
+        echo "High network usage detected ($COUNT/$LIMIT)"
+    else
+        COUNT=0
+    fi
+
+    # If high usage for 5 minutes
+    if [[ "$COUNT" -ge "$LIMIT" ]]; then
+
+        {
+            echo "ALERT: High Network Usage Detected"
+            echo "Hostname: $HOST"
+            echo "Interface: $INTERFACE"
+            echo "Usage: ${TOTAL} MB/s"
+            echo "Time: $(date)"
+            echo
+
+            echo "===== TOP 5 NETWORK USING PROCESSES ====="
+
+            # Using ss to map connections
+            ss -tunap | head -20
+
+            echo
+            echo "===== TOP 5 PROCESSES (CPU) ====="
+            ps -eo pid,user,%cpu,%mem,cmd --sort=-%cpu | head -6
+
+        } | mail -s "NETWORK ALERT on $HOST" "$EMAIL"
+
+        COUNT=0
+    fi
+
+done
+
+
+#!/bin/bash
+
+THRESHOLD=5   # MB/s
+LIMIT=5       # 5 minutes
+
+EMAIL="jagadeeshcloud0@gmail.com"
+HOST=$(hostname)
+
+# Get all interfaces except loopback
+INTERFACES=$(ls /sys/class/net | grep -v lo)
+
+declare -A COUNT
+
+while true
+do
+    for IFACE in $INTERFACES
+    do
+        RX1=$(cat /sys/class/net/$IFACE/statistics/rx_bytes)
+        TX1=$(cat /sys/class/net/$IFACE/statistics/tx_bytes)
+
+        sleep 60
+
+        RX2=$(cat /sys/class/net/$IFACE/statistics/rx_bytes)
+        TX2=$(cat /sys/class/net/$IFACE/statistics/tx_bytes)
+
+        RX_RATE=$(( (RX2 - RX1) / 1024 / 1024 ))
+        TX_RATE=$(( (TX2 - TX1) / 1024 / 1024 ))
+
+        TOTAL=$((RX_RATE + TX_RATE))
+
+        echo "[$IFACE] Usage: ${TOTAL} MB/s"
+
+        if [[ "$TOTAL" -ge "$THRESHOLD" ]]; then
+            COUNT[$IFACE]=$(( ${COUNT[$IFACE]:-0} + 1 ))
+            echo "High usage on $IFACE (${COUNT[$IFACE]}/$LIMIT)"
+        else
+            COUNT[$IFACE]=0
+        fi
+
+        if [[ "${COUNT[$IFACE]}" -ge "$LIMIT" ]]; then
+
+            {
+                echo "ALERT: High Network Usage Detected"
+                echo "Hostname: $HOST"
+                echo "Interface: $IFACE"
+                echo "Usage: ${TOTAL} MB/s"
+                echo "Time: $(date)"
+                echo
+
+                echo "===== TOP NETWORK CONNECTIONS ====="
+                ss -tunap | head -20
+
+                echo
+                echo "===== TOP 5 CPU PROCESSES ====="
+                ps -eo pid,user,%cpu,%mem,cmd --sort=-%cpu | head -6
+
+            } | mail -s "NETWORK ALERT on $HOST ($IFACE)" "$EMAIL"
+
+            COUNT[$IFACE]=0
+        fi
+
+    done
+done
+
+
+*/2 * * * * echo "=====$(date)=====" >> /var/log/cron.log 2>&1 && /bin/bash /root/scripts/net.sh >> /var/log/cron.log 2>&1
+timeout 300 wget http://speedtest.tele2.net/1GB.zip
+timeout 300 curl --interface ens5 -o /dev/null http://speedtest.tele2.net/1GB.zip
+
+  
