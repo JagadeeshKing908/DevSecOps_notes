@@ -1,0 +1,47 @@
+“I have 3 hands-on experience in DevOps and cloud technologies with practical exposure to Linux, Git, Jenkins, Docker, Kubernetes, Terraform, AWS, SonarQube, Nexus, 
+Trivy, and Ansible.As an experienced DevOps engineer I have worked extensively on micro services projects. One notable project involved 
+containerizing applications using Docker and Kubernetes, automating tasks with Jenkins pipelines, and employing Argo CD as a GitOps tool.
+
+In this project, my responsibilities included setting up the CI/CD pipeline, automating the build and deployment processes, ensuring code quality and security through various scans,
+and managing Docker images and containers. The integration of Jenkins, Docker, SonarQube,
+and Trivy within the pipeline ensured a streamlined, secure, and e
+
+
+resource "aws_instance" "myinstance" {
+tags = {
+Name = var.iname
+}
+ami_id = var.ami
+instance_type = var.itype
+key_name = var.key
+vpc_id = var.vpc
+availability_zone = var.az
+security_group = var.sg
+root_block_device {
+volume_size = 10
+}
+}
+
+[ec2-user@ip-172-31-34-186 compute]$ cat variable.tf
+variable "iname" {
+iname = string
+}
+variable "ami" {
+ami = string
+}
+variable "itype" {
+itype = string
+}
+variable "key" {
+  key = string
+}
+variable "vpc" {
+vpc = string
+}
+variable "az" {
+  az = string
+}
+variable "sg" {
+sg = string
+}
+[ec2-user@ip-172-31-34-186 compute]$
