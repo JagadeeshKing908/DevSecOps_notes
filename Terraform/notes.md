@@ -3,6 +3,7 @@ DAY:-1:-
 
 Terraform : (IAAC--Infrastructure as a code) :-
 -----------------------------------------------
+
 It is a tool that is used for infrastructure as a code.
 the tools that are same as teraform in cloud we use services IF we are use :
 Aws-- CFT (cloud formation template ) 
@@ -13,20 +14,24 @@ Google -->GRM(google resource management)
 *) It will be in HCL lanaguage it is in json language.
 *)Terraform is free and open source.
 
+
 Ansible           TERAFORM
 
 Target            provider
 variables         variables
 Tasks             Resources
 
+
 Installation :-
 --------------------
+
 sudo yum install -y yum-utils shadow-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install terraform
------------------------------------
+
 
 Code for EC2 INSTANCE :--
+-----------------------
 
 vim main.tf
 
@@ -52,41 +57,62 @@ root_block_device {
 volume_size = 10
 }
 }
+
+-------------------------------------------------------------
  
 statefile --> It is a file used to store copy of our main server. when we use apply it will show the changes.
  
 commands : (IPAD -->init plan apply destroy)
 
 terraform init    --->it will initilize and download the resources related to aws.
+
 terraform plan    --->It will plan and check the errors.
+
 terraform apply   ---> it will create an instance.
+
 terraform destory ---> it will delete the instance.
+
 terraform fmt     ---> It will give the indentation
 
 terraform validate -->it will validate the code
+
 terraform state list -->to see no of instances created using terraform
+
 terraform destory --auto-aprove -target=aws_instance.myserver[1] --->to delete paticular instance
+
 terraform taint aws_instance.myserver[1] ---->terraform apply --->(It will recreate the instances)
+
 terraform apply --auto-approve -replace="aws_instance.myserver[0]"
+
 terraform refresh ; terraform state list---->to check currently running instances
+
 --auto-approve ---> It will not ask permnission
 
 
 terraform state show aws_instance.myserver[0] ---> it will show over all list of this server
+
 terraform apply --auto-approve | grep public_ip --->to show the outputs
+
 teraform import aws_instance.mustafa instance_id
+
 terraform workspace list ---->to see list of workspaces
+
 terraform workspace new dev ---->to create workspace
+
 terraform workspace select default ----> to switch work space
+
 terraform workspace show --->to see present work space 
+
 $terraform.workspace --->to print current workspace
 
 
 valut server -dev --->To create valut
+
 vault kv put secret/aws access_key="" secret_key= "" --->To put information
+
 valut kv get secret/aws
 
-
+---------------------------------------------------------------------------------------------
 aws configure ----->to add cerdentials
 aws configure list ---->to get list of creds
 aws s3 mb s3://swetha.flm.devops ---->to create bucket bucket -->mb make bucket
@@ -107,7 +133,7 @@ Day-2:-
 3)count 
 4)create instances using list concept.
 
-
+---------------------------------------------------------
 vim provider.tf
 
 provider "aws"  {
@@ -203,10 +229,15 @@ protocol = "-1"
 cidr_blocks = ["0.0.0.0/0"]
 }
 
+---------------------------------------------------------------------------------------------
 terraform init    --->it will initilize and download the resources related to aws.
+
 terraform fmt     ---> It will give the indentation
+
 terraform plan    --->It will plan and check the errors.
+
 terraform apply   ---> it will create an instance.
+
 terraform destory ---> it will delete the instance.
 
 
@@ -249,7 +280,7 @@ terraform destory ---> it will delete the instance.
 
 
 Day-3:-
-***************************************************************************
+-------
 
 Dynamic blocks :- These are used to reduce repeted code.
 Alias (task)
@@ -258,6 +289,7 @@ Importing manual server to terraform
 terraform workspace
 locals : when we want to assign particular  t
 
+----------------------------------------------
 vim main.tf
 
 resource "aws_security_group" "mysg" {
@@ -279,6 +311,7 @@ default = [22, 8080, 80, 9000]
 }
 }
 
+---------------------------------------------------------------------------
 terraform init    --->it will initilize and download the resources related to aws.
 terraform fmt     ---> It will give the indentation
 terraform plan    --->It will plan and check the errors.
@@ -317,6 +350,8 @@ output "output" {
 value = [aws_instance.myserver1.public_ip, aws_instance.myserver1.private_ip, aws_instance.myserver2.public_ip]
 }
 
+-------------------------------------------------
+
 terraform init    --->it will initilize and download the resources related to aws.
 terraform fmt     ---> It will give the indentation
 terraform plan    --->It will plan and check the errors.
@@ -326,6 +361,9 @@ terraform destory ---> it will delete the instance.
 
 Importing instances:-
 --------------------
+
+
+------------------------------
 vim main.tf
 
 provider "aws" {
@@ -366,6 +404,8 @@ ami = ""
 instance_type = local.instance_types[terraform.workspace}
 }
 
+------------------------------
+
 terraform state show aws_instance.myserver[0] ---> it will show over all list of this server
 terraform apply --auto-approve | grep public_ip --->to show the outputs
 teraform import aws_instance.mustafa instance_id
@@ -394,7 +434,7 @@ Terraform lifecycle is used to customize how Terraform manages resources during 
 3)vault.
 4)run time values
 
-
+------------------------------
 
 provider "aws" {
 region = ""
@@ -422,6 +462,8 @@ ignore_changes = [tags]
 
 }
 }
+
+---------------------------------------------
 
 
 vault --->
@@ -519,7 +561,7 @@ type = string
 
 }
 
-
+--------------------------------
 
 Day-5 :-
 -------
@@ -572,11 +614,13 @@ state file in s3 bucket
 
 vs code 
 -----------
+
 Host myserver  -->Writer whatever we want
  Hostname 13.232.226.108
  User ec2-user
  IdentityFile ~/Downloads/New_key.pem
 
+------------------------------------
 provider "aws" {
 
 region = "ap-south-1"
@@ -604,6 +648,8 @@ key = "import/terraform.tfstate"
 region = "ap-south-1"
 }
 }
+
+---------------------------------------------
 
 Day-7 :--
 -------
@@ -645,19 +691,21 @@ Steps to create VPC :-
 7)subnet association
 
 Security Group(Instance firewall) :-
------------------
+--------------------------------------
+
 1)Works at EC2 instance level.
 2)Stateful (reply traffic is allowed automatically).
 3)Only ALLOW rules.
 4)Used for day-to-day instance security.
+
 NACL (Network ACL) (subnet firewall):-
------------------
+-------------------------------------
 1)Works at subnet level
 2)Stateless (must allow inbound & outbound separately)
 3)Has ALLOW and DENY rules
 4)Used as an extra security layer for the subnet
 
-
+--------------------------------------
 vim vpc.tf
 
 provider "aws" {
@@ -807,7 +855,7 @@ cidr_blocks = ["0.0.0.0/0"]
 }
 }
 
-
+--------------------------------------------------------------------
 
 Day-9:-
 -----
