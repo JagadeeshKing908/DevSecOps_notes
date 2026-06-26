@@ -14,8 +14,8 @@ Monolithic:
 
 It is a service that in an appalication all the services run on only a single server if we stop one server then all the services will be stoped.
 
-database---->server1
-app------>sever1
+- database---->server1
+- app------>sever1
 
 microservices: 
 -------------
