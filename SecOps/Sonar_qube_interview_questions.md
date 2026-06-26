@@ -77,18 +77,21 @@ Example Quality Gate Conditions:
 
 5. SonarQube Workflow
 
-Developer Pushes Code
-↓
-Jenkins Pipeline Triggered
-↓
-Build + Test
-↓
-SonarQube Scan
-↓
-Quality Gate Validation
-   ├── PASS → Continue
-   └── FAIL → Stop Pipeline
+## CI/CD Pipeline Flow (Jenkins + SonarQube)
 
+Developer pushes code  
+↓  
+Jenkins Pipeline triggered  
+↓  
+Build + Test stage  
+↓  
+SonarQube code analysis  
+↓  
+Quality Gate validation  
+
+- If PASS → Pipeline continues to deployment  
+- If FAIL → Pipeline stops
+- 
 --------------------------------------------------
 
 6. SonarQube Metrics Explanation
