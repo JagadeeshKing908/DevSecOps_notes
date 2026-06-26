@@ -1,0 +1,108 @@
+1Q) pod vs deployment vs service - when do you use each?
+
+2Q) what is crashloop backoff and how do you troubleshoot it ?
+
+3Q)how does k8s handeles self-healing?
+
+4Q)ConfigMap vs secret ?
+
+5Q)Node port vs loadbalancer vs ingress vs clusterip vs none
+
+6Q) what happens when a node goes down ?
+
+7Q)How do rolling updates work?
+
+8Q)How do you trouble shoot a pod not starting?
+
+9Q)what is HPA and how does autoscaling works?
+
+10Q)How do you achieve zeo down time deployments?
+
+11Q)Pod in crashloopbackoff
+Ans :- pod keep on restarting
+To check :-
+1) kubectl logs of cont
+2)kubectl describe pod
+3)check OOM killed
+4)wrong env/config
+5)image issues
+Fix :-->correct config --> redeploy --> rollout restart
+
+12Q)Appalication is not accessiable via service
+Ans:-
+Problem:- pods running but service not working
+check :-
+1)service type (clusterIP/NodePort/LB)
+2)Endpoints
+3)Label selector missmatch
+4)TargetPort mismatch
+5)NetworkPolicy
+-->Mostly : label mimatch
+
+13Q)Node is not ready?
+Ans:
+ check :-- kubectl describe node
+           Disk pressure
+           memory pressure
+           kubelet status
+           container runtime
+           mostly :-- disk presure/resources
+14Q) pods are getting OOM killed
+Ans:- 
+check : resources and requests
+        kubectl top pods
+fix :
+     Adjust memory limits
+     optimize appalication
+     configure HPA
+15Q) Failed deployment --> need roll back
+ Ans :--> 
+      check rollout history and roll back to pervious version
+    Best Practice :--
+     1) Versioned image tags rollback to pervious version using bluegreen deployment or rolling update
+16) Pod stuck in pending
+ Ans:--
+    1) no resources
+    2)taints and tolerations
+    3)PVC not bound 
+    4)Node selector mismatch
+17Q)ConfigMap updated but app not refelcting changes
+Ans :--
+  ConfigMap don't auto reload
+fix:
+   1)Restart Pod
+   2)use checksum annotation 
+   3)Use reload controller
+18Q)Cluster performance issue 
+Ans:
+  1)Node CPU/Memory
+  2)Pod restarts
+  3)etcd health
+  4)Network latency
+  5)Storage performance
+
+19Q)Zerodown time deployment
+Ans:-
+1) Rolling update
+2)Readiness Probes
+3)multiple replicas
+4)PodDistruption budget
+
+20Q)Database pod deleted
+Ans:-
+1)stateful set + PVC  -->datasafe
+2)if using empty Dir -->datalost
+
+
+
+
+You have a deployment in git with 5 replicas hardcoded in the yaml you are using argocd to deploy the app and self heal is enabled . later you have attached a HPA to manage 
+based on CPU load a traffic spike hits and the HPA tries to scale the deployment to 10 replicas ? what happens immeadietly ?
+options :-
+
+1)The HPA scales the app to 10 (HPA takes priority)
+2) ArgoCD detects drift and reverts count back to 5
+3) the app enters a crash loop backoff state.
+4)ArgoCD automatically diables self heal
+
+Answer : 2) ArgoCD detects drift and reverts count back to 5 . HPA doesnot take that>
