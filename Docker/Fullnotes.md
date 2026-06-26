@@ -1,20 +1,25 @@
-Docker : Docker is an open-source platform that uses containers to package applications with their dependencies. 
-Containers are lightweight, portable, and run consistently across environments. Unlike virtual machines, they share the host OS, making them 
-faster and more efficient. Docker ensures easy deployment, scalability, and eliminates the “works on my machine” problem.
+Docker : 
+-------
+Docker is an open-source platform that uses containers to package applications with their dependencies. Containers are lightweight, portable, and run consistently across environments. Unlike virtual machines, they share the host OS, making them faster and more efficient. Docker ensures easy deployment, scalability, and eliminates the “works on my machine” problem.
 
 components:-
 
-1)images
-2)containers
-3)volumes
-4)N/w.
+- 1)images
+- 2)containers
+- 3)volumes
+- 4)N/w.
 
-Monolithic: It is a service that in an appalication all the services run on only a single server if we stop one server then all the services will be stoped.
+Monolithic: 
+-----------
+
+It is a service that in an appalication all the services run on only a single server if we stop one server then all the services will be stoped.
 
 database---->server1
 app------>sever1
 
-microservices: It is a service that single service will be running on single server
+microservices: 
+-------------
+It is a service that single service will be running on single server
 
 database---->serve1
 app------>sever2
@@ -31,8 +36,8 @@ dockerhub -->is docker code management like github
 
 
 commands:
-
-To check list images--->docker images
+--------
+To check list images---> docker images
 
 To pull images from docker hub-->docker pull ubuntu
 
@@ -40,7 +45,8 @@ To create containers -->docker run -itd --name jagadeesh centos
 
 To see the image is created or not ---> docker ps
 
---------------------------------------------------------------
+---------------------------------------------------------------------------
+
 docker run -itd --name jagadeesh -p 8080:8081 tomcat
 
 SIGMA RULE :-- IMAGE  RUN CONTAINER create
@@ -51,13 +57,14 @@ p -->publish port
 8080-->host port any thing we can take
 8081-->container port depands on image
 
+--------------------------------------------------------------------------------------------------------------------------------------------------
 
 Day-2
 -----
 
 To switch into specific container ----> docker exec -it cont1 bash
 To exit --->exit
-To stop ---> dcoker  stop cont1 cont2 etc  --->docker kill cont1
+To stop ---> docker stop cont1 cont2 etc  --->docker kill cont1
 to see running containers --->docker ps
 to see the full info about container -->docker inspect cont1
 To see all  containers --->docker ps -a
@@ -87,8 +94,7 @@ remove:
 --->To rename container--->docker rename cont1 cont11111
 docker ps -a --filter "ancestor=nginx"
 
-
-
+----------------------------------------------------------------------------------------------------------------------------------
 
 Day-3:
 ------
@@ -103,11 +109,11 @@ Path of directory--> .
 
 To remove all stopped containers --->docker container prune
 
------------------------------------------------------------------------------------------------------
-
 If we create an image with same name then the previous image gets override and previous goes to <none> state this technically we call it as dangling images
 
 If we want to remove dangling images ---->docker image prune
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Day-4:
 ------
@@ -134,7 +140,8 @@ CMD ["node","index.js"]
 docker build -t nodeapp .
 docker run -itd --name cont2 -p  7777:80 nodeapp
 
-1)Multi stage Docker file : By providing input of one stage of docker file to second stage we call it as multistage docker file -->it should be done by removing cache
+1)Multi stage Docker file : By providing input of one stage of docker file to second stage we call it as multistage docker file 
+    -->it should be done by removing cache
 2)It is mainly for image size reduction
 
 
@@ -175,7 +182,7 @@ craete database flm;
 use flm;
 show tables;
 
-
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Day-5:
 -----
@@ -205,20 +212,19 @@ From above we are naming a container to cont2 and giving previleges as true from
 Volumes:-
 ------
 
-To create volumes : docker volume create vishnu
+To create volumes : docker volume create jagadeesh
 
 To check --->  docker volume ls
 
 Add some data in volume--->touch /var/lib/docker/myfile{1..10}.txt
 
-To mount for a container --->docker run -itd  --name cont1 --mount src=vishnu,destination=/frontlinesmedia ubuntu
+To mount for a container --->docker run -itd  --name cont1 --mount src=jagadeesh,destination=/frontlinesmedia ubuntu
 
-	
-To mount for a container --->docker run -itd --name cont2 --mount src=vishnu,destination=/frontlinesmedia ubuntu
+To mount for a container --->docker run -itd --name cont2 --mount src=jagadeesh,destination=/frontlinesmedia ubuntu
 
 check the files exist or not-->
 
-To remove volumes-->docker volume rm vishnu
+To remove volumes-->docker volume rm jagadeesh
 
 To remove all the  volumes :-->docker voulme rm $(docker volume ls)
 
@@ -369,7 +375,7 @@ There four types of networks by default.
 
 custom network :If we create any custom network it will start by default 172.18.0.2
 
-To create docker network -->dcoker network create instamart 
+To create docker network -->docker network create instamart 
 To check networks--->docker network ls
 To create container with network --->docker run -itd --name cont1 -p 3333:80 --network instamart nginx
 
@@ -471,7 +477,6 @@ Day-9 :--
 --------
 
 Docker swarm:-->Used to run an appalication on multiple servers by creating orcherstration
-	
 
 Docker compose :-->Used to create multiple services and run an app on single servers.
 
@@ -488,6 +493,7 @@ compose.yml
 compose.yaml
 docker-compose.yml
 docker_compose.yaml
+
 
 vim compose.yml
 
@@ -574,6 +580,7 @@ services:
 --->docker compose up -d (If changes has made in code then build image again--->and build it up again -->we shoud not use this process because if we many services then we need to build
       it for 10 times. we will use the below process.
 
+---
 version: "3"
 services:
   instamart:
