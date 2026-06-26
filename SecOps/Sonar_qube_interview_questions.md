@@ -91,7 +91,7 @@ Quality Gate validation
 
 - If PASS → Pipeline continues to deployment  
 - If FAIL → Pipeline stops
-- 
+  
 --------------------------------------------------
 
 6. SonarQube Metrics Explanation
