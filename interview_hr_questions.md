@@ -159,9 +159,32 @@ We also integrated internal runbooks and documentation so engineers could ask qu
 MTTR, and improved productivity for the SRE and support teams. My involvement was mainly around API integration, automation 
 workflows, monitoring integration, and validating the AI-generated responses before production rollouts.
 
+Q) WHAT IS YOUR CLUSTER SIZE ?
+  ----------------------------
+Yes. In our project, we maintain two Kubernetes clusters: one for Production and another for Non-Production (dev,test) environments. We keep them separate to ensure production workloads are isolated from development and testing activities.
+
+Our production cluster consists of three master nodes for high availability and ten worker nodes. Each worker node is configured with 4 vCPUs, 16 GB of RAM, and 100 GB of SSD storage. Based on application demand, the worker nodes are configured with an Auto Scaling Group, allowing the cluster to scale up to 20 worker nodes during peak traffic.
+
+For our workloads, a typical pod is configured with resource requests of 0.5 vCPU and 1 GB of memory
+
+We use an internet-facing Application Load Balancer to receive external traffic. Inside the cluster, an Ingress Controller manages incoming HTTP/HTTPS requests and routes them to the appropriate services based on host names and URL paths.
+
+To ensure fair resource usage, we configure ResourceQuotas for each namespace. For example, a namespace can use up to 10 vCPUs and 100 GB of memory. We organize our workloads into separate namespaces such as dev, test, production, monitoring, and application namespaces for better isolation and management.
+
+For storage, we use Amazon EBS-backed Persistent Volumes for stateful applications. Sensitive information such as database passwords, API keys, and SSH keys is stored securely using Kubernetes Secrets.
+
+To improve availability and performance, we use Horizontal Pod Autoscalers (HPA), which automatically increase or decrease the number of pods based on CPU or memory utilization.
+
+For monitoring and observability, we use Prometheus to collect metrics and Grafana to visualize dashboards and monitor cluster health. We also configure alerting so the operations team is notified immediately if any critical issues occur.
+
+We implement Kubernetes RBAC to provide role-based access control, ensuring users and teams have only the permissions they require.
+
+Our application deployments are fully automated through Jenkins CI/CD pipelines. Docker images are stored in our container registry, and we use the Rolling Update deployment strategy to deploy new application versions with zero or minimal downtime.
+
+Finally, we perform regular backups of persistent data and have a documented disaster recovery process that is periodically tested to ensure business continuity.
 
 Q) Why should we hire you?
---------------------------
+  ------------------------
 
 "I have around 3 years of hands-on DevOps experience working with AWS, Kubernetes, Terraform, Jenkins, Docker, monitoring, and CI/CD automation. I enjoy solving production issues, automating deployments, and continuously learning new technologies. I believe I can contribute quickly while continuing to grow with the team."
 
