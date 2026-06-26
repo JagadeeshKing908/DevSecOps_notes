@@ -20,13 +20,13 @@ Then I attend the daily stand-up to discuss ongoing tasks, deployments, and any 
 
 My day-to-day responsibilities include:
 
-~Managing Jenkins CI/CD pipelines
-~Deploying applications to AWS EKS
-~Monitoring Kubernetes clusters
-~Troubleshooting production issues
-~Provisioning infrastructure using Terraform
-~Managing Docker images and ECR
-~Handling alerts, incidents, and RCA activities
+- Managing Jenkins CI/CD pipelines
+- Deploying applications to AWS EKS
+- Monitoring Kubernetes clusters
+- Troubleshooting production issues
+- Provisioning infrastructure using Terraform
+- Managing Docker images and ECR
+- Handling alerts, incidents, and RCA activities
 
 I also work closely with developers during releases and ensure deployments are completed smoothly with minimal downtime.
 So overall, my focus is on automation, deployments, monitoring, troubleshooting, and maintaining platform reliability.”
