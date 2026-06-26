@@ -1,5 +1,5 @@
-Docker : 
--------
+# Docker : 
+  -------
 Docker is an open-source platform that uses containers to package applications with their dependencies. Containers are lightweight, portable, and run consistently across environments. Unlike virtual machines, they share the host OS, making them faster and more efficient. Docker ensures easy deployment, scalability, and eliminates the “works on my machine” problem.
 
 components:-
