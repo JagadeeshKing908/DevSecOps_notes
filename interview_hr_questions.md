@@ -138,7 +138,7 @@ Overall, the architecture is designed for high availability, scalability, securi
 
 
 ensure high availability, everything is deployed across multiple Availability Zones. The ALB distributes traffic across healthy targets, Kubernetes provides self-healing by automatically recreating failed pods, Auto Scaling handles traffic spikes, and RDS Multi-AZ provides database failover. We also maintain backups and disaster recovery procedures to handle regional failures.
----
+
 
 *claude ai in your project :-
 ---------------------------
@@ -159,4 +159,8 @@ We also integrated internal runbooks and documentation so engineers could ask qu
 MTTR, and improved productivity for the SRE and support teams. My involvement was mainly around API integration, automation 
 workflows, monitoring integration, and validating the AI-generated responses before production rollouts.
 
+
+Q) Why should we hire you?
+
+"I have around 3 years of hands-on DevOps experience working with AWS, Kubernetes, Terraform, Jenkins, Docker, monitoring, and CI/CD automation. I enjoy solving production issues, automating deployments, and continuously learning new technologies. I believe I can contribute quickly while continuing to grow with the team."
 
