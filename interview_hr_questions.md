@@ -161,6 +161,7 @@ workflows, monitoring integration, and validating the AI-generated responses bef
 
 
 Q) Why should we hire you?
+--------------------------
 
 "I have around 3 years of hands-on DevOps experience working with AWS, Kubernetes, Terraform, Jenkins, Docker, monitoring, and CI/CD automation. I enjoy solving production issues, automating deployments, and continuously learning new technologies. I believe I can contribute quickly while continuing to grow with the team."
 
