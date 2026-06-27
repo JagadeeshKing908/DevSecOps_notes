@@ -28,6 +28,8 @@ I also work closely with developers during releases and ensure deployments are c
 So overall, my focus is on automation, CI/CD, cloud infrastructure, Kubernetes operations, monitoring, troubleshooting, and maintaining high availability of the platform.”
 
 Major incident or problem :-
+--------------------------
+
 “Yeah, one major production incident I handled was during a peak business event when application traffic suddenly increased by almost 3x compared to normal traffic.
 
 Users started reporting:
