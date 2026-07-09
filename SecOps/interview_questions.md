@@ -1,31 +1,34 @@
 Self-Intro :-
 -----------
+Hi, my name is Jagadeesh Yeddula. I am working as an AWS DevOps Engineer with over 3 years of experience in designing, automating, and managing cloud infrastructure and CI/CD processes.
+In my current role at CGI, I work on building and maintaining cloud-native environments using AWS services, Kubernetes, Terraform, Jenkins, and GitOps practices. My primary responsibilities include provisioning AWS infrastructure using Terraform, managing containerized applications on Amazon EKS, creating CI/CD pipelines, and implementing automation to improve deployment efficiency.
 
-Good morning/afternoon. First of all, thank you for giving me the opportunity to introduce myself.
+I have hands-on experience with AWS services like EC2, VPC, IAM, S3, RDS, ELB, Auto Scaling, CloudWatch, and EKS. On the Kubernetes side, I have worked with deployments, services, ingress, Helm charts, scaling, troubleshooting, and application deployments.
 
-My name is Jagadeesh. I was born and brought up in Rly Kodur, which is located in Tirupati district, Andhra Pradesh.
+For CI/CD automation, I have worked with Jenkins integrated with GitHub webhooks, Maven builds, SonarQube quality gates, and Trivy security scanning to implement DevSecOps practices. I have also implemented GitOps workflows using ArgoCD to automate Kubernetes deployments and maintain consistency between Git repositories and clusters.
 
-I have 3 years of experience as a DevOps Engineer.In my experience we use Linux, Git and GitHub for source code management, Jenkins for CI/CD automation, Docker for containerization, Kubernetes for container orchestration, Terraform for Infrastructu re as Code, and AWS cloud services. I have also worked with SonarQube for code quality analysis, Nexus Repository for artifact management, and Prometheus and Grafana for monitoring and alerting.
+I have strong experience in Infrastructure as Code using Terraform, including writing reusable modules, managing remote state, and provisioning AWS resources across different environments. I also have experience with Linux administration and Bash scripting for automation and troubleshooting.
+
+Recently, I have been expanding my knowledge in Azure services, especially AKS and Azure DevOps, to strengthen my multi-cloud skills. I am also exploring how AI tools can help improve automation and troubleshooting workflows in DevOps.
+
+Overall, I enjoy solving infrastructure challenges, automating repetitive tasks, and building reliable, scalable deployment platforms. I am looking for opportunities where I can contribute my DevOps skills while continuing to grow in cloud-native technologies.
 
 Day to day activities :-
 ---------------------
 
-Yeah, in my current role as a DevOps Engineer, my day-to-day activities mainly involve managing CI/CD pipelines, Kubernetes environments, cloud infrastructure, monitoring, and production support.
+In my current role as an AWS DevOps Engineer at CGI, my day typically starts by checking the health of our production and non-production environments. I review monitoring dashboards in Prometheus, Grafana, and AWS CloudWatch to identify any alerts, failed deployments, or infrastructure issues.
 
-Then I attend the daily stand-up to discuss ongoing tasks, deployments, and any production issues.
+I then monitor our Jenkins pipelines to ensure builds and deployments have completed successfully. If a pipeline fails, I analyze the logs, identify the root cause, and work with the development team to resolve issues related to build failures, code quality, or deployment.
 
-My day-to-day responsibilities include:
+A major part of my work involves provisioning and managing AWS infrastructure using Terraform. This includes creating or updating resources such as EKS clusters, IAM roles, VPCs, EC2 instances, security groups, and load balancers while maintaining reusable Terraform modules and remote state.
 
-Managing Jenkins CI/CD pipelines
-Deploying applications to AWS EKS
-Monitoring Kubernetes clusters
-Troubleshooting production issues
-Provisioning infrastructure using Terraform
-Managing Docker images and ECR
-Handling alerts, incidents, and RCA activities
-I also work closely with developers during releases and ensure deployments are completed smoothly with minimal downtime. So overall, my focus is on automation, deployments, monitoring, troubleshooting, and maintaining platform reliability.”
+I also manage Kubernetes workloads running on Amazon EKS. My responsibilities include deploying applications using Helm charts, troubleshooting pod or node issues, configuring Deployments, Services, Ingress, ConfigMaps, and Secrets, monitoring cluster health, and ensuring smooth application releases.
 
-So overall, my focus is on automation, CI/CD, cloud infrastructure, Kubernetes operations, monitoring, troubleshooting, and maintaining high availability of the platform.”
+I work closely with developers to containerize applications using Docker and automate deployments through Jenkins and ArgoCD. We follow a GitOps approach, where approved changes in Git are automatically synchronized to Kubernetes clusters using ArgoCD.
+
+From a DevSecOps perspective, I integrate SonarQube and Trivy into our CI/CD pipelines to ensure code quality and security vulnerabilities are addressed before deployment.
+
+I also participate in production support activities, investigate incidents, perform root cause analysis, optimize deployment processes, and automate repetitive operational tasks using Bash scripting. Additionally, I collaborate with developers, QA teams, and cloud architects during sprint planning, releases, and infrastructure changes to ensure reliable and efficient software delivery.
 
 Major incident or problem :-
 --------------------------
@@ -89,6 +92,113 @@ Performed load testing
 Updated capacity planning documentation
 
 The entire incident resolved with in the SLA.The key learning was to proactively prepare for traffic spikes and ensure auto-scaling policies are properly tuned before major business events.
+
+Incident 1: Kubernetes Pods Not Starting (CrashLoopBackOff)
+------------------------------------------------------------
+
+One of the production issues I handled was an application deployment where the pods started going into the CrashLoopBackOff state after a new release.
+
+I first checked the pod status using kubectl get pods, then inspected the events with kubectl describe pod, and finally reviewed the application logs using kubectl logs.
+
+The logs showed that the application was failing because a required environment variable from a Kubernetes Secret was missing after the deployment.
+
+We corrected the Secret, redeployed the application through ArgoCD, and verified that all pods were healthy before closing the incident.
+
+After that incident, we added validation checks to our deployment process to ensure required Secrets and ConfigMaps were present before deployment.
+
+Incident 2: Jenkins Pipeline Failure
+------------------------------------
+We experienced a deployment failure where the Jenkins pipeline failed during the deployment stage.
+
+I reviewed the Jenkins console output and found that the Kubernetes authentication token used by Jenkins had expired.
+
+I updated the Kubernetes credentials in Jenkins, reran the pipeline, and verified the deployment.
+
+To reduce the chance of the same issue happening again, we documented the credential rotation process and scheduled regular reviews of service account credentials.
+
+Incident 3: Terraform Apply Failed
+-----------------------------------
+During an infrastructure deployment, the Terraform pipeline failed because the state file was locked.
+
+I verified that another pipeline execution had been interrupted while holding the state lock.
+
+After confirming that no active Terraform operation was running, I safely released the lock, reran the deployment, and it completed successfully.
+
+We later improved our pipeline process to avoid concurrent Terraform executions.
+
+Incident 4: High CPU Usage
+--------------------------
+We received alerts from Prometheus indicating high CPU utilization for one of our microservices.
+
+I used Grafana dashboards to identify the affected service, checked Kubernetes metrics, and reviewed the application logs.
+
+We found that a recent code change had introduced an inefficient database query, causing excessive CPU usage.
+
+The development team optimized the query, and we also configured Horizontal Pod Autoscaler to better handle traffic spikes.
+
+Incident 5: EKS Worker Nodes Not Joining the Cluster
+-----------------------------------------------------
+
+During an Amazon EKS cluster deployment using Terraform, the managed node group failed with a NodeCreationFailure error because the EC2 instances were not joining the cluster.
+
+I investigated the node group status, checked the IAM role attached to the worker nodes, reviewed the security groups, and verified the networking configuration.
+
+The issue was caused by an incorrect IAM configuration that prevented the nodes from registering with the Kubernetes control plane.
+
+After correcting the IAM configuration and recreating the node group, the worker nodes successfully joined the cluster.
+
+1. EKS Worker Nodes Not Joining the Cluster
+
+### Interviewer:
+
+If the worker nodes were not joining the EKS cluster, what was wrong with the IAM role?
+
+Answer :
+
+When an EC2 instance is created as an EKS worker node, it needs an IAM role (Node Instance Role). This role allows the node to:
+
+Communicate with the EKS control plane.
+Pull container images from ECR.
+Join the Kubernetes cluster.
+
+If the IAM role is missing required permissions, the node launches successfully, but it cannot register itself with the EKS control plane.
+
+The required AWS managed policies are:
+
+AmazonEKSWorkerNodePolicy
+AmazonEC2ContainerRegistryReadOnly
+AmazonEKS_CNI_Policy
+
+```text
+
+EC2 Instance Starts
+        │
+        ▼
+Attempts to join EKS
+        │
+        ▼
+IAM Role doesn't have required permissions
+        │
+        ▼
+Authentication fails
+        │
+        ▼
+NodeCreationFailure
+
+
+
+
+```
+
+Incident 6: ArgoCD Out of Sync
+------------------------------
+There was a situation where ArgoCD showed an application as OutOfSync and changes were not being applied.
+
+I checked the ArgoCD application events, reviewed the Git repository, and inspected the Kubernetes resources.
+
+I found that a manual change had been made directly in the cluster, causing configuration drift.
+
+I synchronized the application from Git and reminded the team to avoid manual production changes, reinforcing our GitOps workflow.
 
 Explain Your AWS Architecture :-
 --------------------------------
