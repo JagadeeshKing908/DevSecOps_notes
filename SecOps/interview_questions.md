@@ -185,10 +185,22 @@ Authentication fails
         ▼
 NodeCreationFailure
 
-
-
-
 ```
+### How did I troubleshoot?
+
+1. I checked: 
+```bash
+  aws eks describe-nodegroup
+```
+#### The error showed:
+         NodeCreationFailure
+         Instances failed to join the kubernetes cluster
+#### Then I verified:
+
+- IAM Role
+- Security Groups
+- VPC/Subnets
+- aws-auth ConfigMap (for self-managed nodes)
 
 Incident 6: ArgoCD Out of Sync
 ------------------------------
