@@ -35,15 +35,15 @@ Major incident or problem :-
 
 “Yeah, one major production incident I handled was during a peak business event when application traffic suddenly increased by almost 3x compared to normal traffic.
 
-Users started reporting:
+- Users started reporting:
 
-Slow application response
+- Slow application response
 
-Request timeouts
+- Request timeouts
 
-Intermittent 5xx errors
+  - Intermittent 5xx errors
 
-We immediately received alerts from Prometheus and Grafana for:
+  - We immediately received alerts from Prometheus and Grafana for:
 
 High CPU utilization
 
@@ -54,10 +54,11 @@ Pod resource exhaustion
 My first step was to identify whether it was an application issue or a traffic-related issue.
 
 I checked:
-
-kubectl top pods kubectl get hpa kubectl get nodes
-
-We found that traffic had increased significantly and the existing pod replicas were not enough to handle the load.
+```bash
+- kubectl top pods
+- kubectl get hpa kubectl get nodes
+```
+- We found that traffic had increased significantly and the existing pod replicas were not enough to handle the load.
 
 Immediate actions:
 
@@ -163,11 +164,11 @@ Join the Kubernetes cluster.
 
 If the IAM role is missing required permissions, the node launches successfully, but it cannot register itself with the EKS control plane.
 
-The required AWS managed policies are:
+- The required AWS managed policies are:
 
-AmazonEKSWorkerNodePolicy
-AmazonEC2ContainerRegistryReadOnly
-AmazonEKS_CNI_Policy
+        - AmazonEKSWorkerNodePolicy
+        - AmazonEC2ContainerRegistryReadOnly
+        - AmazonEKS_CNI_Policy
 
 ```text
 
