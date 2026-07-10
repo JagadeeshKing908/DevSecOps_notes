@@ -318,6 +318,7 @@ Our application deployments are fully automated through Jenkins CI/CD pipelines.
 
 Finally, we perform regular backups of persistent data and have a documented disaster recovery process that is periodically tested to ensure business continuity.
 
+
 Q) Why should we hire you?
 --------------------------
 "I have around 3 years of hands-on DevOps experience working with AWS, Kubernetes, Terraform, Jenkins, Docker, monitoring, and CI/CD automation. I enjoy solving production issues, automating deployments, and continuously learning new technologies. I believe I can contribute quickly while continuing to grow with the team."
