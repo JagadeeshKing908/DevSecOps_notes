@@ -35,7 +35,7 @@ sudo yum -y install terraform
 
 ```bash
 
-vim main.tf
+# vim main.tf
 
 provider "aws" {
 region = "us-east-1"
@@ -138,7 +138,7 @@ volume_size = 10
 
 ```terraform
 
-vim provider.tf
+# vim provider.tf
 
 provider "aws"  {
 
@@ -147,7 +147,7 @@ region = " us-east-1 "
 }
 
 
-vim resource.tf
+# vim resource.tf
 
 resource "aws_instance" "myserver" {
 
@@ -197,7 +197,7 @@ default = 10
 }
 
 
-vim security.tf
+# vim security.tf
 
 resource "aws_security_group" "mysg" {
 
@@ -247,7 +247,7 @@ cidr_blocks = ["0.0.0.0/0"]
 
 ```terraform
 
-vim resource.tf
+# vim resource.tf
 
 resource "aws_instance" "myserver" {
 
@@ -294,7 +294,7 @@ default =  ["t2.medium" , "t2.micro"]
 
 ```terraform
 
-vim main.tf
+# vim main.tf
 
 resource "aws_security_group" "mysg" {
 name = "Terraform-sg"
@@ -314,6 +314,7 @@ type = list(any)
 default = [22, 8080, 80, 9000]
 }
 }
+
 ```
 
 - terraform init    --->it will initilize and download the resources related to aws.
@@ -325,7 +326,8 @@ default = [22, 8080, 80, 9000]
 ### Task : create two instances aon two different regions .
 
 ```terraform
-vim task.tf
+
+# vim task.tf
 
 provider "aws" {
 region = "us-east-1"
@@ -383,9 +385,11 @@ ami = ""
 instance_type = "t2.micro"
 
 }
+
 ```
 
 - Terraform locals :--
+  
  ```terraform
 vim main.tf
 
@@ -408,6 +412,7 @@ Name = "${terraform.workspace}-server"
 ami = ""
 instance_type = local.instance_types[terraform.workspace}
 }
+
 ```
 
 - terraform state show aws_instance.myserver[0] ---> it will show over all list of this server
@@ -465,6 +470,7 @@ ignore_changes = [tags]
 }
 }
 
+
 ```
 
 
@@ -479,7 +485,8 @@ vault --->
 1. vault server -dev
    
 ```terraform
-vim provider.tf 
+
+# vim provider.tf 
 
 provider "vault" {
 
@@ -523,6 +530,7 @@ key_name = "New_key"
 Runtime :--
 
 ```terraform
+
 provider "aws" {
 
 region = var.region
@@ -619,10 +627,10 @@ https://s3.ap-south-1.amazonaws.com/jagadeesh.firstbucket/March+Internet+bill+-+
 
 ### vs code 
 
- Host myserver  -->Writer whatever we want
- Hostname 13.232.226.108
- User ec2-user
- IdentityFile ~/Downloads/New_key.pem
+ - Host myserver  -->Writer whatever we want
+ - Hostname 13.232.226.108
+ - User ec2-user
+ - IdentityFile ~/Downloads/New_key.pem
 
 ```terraform
 
@@ -644,7 +652,7 @@ versioning_configuration {
  }
 }
 
-vim backend.tf
+# vim backend.tf
 
 terraform {
 backend "s3"  {
@@ -747,7 +755,7 @@ cidr_block = "12.0.1.0/24"
 }
 
 
-## vim igw.tf
+# vim igw.tf
 
 resource "aws_internet_gateway" "myigw" {
 
@@ -759,7 +767,7 @@ vpc_id = aws_vpc.mypc.id
 
 }
 
-## vim "aws_route_table" "public_RT"  {
+# vim "aws_route_table" "public_RT"  {
 tags = {
 Name = "Terraform_public_RT"
 }
@@ -775,7 +783,7 @@ gateway_id = aws_internet_gateway.myigw.id
 }
 
 
-## vim nat.tf
+# vim nat.tf
 
 resource "aws_eip" "myeip" {
 domain = "vpc"
@@ -790,7 +798,7 @@ allocation_id = aws_eip.myeip.id
 }
 
 
-## vim private_route.tf
+# vim private_route.tf
 
 resource "aws_route_table" "private_route" {
 
@@ -803,7 +811,7 @@ nat_gateway_id = aws_nat_gateway.mynat.id
 }
 
 
-## vim subnet-association.tf
+# vim subnet-association.tf
 
 resource "aws_route_table_association" "public_subnet"  {
 subnet_id = aws_subnet.public_subnet.id
@@ -817,7 +825,7 @@ route_table_id = aws_route_table.private_RT.id
 
 }
 
-## vim sg.tf
+# vim sg.tf
 
 resource "aws_security_group" "public-sg" {
 name = "public-sg"
@@ -883,7 +891,7 @@ cidr_blocks = ["0.0.0.0/0"]
 
 ```terraform
 
-#vim launch.tf
+# vim launch.tf
 
 resource "aws_launch_template" "mylt" {
 
@@ -1033,7 +1041,7 @@ for cloud watch logs use ubuntu 22.04
 	3. apt install python2.7 -y
 	4. Install python binary file -->
 	DOWNLOAD FILE : curl https://s3.amazonaws.com/awscloudwatch/downloads/latest/awslogs-agent-setup.py -O
-	 5.   RUN PYTHON FILE : python awslogs-agent-setup.py —region ap-south-1
+	5. RUN PYTHON FILE : python awslogs-agent-setup.py —region ap-south-1
 	6. IAM --> Admin access (or) cloud watch full access --->access key & secret key
 	7.  Need to give logs info and create group at last no
 
@@ -1043,7 +1051,6 @@ for cloud watch logs use ubuntu 22.04
 
 
 #### SNS :--
-
 
 1. create topic -- Standard topic
 2. create subscription
@@ -1077,6 +1084,7 @@ Real-Time Example
 
   
 ```bash
+
 # mkdir  terraform
 
 # touch main.tf
