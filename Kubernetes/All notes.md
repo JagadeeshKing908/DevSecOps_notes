@@ -1,170 +1,158 @@
-Day-1:-
--------
+## Day-1:-
 
-Kubernetes:-
------------
+
+### Kubernetes:-
+
 1) Docker is managed by k8s with the help of its steering . It is advanced version of docker.
 
-Docker :--
------
-1)In docker we do not do autoscalling automatically manually we need to do.
-2)we need to roll back for the last two version not spcific versions .
-3)We have downtime in docker .
-4)Here we will create containers.
+### Docker :--
 
-1)Docker is a containerization platform – it creates and runs containers.
+	1. In docker we do not do autoscalling automatically manually we need to do.
+	2. we need to roll back for the last two version not spcific versions .
+	3. We have downtime in docker .
+	4. Here we will create containers.
 
-2)No built-in auto-scaling – scaling has to be managed manually or with extra tools (like Docker Swarm).
+1. Docker is a containerization platform – it creates and runs containers.
 
-3)Docker supports rollbacks but not as flexibly as Kubernetes (limited compared to deployments in K8s).
+2. No built-in auto-scaling – scaling has to be managed manually or with extra tools (like Docker Swarm).
 
-4)Possible downtime during container restarts/updates unless load balancing is set up manually.
+3. Docker supports rollbacks but not as flexibly as Kubernetes (limited compared to deployments in K8s).
 
-5)Docker focuses on container runtime and packaging.
+4. Possible downtime during container restarts/updates unless load balancing is set up manually.
 
-Kubernetes:-
----------
-1)In kubernetes we call autoscalling .
-2)we will roll back for specific version.
-3)we don't have any downtime here.
-4)Here we will create pods. pods contains containers.
+5. Docker focuses on container runtime and packaging.
+
+### Kubernetes:-
+
+	1. In kubernetes we call autoscalling .
+	2. we will roll back for specific version.
+	3. we don't have any downtime here.
+	4. Here we will create pods. pods contains containers.
 
 
 
-1)Kubernetes is a container orchestration tool, it manages containers (Docker or others like containerd, CRI-O).
+1. Kubernetes is a container orchestration tool, it manages containers (Docker or others like containerd, CRI-O).
 
-2)Supports autoscaling (Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler).
+2. Supports autoscaling (Horizontal Pod Autoscaler, Vertical Pod Autoscaler, Cluster Autoscaler).
 
-3)Can rollback to specific versions of deployments.
+3. Can rollback to specific versions of deployments.
 
-4)Ensures zero-downtime deployments (rolling updates, blue-green, canary).
+4. Ensures zero-downtime deployments (rolling updates, blue-green, canary).
 
-5)Kubernetes runs pods (group of containers), which sit on worker nodes.
+5. Kubernetes runs pods (group of containers), which sit on worker nodes.
 
 👉 Correction: Kubernetes is not an advanced version of Docker – Docker is for containerization, Kubernetes is for orchestration. They complement each other.
 
 
 
-Kubernetes Architecture :
--------------------------
+### Kubernetes Architecture :
 
-Master Node components:-
------------------------
 
-1)Operator/client : He will tell api server to create a pods.
-  -------------
+#### Master Node components:-
 
-2)API Server:-This is the one who is responsiable for creation one create and managing it will send info to etcd.
-  ----------
 
-3)scheduler :- It will decide where the pods need to created. Based on below
-  ----------
- a) Based on no of pods the server contains.
- b)And size of server like Ram and storage.
- c) As a client we can also decide where to create a pod
+1. Operator/client : He will tell api server to create a pods.
 
-4) etcd:--
-   -------
-   It contains all the cluster information. It stores values in key data pair.Only api server can access this.
+2. API Server:-This is the one who is responsiable for creation one create and managing it will send info to etcd.
+
+3. scheduler :- It will decide where the pods need to created. Based on below
+
+	 a. Based on no of pods the server contains.
+	 b. And size of server like Ram and storage.
+	 c. As a client we can also decide where to create a pod
+
+4. etcd:--
+    It contains all the cluster information. It stores values in key data pair.Only api server can access this.
       
-5)Controller manager:- It will keep an eye on everything help us to create pods ,nodes and services when deleted them automatically with the help of API server.
-  ------------------
-  1)Replication controller:- If any pod or containers will be deleted then it will create them automatically with the help of API server.
-    ---------------------
-  2)Node controller:- It will manages the node when any nodes got deleted then node controller will create them automatically with the help of API server.
-   -----------------
-  3) Service controller:- It will manages services if any service got deleted then it will create them automatically with the help of API server.
-     ------------------
+5. Controller manager:- It will keep an eye on everything help us to create pods ,nodes and services when deleted them automatically with the help of API server.
+ 
+    1. Replication controller:- If any pod or containers will be deleted then it will create them automatically with the help of API server.
+    2. Node controller:- It will manages the node when any nodes got deleted then node controller will create them automatically with the help of API server.
+  
+    3. Service controller:- It will manages services if any service got deleted then it will create them automatically with the help of API server.
 	 
-6)contrlollers (Node controller / Replication controller / service controller) :-
+6. contrlollers (Node controller / Replication controller / service controller) :-
   ---------------------------------------------------------------------------
   
-   1)controllers :-
-     -----------
-	 a)These will monitor by sending the requests the desired no of services that are running.
-	 b)If we deletes then respective controller will create new ones.
-	 c)If node controller does not get any response from any node for 40seconds then it will mark that node as unrechable . we can increase that grace time as well.
+   1. controllers :-
+	 a. These will monitor by sending the requests the desired no of services that are running.
+	 b. If we deletes then respective controller will create new ones.
+	 c. If node controller does not get any response from any node for 40seconds then it will mark that node as unrechable . we can increase that grace time as well.
 	 
 	 
-Worker components :---
--------------------
+#### Worker components :---
 
-1)kublet :---
- -------
-   It contains the pod data like how many pods that node contain. And it will tell to api server api server tells to scheduler.
+
+1. kublet :---It contains the pod data like how many pods that node contain. And it will tell to api server api server                   tells to scheduler.   
+2. kube-Proxy :- It contains the network information.It helps to maintain the netwokconfig between two servers.
    
-2)kube-Proxy :-
--------------
-   It contains the network information.It helps to maintain the netwokconfig between two servers.
+   - API Server = Gatekeeper + communication hub
+   - etcd = Brain (memory of cluster)
+   - Controllers = Managers (make sure reality matches expectation)
+   - Scheduler = Decision maker (where pods go)
+   - kubelet = Executor (runs pods on node)
+   - kube-proxy = Network manager
    
-API Server = Gatekeeper + communication hub
-
-etcd = Brain (memory of cluster)
-
-Controllers = Managers (make sure reality matches expectation)
-
-Scheduler = Decision maker (where pods go)
-
-kubelet = Executor (runs pods on node)
-
-kube-proxy = Network manager
-
+3. Pods:- It stores list of containers.
    
-3)Pods:- It stores list of containers.
--------
-
-   
-   
-Clusters:-- cluster is nothing but group of servers.
---------
+#### Clusters:-- cluster is nothing but group of servers.
 
 They are two types to mantain our cluster.
 
-1)Self managed cluster:-
-----------------------
-1.minikube (single node cluster)
-2.kubeadm(multi node cluster)
-3.kops (multi node cluster)
-4.k3D (multi node cluster)
+1. Self managed cluster:-
 
-2)cloud managed k8's cluster :-
------------------------------
-a)Aws eks
-b)azure aks
-c)google gks
-d)ibm ike
+	a. minikube (single node cluster)
+	b. kubeadm(multi node cluster)
+	c. kops (multi node cluster)
+	d. k3D (multi node cluster)
+
+2. cloud managed k8's cluster :-
+
+    a. Aws eks
+    b. azure aks
+    c. google gks
+    d. ibm ike
 
 
-Day-2:-
------
+## Day-2:-
 
-minikube:-
----------
-1)  It is a single node cluster
-2)It contains Api servers ,ETCD database and container runtime
-3)It helps us to containerize the apps.
-4)It helps us development .testing  and expermentation purposes.
-5)Here master and worker runs on the same machine
-6)It is platform independent
-7)By default it will create only one node
-8)Installing manikube is simple as compared to other tools.
 
-Note :- It will not be used in real time.
+### minikube:-
 
-Requirements to install :--
----------------------
-1)2cpu's
-2)2gb of memeory
-3)20 gb diskspace
-4)Internet connection
-5)Docker 
+	1. It is a single node cluster
+	2. It contains Api servers ,ETCD database and container runtime
+	3. It helps us to containerize the apps.
+	4. It helps us development .testing  and expermentation purposes.
+	5. Here master and worker runs on the same machine
+	6. It is platform independent
+	7. By default it will create only one node
+	8. Installing manikube is simple as compared to other tools.
+	
+	Note :- It will not be used in real time.
 
-1)get it install from offical document
--------------------------------------
-------->yum install docker -y ;systemctl docker -y
-check the version----->minikube version
-To start minikube ----->minikube start --driver=docker --force
-To check status---->minikube status
+#### Requirements to install :--
+
+	1. 2cpu's
+	2. 2gb of memeory
+	3. 20 gb diskspace
+	4. Internet connection
+	5. Docker 
+
+1. get it install from offical document
+   
+```bash
+yum install docker -y ;systemctl docker -y
+
+# check the version
+
+minikube version
+
+# To start minikube
+
+minikube start --driver=docker --force
+# To check status
+
+minikube status
 
 vim bashrc
 export PATH=$PATH:/usr/local/bin/
@@ -172,45 +160,50 @@ source .bashrc
 chmod +x kubectl
 mv /usr/local/bin/
 
+```
 
 These are used when we use binary  files for download
 
+1. cli tool for k8s is :---kubectl
+2. To see list of objects in kubernetes--->kubectl api-resources.
 
-cli tool for k8s is :---kubectl
-To see list of objects in kubernetes--->kubectl api-resources.
+2. install kubectl from official document
 
-2)install kubectl from official document
----------------------------------------
+##### Pods:-
 
-Pods:-
------
-1)It is a smallest object that we create in kubernetes.
-2)It contains group of containers.
-3)it is like single instance for our appalication.
-4)pods are empherial (short living objects)
-5)Mostly we will create single container in a pod if required we can create multiple containers.
-6)whenever we create a pod the containers inside a pod can share same network,namespace and same volume as well.
-7)while creating a pod we must specify the image along with any necessary configuration and resource limits.
-8)k8's cannot communicate with containers they will communicate only with pods
-9)We can create pods in two ways
-   i)imperative way (command)
-   ii)Declarative way (manifest file)
+	1. It is a smallest object that we create in kubernetes.
+	2. It contains group of containers.
+	3. it is like single instance for our appalication.
+	4. pods are empherial (short living objects)
+	5. Mostly we will create single container in a pod if required we can create multiple containers.
+	6. whenever we create a pod the containers inside a pod can share same network,namespace and same volume as well.
+	7. while creating a pod we must specify the image along with any necessary configuration and resource limits.
+	8. k8's cannot communicate with containers they will communicate only with pods
+	9. We can create pods in two ways
+	   i. imperative way (command)
+	   ii. Declarative way (manifest file)
    
 
-i)imperative way (command):-
-   -------------------------  
-   
-To create pod--->kubectl run mypod --image=nginx
-To see list of pods--->kubectl get pods
+i. imperative way (command):-
+```bash    
+# To create pod
+```bash
+kubectl run mypod --image=nginx
+```
+```bash
+# To see list of pods
+```bash
+kubectl get pods
+```
 
- ii)Declarative way (manifest file) :-
- ----------------------------------
+ ii. Declarative way (manifest file) :-
  
  file name should be any thing
  
- vim demo.yml
+ ```bash
+# vim demo.yml
  
- ---
+---
 apiVersion: v1
 kind: Pod
 metadata
@@ -223,80 +216,106 @@ spec:
 	    - containerPort: 80
   
    
-To run --->kubectl apply/create -f  demo.yml
+# To run
 
--f--> means file
+kubectl apply/create -f  demo.yml
 
-Day-2:-
-------
+# -f--> means file
+
+```
+## Day-2:-
 
 Kops cluster -->kubernetes operations.
 
 ------------->search kops in google
 
-1)kops
-2)namespaces,labels ,selectors
+1. kops
+2. namespaces,labels ,selectors
 
-KOPS :
-----
+### KOPS :
 
- It is like a kubectl in clusters .Kops will not only help you in create , destroy,upgrade and maintain production grade highly avaliable, kubernetes cluster
-but also provision the necessary cloud infrastructure. Aws , gcp, open stack , digital ocean and azure will support it .
+1. It is like a kubectl in clusters .Kops will not only help you in create , destroy,upgrade and maintain production grade highly avaliable, kubernetes cluster but also provision the necessary cloud infrastructure. Aws , gcp, open stack , digital ocean and azure will support it .
 
+### Installation:-
 
-Installation:-
--------------
-
-1)Kops install
-2)kubectl install 
-3)awscli install
+	1. Kops install
+	2. kubectl install 
+	3. awscli install
+	
+```bash
 
 export PATH=$PATH:/usr/local/bin/
 source .bashrc
 
+```
+
 After installing these -->clusters ,servers, Asg,lb ,sec gp , vpc will create automatically
+```bash
+# To create s3 bucket 
 
-To create s3 bucket -->aws s3 mb s3://mustafa77.flm.k8s
+aws s3 mb s3://mustafa77.flm.k8s
 
-To check buckets ---->aws s3 ls
+```bash
 
-To store cluster info in s3 bucket --->export KOPS_STATE_STORE=s3://jagadeesh5484.k8s.local
+# To check buckets
 
-To create cluster --->kops create cluster --name jagadeesh.k8s.local --zones us-east-1a,us-east-1b,us-east-1c --master-size t2.medium --master-count 1 
-                      --master-volume-size 30 --node-size t2.micro --node-count 2 --node-voulme-size 20
+aws s3 ls
+
+# To store cluster info in s3 bucket
+
+export KOPS_STATE_STORE=s3://jagadeesh5484.k8s.local
+
+# To create cluster
+
+kops create cluster --name jagadeesh.k8s.local --zones us-east-1a,us-east-1b,us-east-1c --master-size t2.medium --master-count 1 --master-volume-size 30 --node-size t2.micro --node-count 2 --node-voulme-size 20
 					  
-To delete cluster---->
+# To delete cluster
 
-1)export KOPS_STATE_STORE=s3://jagadeesh5484.k8s.local.flm
-2)kops delete cluster --name jagadeesh.k8s.local --yes
-3)kops get cluster
+export KOPS_STATE_STORE=s3://jagadeesh5484.k8s.local.flm
+kops delete cluster --name jagadeesh.k8s.local --yes
+kops get cluster
 					  
-copy suggestions and paste it some where--->and use it in cluster
+# copy suggestions and paste it some where--->and use it in cluster
 
-to check list of nodes -->kubectl get nodes
+# to check list of nodes
 
-To check live data about nodes -->kubectl get no -w   (w-watch)
+kubectl get nodes
 
-To see which server does the pod is created --->kubectl get po -o wide
+# To check live data about nodes
 
-To see the details of pod in yaml format --->kubectl get po -o ymal/json	
+kubectl get no -w   (w-watch)
 
-To see the full info about pod ---->kubectl describe pod jagadeesh
+# To see which server does the pod is created
 
-To delete pod or list of pods -->kubectl delete pod podname/ kubectl delete --all
+kubectl get po -o wide
 
-To enter into the pod -->kubectl -it exec podname -- bash
+# To see the details of pod in yaml format
 
-2)namespaces,labels ,selectors:-
-------------------------------
+kubectl get po -o ymal/json	
 
-Labels : these are nothing but adding name/tag to pods and is used to filter , by this will update ,delete expose.It should in key value pair
+# To see the full info about pod -
 
-we can't able to access the app by creating app. the help of pod we can't able to access the app. To access it we need to expose that .
+kubectl describe pod jagadeesh
 
-selectors:-- selectors are used to select the label.
-----------
+# To delete pod or list of pods
 
+kubectl delete pod podname/ kubectl delete --all
+
+# To enter into the pod
+
+kubectl -it exec podname -- bash
+
+```
+
+2. namespaces,labels ,selectors:-
+
+
+	#### Labels :
+these are nothing but adding name/tag to pods and is used to filter , by this will update ,delete expose.It should in key value pair we can't able to access the app by creating app. the help of pod we can't able to access the app. To access it we need to expose that .
+
+   
+```bash
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -312,26 +331,42 @@ spec:
         image: nginx
         ports: 
           - container_port: 80
+```
+####  selectors:-- selectors are used to select the label.
 
-Equality based selectors:- Here we can select only one label at a time.
--------------------------
-To see labels ----> kubectl get po --show-lables
-To update labels for existing pod:----	kubectl label pod jagadeesh_pod app=zomato
+ i. Equality based selectors:- Here we can select only one label at a time.
+ 
+```bash
+# To see labels
 
-To see list of pod that belongs to swiggy---->kubectl get po -l app=swiggy
+kubectl get po --show-lables
 
-Set based selectors :-- here we can use sets for selecting
---------------------
+# To update labels for existing pod
 
--------->kubectl get po -l 'env in (test,dev)'
---------->kubectl get po -l app!=swiggy
+kubectl label pod jagadeesh_pod app=zomato
 
-Node selectors:-- 
---------------
+# To see list of pod that belongs to swiggy
+
+kubectl get po -l app=swiggy
+
+```
+ii. Set based selectors :-- here we can use sets for selecting services.
+
+```bash
+
+kubectl get po -l 'env in (test,dev)'
+kubectl get po -l app!=swiggy
+
+```
+
+iii. Node selectors:-- 
+
 
 These are used to create pods on specific node.	
 
----->kubectl get no node_id server=flm
+```bash
+kubectl get no node_id server=flm
+
 
 apiVersion: v1
 kind: Pod
@@ -350,37 +385,37 @@ spec:
               - container_port: 80
     nodeSelector:
       server=flm	
-				
-Day-3:-
------
-1)Services
+```
+			
+## Day-3:-
+
+1. Services
 
 
 
-Services :--
----------
-1) It is a method for exposing pods in your cluster.
-2)Each pod gets its own ip address but we need to access it from ip of the node.
-3)If we want to access pod from inside we use cluster ip 
-4)If the service is of type node port or load balancer it can also be accessed fromoutside the cluster.
-5)It enables the pods to be decoupled from the network topology which makes it easier to manage and scale the appalications.
+1. Services :--
 
+	1. It is a method for exposing pods in your cluster.
+	2. Each pod gets its own ip address but we need to access it from ip of the node.
+	3. If we want to access pod from inside we use cluster ip 
+	4. If the service is of type node port or load balancer it can also be accessed fromoutside the cluster.
+	5. It enables the pods to be decoupled from the network topology which makes it easier to manage and scale the appalications.
 
 Types of services:-
 
- 1)Cluster Ip -->this is used to access the db internally with in the server--->use to expose db pods
+ 1. Cluster Ip -->this is used to access the db internally with in the server--->use to expose db pods
  
- 2)Node port -->this is used access the app from internet-->range-->30k=30,767
-  a)It used to access it internaly as well
-  b)aswell as external using node port
- 3)Load balancer -->this is used access the app from internet
-   a)Internally & externally nodeport
-   b)DNS name
- (Headless Service) → No ClusterIP, used when you need direct access to individual Pod IPs (common in DBs like Cassandra, StatefulSets).
-   
- 
- 
-vim services.yml--->clusteIP
+ 2. Node port -->this is used access the app from internet-->range-->30k=30,767
+   a. It used to access it internaly as well
+   b. well as external using node port
+ 3. Load balancer -->this is used access the app from internet
+    a. Internally & externally nodeport
+    b. DNS name
+ 4. (Headless Service) → No ClusterIP, used when you need direct access to individual Pod IPs (common in DBs like Cassandra, StatefulSets).
+
+ ```bash
+
+# vim services.yml--->clusteIP
 
 ---
 apiVersion: v1
@@ -395,31 +430,40 @@ spec:
     - port: 80
 	  targetpot: 80
 	  nodePort: 30002
+
+# TO create service
 	  
----->kubectl create -f services.yml
------>kubectl get services
----->To access app with ip it locally --> curl ip
+kubectl create -f services.yml
 
-Day-4:-
-------
+# To see list of services
 
-1)Replication in kubernetes
+kubectl get services
 
-Replication in kubernetes :--
---------------------------
-1)Before kubernetes, other tools did not provide important and customized future like replicaton and scaling.
-2)when kubernetes was introduced a replication and scaling where the premium futures.that increased the popularity of containerization and orchestrazation tool
-3)Replication means if that if the pod desired state is set to 3 and whenever any pod gets deleted with the help of replication the new pod will be crated sooon
-  as posiable .this will help us in reduction of down time in appalication
-4)Scaling means if the load on app gets increased then kubernetes increase the number of pods accroding to the load on the appalication.
+# To access app with ip it locally
 
-we have two types of scaling:--
------------------------------
-1) Scalein :- It increases the no of pods.
-2)scaleout :- It decreases the no of pods.
+curl ip:port
 
-Replication controller :- (rc)
----------------------
+```
+
+## Day-4:-
+
+
+1. Replication in kubernetes
+
+ ## Replication in kubernetes :--
+ 
+  1. Before kubernetes, other tools did not provide important and customized future like replicaton and scaling.
+  2. when kubernetes was introduced a replication and scaling where the premium futures.that increased the popularity of containerization and orchestrazation tool
+  3. Replication means if that if the pod desired state is set to 3 and whenever any pod gets deleted with the help of replication the new pod will be crated sooon as posiable .this will help us in reduction of down time in appalication
+  4. Scaling means if the load on app gets increased then kubernetes increase the number of pods accroding to the load on the appalication.
+
+#### we have two types of scaling:--
+
+	1. Scalein :- It increases the no of pods.
+	2. scaleout :- It decreases the no of pods.
+
+### Replication controller :- (rc)
+
 equailty based selectors.
 
 RC-->pods--->containers
@@ -428,7 +472,8 @@ Replicaset:-(rs)
 ----------
 set based selector.
 
-vim rc.yml
+```bash
+# vim rc.yml
 
 ---
 apiVersion: v1
@@ -450,7 +495,10 @@ spec:
 			 - containerPort: 80
 			 
 
-kubectl create -f rc.yml
+# kubectl create -f rc.yml
+
+```
+```bash
 ---
 apiVersion: v1
 kind: Service
@@ -465,9 +513,14 @@ spec:
 	  targetpot: 80
 	  nodePort: 30002
 	  
----->kubectl create -f services.yml  
----->kubectl apply -f services.yml --To update the containers. 
+kubectl create -f services.yml
 
+# To update the containers
+
+kubectl apply -f services.yml
+
+
+```
 scaling:-
 --------
 
