@@ -127,6 +127,54 @@ After confirming that no active Terraform operation was running, I safely releas
 
 We later improved our pipeline process to avoid concurrent Terraform executions.
 
+We encountered a Terraform state lock after a previous deployment was interrupted. Instead of immediately removing the lock, I first confirmed that no other Terraform operation was in progress. After verifying that the lock was stale, I used 
+
+```bash
+terraform force-unlock
+```
+#### 1. How do I know the Lock ID?
+
+When Terraform fails because of a lock, it usually displays the lock information. to release it and reran the deployment. This resolved the issue without risking state corruption, and we later improved our pipeline to prevent concurrent Terraform executions.
+
+```text
+Error: Error acquiring the state lock
+
+Lock Info:
+
+ID:        8d0c62d2-3b8b-7e54-f4cd-2e92d0b52b11  --->LockId
+Path:      terraform.tfstate
+Operation: OperationTypeApply
+Who:       jagadeesh@jenkins-server
+Version:   1.6.2
+Created:   2026-07-09 10:15:23 UTC
+```
+Info:
+   - 2. How do I know if someone is still running Terraform?
+       
+       - Scenario 1: Jenkins Pipeline (Most Common)
+           - If your team uses Jenkins:
+           - Open Jenkins.
+              - Check whether the pipeline is still Running.
+              - If it is still running, do not unlock.
+               ```text
+                   Build #120  Running ✅
+               ```
+      - Scenario 2: Linux Server
+          ```bash
+           - ps -ef | grep terraform
+           - ec2-user  12345  terraform apply
+         ```
+     - Scenario 3: CI/CD Tool
+         If you're using:
+       
+            GitHub Actions
+            Azure DevOps
+            GitLab CI
+            Bamboo
+            Check whether the pipeline is still running.
+       
+     
+
 Incident 4: High CPU Usage
 --------------------------
 We received alerts from Prometheus indicating high CPU utilization for one of our microservices.
