@@ -137,7 +137,7 @@ Note :- It will not be used in real time.
 5. Docker 
 
 1. get it install from offical document
-   
+
 ```bash
 
 yum install docker -y ;systemctl docker -y
@@ -186,6 +186,7 @@ These are used when we use binary  files for download
 i. imperative way (command):-
 ```bash    
 # To create pod
+```
 ```bash
 kubectl run mypod --image=nginx
 ```
