@@ -7,10 +7,10 @@
 
 ### Docker :--
 
-	1. In docker we do not do autoscalling automatically manually we need to do.
-	2. we need to roll back for the last two version not spcific versions .
-	3. We have downtime in docker .
-	4. Here we will create containers.
+1. In docker we do not do autoscalling automatically manually we need to do.
+2. we need to roll back for the last two version not spcific versions .
+3. We have downtime in docker .
+4. Here we will create containers.
 
 1. Docker is a containerization platform – it creates and runs containers.
 
@@ -24,11 +24,10 @@
 
 ### Kubernetes:-
 
-	1. In kubernetes we call autoscalling .
-	2. we will roll back for specific version.
-	3. we don't have any downtime here.
-	4. Here we will create pods. pods contains containers.
-
+1. In kubernetes we call autoscalling .
+2. we will roll back for specific version.
+3. we don't have any downtime here.
+4. Here we will create pods. pods contains containers.
 
 
 1. Kubernetes is a container orchestration tool, it manages containers (Docker or others like containerd, CRI-O).
@@ -72,7 +71,6 @@
     3. Service controller:- It will manages services if any service got deleted then it will create them automatically with the help of API server.
 	 
 6. contrlollers (Node controller / Replication controller / service controller) :-
-  ---------------------------------------------------------------------------
   
    1. controllers :-
 	 a. These will monitor by sending the requests the desired no of services that are running.
@@ -119,28 +117,29 @@ They are two types to mantain our cluster.
 
 ### minikube:-
 
-	1. It is a single node cluster
-	2. It contains Api servers ,ETCD database and container runtime
-	3. It helps us to containerize the apps.
-	4. It helps us development .testing  and expermentation purposes.
-	5. Here master and worker runs on the same machine
-	6. It is platform independent
-	7. By default it will create only one node
-	8. Installing manikube is simple as compared to other tools.
+1. It is a single node cluster
+2. It contains Api servers ,ETCD database and container runtime
+3. It helps us to containerize the apps.
+4. It helps us development .testing  and expermentation purposes.
+5. Here master and worker runs on the same machine
+6. It is platform independent
+7. By default it will create only one node
+8. Installing manikube is simple as compared to other tools.
 	
-	Note :- It will not be used in real time.
+Note :- It will not be used in real time.
 
 #### Requirements to install :--
 
-	1. 2cpu's
-	2. 2gb of memeory
-	3. 20 gb diskspace
-	4. Internet connection
-	5. Docker 
+1. 2cpu's
+2. 2gb of memeory
+3. 20 gb diskspace
+4. Internet connection
+5. Docker 
 
 1. get it install from offical document
    
 ```bash
+
 yum install docker -y ;systemctl docker -y
 
 # check the version
