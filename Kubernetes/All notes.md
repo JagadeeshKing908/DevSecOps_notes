@@ -56,9 +56,9 @@
 
 3. scheduler :- It will decide where the pods need to created. Based on below
 
-	 a. Based on no of pods the server contains.
-	 b. And size of server like Ram and storage.
-	 c. As a client we can also decide where to create a pod
+     - Based on no of pods the server contains.
+	 - And size of server like Ram and storage.
+	 - As a client we can also decide where to create a pod
 
 4. etcd:--
     It contains all the cluster information. It stores values in key data pair.Only api server can access this.
@@ -73,9 +73,9 @@
 6. contrlollers (Node controller / Replication controller / service controller) :-
   
    1. controllers :-
-	 a. These will monitor by sending the requests the desired no of services that are running.
-	 b. If we deletes then respective controller will create new ones.
-	 c. If node controller does not get any response from any node for 40seconds then it will mark that node as unrechable . we can increase that grace time as well.
+	 - These will monitor by sending the requests the desired no of services that are running.
+	 - If we deletes then respective controller will create new ones.
+	 - If node controller does not get any response from any node for 40seconds then it will mark that node as unrechable . we can increase that grace time as well.
 	 
 	 
 #### Worker components :---
@@ -99,17 +99,17 @@ They are two types to mantain our cluster.
 
 1. Self managed cluster:-
 
-	a. minikube (single node cluster)
-	b. kubeadm(multi node cluster)
-	c. kops (multi node cluster)
-	d. k3D (multi node cluster)
+   - minikube (single node cluster)
+   - kubeadm(multi node cluster)
+   - kops (multi node cluster)
+   - k3D (multi node cluster)
 
 2. cloud managed k8's cluster :-
 
-    a. Aws eks
-    b. azure aks
-    c. google gks
-    d. ibm ike
+    - Aws eks
+    - Azure aks
+    - google gks
+    - ibm ike
 
 
 ## Day-2:-
