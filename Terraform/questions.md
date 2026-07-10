@@ -11,7 +11,7 @@
 - Infrastructure Immutability: Terraform encourages creating new resources rather than updating existing ones in place (e.g., swapping a server instance rather than updating its OS). This reduces configuration drift and makes deployments more predictable.
 
 
-2Q)What’s the deal with Terraform Providers?
+## 2Q)What’s the deal with Terraform Providers?
 
 - Terraform providers are plugins that act as essential intermediaries between Terraform and various infrastructure APIs (cloud, SaaS, local). They translate Terraform code into API actions, allowing you to manage resources (like VMs or networks) across diverse platforms—including AWS, Azure, GCP, and GitHub—using a unified, consistent configuration language. 
 Key Details About Terraform Providers:
@@ -24,16 +24,17 @@ Functionality: Providers handle authentication, API communication, and resource 
 
 ## 3Q) How do you create and manage resources in Terraform?
 
-- we will  define each resource in a .tf file using blocks of code. For instance, 
+- we will  define each resource in a .tf file using blocks of code. For instance,
+  
 ``` Terraform
+
 resource "aws_instance" "my_instance" {
 ami = "ami-12345678"
 instance_type = "t2.micro"
 }
+
 ```
-- This block says,
-“Hey, Terraform, I want an EC2 instance using this specific AMI and instance type.” When you run terraform apply, Terraform talks to AWS and provisions the instance for you. Want to change something later? Just update the code and rerun terraform
-apply. Terraform handles the rest.
+- This block says, “Hey, Terraform, I want an EC2 instance using this specific AMI and instance type.” When you run terraform apply, Terraform talks to AWS and provisions the instance for you. Want to change something later? Just update the code and rerun terraform apply. Terraform handles the rest.
 
 ## 4Q)  What’s a Terraform State file, and why is it important?
 
