@@ -1,8 +1,8 @@
-DAY:-1:-
--------
+## DAY:-1:-
 
-Terraform : (IAAC--Infrastructure as a code) :-
------------------------------------------------
+
+### Terraform : (IAAC--Infrastructure as a code) :-
+
 
 It is a tool that is used for infrastructure as a code.
 the tools that are same as teraform in cloud we use services IF we are use :
@@ -10,28 +10,30 @@ Aws-- CFT (cloud formation template )
 Azure -->ARM( Azure resource management )
 Google -->GRM(google resource management)
 
-*)Terraform was developed by HASHICORP It supports multicloud infrastructure.
-*) It will be in HCL lanaguage it is in json language.
-*)Terraform is free and open source.
+* Terraform was developed by HASHICORP It supports multicloud infrastructure.
+* It will be in HCL lanaguage it is in json language.
+* Terraform is free and open source.
 
 
-Ansible           TERAFORM
+| **Ansible** | **Terraform** |
+|:-----------:|:-------------:|
+| Target | Provider |
+| Variables | Variables |
+| Tasks | Resources |
 
-Target            provider
-variables         variables
-Tasks             Resources
 
+```Installation :-
 
-Installation :-
---------------------
 
 sudo yum install -y yum-utils shadow-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install terraform
 
+```
 
-Code for EC2 INSTANCE :--
------------------------
+#### Code for EC2 INSTANCE :--
+
+```bash
 
 vim main.tf
 
@@ -58,82 +60,84 @@ volume_size = 10
 }
 }
 
--------------------------------------------------------------
+```
  
-statefile --> It is a file used to store copy of our main server. when we use apply it will show the changes.
+- statefile --> It is a file used to store copy of our main server. when we use apply it will show the changes.
  
-commands : (IPAD -->init plan apply destroy)
+  - commands : (IPAD -->init plan apply destroy)
 
-terraform init    --->it will initilize and download the resources related to aws.
+- terraform init    --->it will initilize and download the resources related to aws.
 
-terraform plan    --->It will plan and check the errors.
+- terraform plan    --->It will plan and check the errors.
 
-terraform apply   ---> it will create an instance.
+- terraform apply   ---> it will create an instance.
 
-terraform destory ---> it will delete the instance.
+- terraform destory ---> it will delete the instance.
 
-terraform fmt     ---> It will give the indentation
+- terraform fmt     ---> It will give the indentation
 
-terraform validate -->it will validate the code
+- terraform validate -->it will validate the code
 
-terraform state list -->to see no of instances created using terraform
+- terraform state list -->to see no of instances created using terraform
 
-terraform destory --auto-aprove -target=aws_instance.myserver[1] --->to delete paticular instance
+- terraform destory --auto-aprove -target=aws_instance.myserver[1] --->to delete paticular instance
 
-terraform taint aws_instance.myserver[1] ---->terraform apply --->(It will recreate the instances)
+- terraform taint aws_instance.myserver[1] ---->terraform apply --->(It will recreate the instances)
 
-terraform apply --auto-approve -replace="aws_instance.myserver[0]"
+- terraform apply --auto-approve -replace="aws_instance.myserver[0]"
 
-terraform refresh ; terraform state list---->to check currently running instances
+- terraform refresh ; terraform state list---->to check currently running instances
 
 --auto-approve ---> It will not ask permnission
 
 
-terraform state show aws_instance.myserver[0] ---> it will show over all list of this server
+- terraform state show aws_instance.myserver[0] ---> it will show over all list of this server
 
-terraform apply --auto-approve | grep public_ip --->to show the outputs
+- terraform apply --auto-approve | grep public_ip --->to show the outputs
 
-teraform import aws_instance.mustafa instance_id
+- teraform import aws_instance.mustafa instance_id
 
-terraform workspace list ---->to see list of workspaces
+- terraform workspace list ---->to see list of workspaces
 
-terraform workspace new dev ---->to create workspace
+- terraform workspace new dev ---->to create workspace
 
-terraform workspace select default ----> to switch work space
+- terraform workspace select default ----> to switch work space
 
-terraform workspace show --->to see present work space 
+- terraform workspace show --->to see present work space 
 
-$terraform.workspace --->to print current workspace
+- $terraform.workspace --->to print current workspace
 
 
-valut server -dev --->To create valut
+- valut server -dev --->To create valut
 
-vault kv put secret/aws access_key="" secret_key= "" --->To put information
+- vault kv put secret/aws access_key="" secret_key= "" --->To put information
 
-valut kv get secret/aws
+- valut kv get secret/aws
 
 ---------------------------------------------------------------------------------------------
-aws configure ----->to add cerdentials
-aws configure list ---->to get list of creds
-aws s3 mb s3://swetha.flm.devops ---->to create bucket bucket -->mb make bucket
-aws s3 ls --->To see list of buckets
-aws s3 rb s3://swetha.devops -->to remove bucket rb remove bucket
-aws s3 rm s3://swetha.devops --recursive -->To remove the data in the file
-aws s3 ls s3://swetha.devops  --->To add see the list of files in s3 bucket
-aws s3 cp s3://swetha.devops/build . -->to download the file to our server
-aws s3 cp app.java s3://swetha.devops 
+- aws configure ----->to add cerdentials
+- aws configure list ---->to get list of creds
+- aws s3 mb s3://swetha.flm.devops ---->to create bucket bucket -->mb make bucket
+- aws s3 ls --->To see list of buckets
+- aws s3 rb s3://swetha.devops -->to remove bucket rb remove bucket
+- aws s3 rm s3://swetha.devops --recursive -->To remove the data in the file
+- aws s3 ls s3://swetha.devops  --->To add see the list of files in s3 bucket
+- aws s3 cp s3://swetha.devops/build . -->to download the file to our server
+- aws s3 cp app.java s3://swetha.devops 
 
 
 
-Day-2:-
--------
+## Day-2:-
 
-1)variables -->string , number, boolean
-2)security groups -->vpc_security_group_ids = resource_name.label.id
-3)count 
-4)create instances using list concept.
 
----------------------------------------------------------
+1. variables -->string , number, boolean
+2. security groups -->vpc_security_group_ids = resource_name.label.id
+3. count 
+4. create instances using list concept.
+
+
+```terraform
+
 vim provider.tf
 
 provider "aws"  {
@@ -229,21 +233,19 @@ protocol = "-1"
 cidr_blocks = ["0.0.0.0/0"]
 }
 
----------------------------------------------------------------------------------------------
-terraform init    --->it will initilize and download the resources related to aws.
+```
 
-terraform fmt     ---> It will give the indentation
+- terraform init    --->it will initilize and download the resources related to aws.
 
-terraform plan    --->It will plan and check the errors.
+- terraform fmt     ---> It will give the indentation
 
-terraform apply   ---> it will create an instance.
+- terraform plan    --->It will plan and check the errors.
 
-terraform destory ---> it will delete the instance.
+- terraform apply   ---> it will create an instance.
 
+- terraform destory ---> it will delete the instance.
 
-
-
-*********************************
+```terraform
 
 vim resource.tf
 
@@ -271,25 +273,27 @@ variable "itype" {
 type = list(string)
 default =  ["t2.medium" , "t2.micro"]
 }
+```
 
-terraform init    --->it will initilize and download the resources related to aws.
-terraform fmt     ---> It will give the indentation
-terraform plan    --->It will plan and check the errors.
-terraform apply   ---> it will create an instance.
-terraform destory ---> it will delete the instance.
+- terraform init    --->it will initilize and download the resources related to aws.
+- terraform fmt     ---> It will give the indentation
+- terraform plan    --->It will plan and check the errors.
+- terraform apply   ---> it will create an instance.
+- terraform destory ---> it will delete the instance.
 
 
-Day-3:-
--------
+## Day-3:-
 
-Dynamic blocks :- These are used to reduce repeted code.
-Alias (task)
-output --->to print the output of the server
-Importing manual server to terraform 
-terraform workspace
-locals : when we want to assign particular  t
 
-----------------------------------------------
+1. Dynamic blocks :- These are used to reduce repeted code.
+2. Alias (task)
+3. output --->to print the output of the server
+4. Importing manual server to terraform 
+5. terraform workspace
+6. locals : when we want to assign particular  
+
+```terraform
+
 vim main.tf
 
 resource "aws_security_group" "mysg" {
@@ -310,17 +314,17 @@ type = list(any)
 default = [22, 8080, 80, 9000]
 }
 }
+```
 
----------------------------------------------------------------------------
-terraform init    --->it will initilize and download the resources related to aws.
-terraform fmt     ---> It will give the indentation
-terraform plan    --->It will plan and check the errors.
-terraform apply   ---> it will create an instance.
-terraform destory ---> it will delete the instance.
+- terraform init    --->it will initilize and download the resources related to aws.
+- terraform fmt     ---> It will give the indentation
+- terraform plan    --->It will plan and check the errors.
+- terraform apply   ---> it will create an instance.
+- terraform destory ---> it will delete the instance.
 
-Task : create two instances aon two different regions .
--------------------------------------------------------------
+### Task : create two instances aon two different regions .
 
+```terraform
 vim task.tf
 
 provider "aws" {
@@ -350,20 +354,20 @@ output "output" {
 value = [aws_instance.myserver1.public_ip, aws_instance.myserver1.private_ip, aws_instance.myserver2.public_ip]
 }
 
--------------------------------------------------
-
-terraform init    --->it will initilize and download the resources related to aws.
-terraform fmt     ---> It will give the indentation
-terraform plan    --->It will plan and check the errors.
-terraform apply   ---> it will create an instance.
-terraform destory ---> it will delete the instance.
+```
 
 
-Importing instances:-
---------------------
+
+- terraform init    --->it will initilize and download the resources related to aws.
+- terraform fmt     ---> It will give the indentation
+- terraform plan    --->It will plan and check the errors.
+- terraform apply   ---> it will create an instance.
+- terraform destory ---> it will delete the instance.
 
 
-------------------------------
+#### Importing existing  instances:-
+
+```terraform
 vim main.tf
 
 provider "aws" {
@@ -379,9 +383,10 @@ ami = ""
 instance_type = "t2.micro"
 
 }
+```
 
-Terraform locals :--
-
+- Terraform locals :--
+ ```terraform
 vim main.tf
 
 provider "aws" {
@@ -403,38 +408,35 @@ Name = "${terraform.workspace}-server"
 ami = ""
 instance_type = local.instance_types[terraform.workspace}
 }
+```
 
-------------------------------
-
-terraform state show aws_instance.myserver[0] ---> it will show over all list of this server
-terraform apply --auto-approve | grep public_ip --->to show the outputs
-teraform import aws_instance.mustafa instance_id
-terraform workspace list ---->to see list of workspaces
-terraform workspace new dev ---->to create workspace
-terraform workspace select default ----> to switch work space
-terraform workspace show --->to see present work space 
-$terraform.workspace --->to print current workspace
+- terraform state show aws_instance.myserver[0] ---> it will show over all list of this server
+- terraform apply --auto-approve | grep public_ip --->to show the outputs
+- teraform import aws_instance.mustafa instance_id
+- terraform workspace list ---->to see list of workspaces
+- terraform workspace new dev ---->to create workspace
+- terraform workspace select default ----> to switch work space
+- terraform workspace show --->to see present work space 
+- $terraform.workspace --->to print current workspace
 
 
-Day-4 :--
-------
-1)lifecycle -->
+## Day-4 :--
 
-Terraform lifecycle is a meta-argument used to control the behavior of resources during infrastructure creation, modification, and deletion operations.
-It helps manage how Terraform handles resource changes by using rules such as:
-
-create_before_destroy
-prevent_destroy
-ignore_changes
+1. lifecycle -->
+- Terraform lifecycle is a meta-argument used to control the behavior of resources during infrastructure creation,modification, and deletion operations.
+ - It helps manage how Terraform handles resource changes by using rules such as:
+ - create_before_destroy
+ - prevent_destroy
+ - ignore_changes
 
 Terraform lifecycle is used to customize how Terraform manages resources during apply, update, or destroy operations.
 
 
-2)hashicrop world
-3)vault.
-4)run time values
+2. hashicrop world.
+3. vault.
+4. run time values
 
-------------------------------
+```terraform
 
 provider "aws" {
 region = ""
@@ -463,7 +465,7 @@ ignore_changes = [tags]
 }
 }
 
----------------------------------------------
+```
 
 
 vault --->
