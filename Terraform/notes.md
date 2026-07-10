@@ -6,13 +6,13 @@
 
 It is a tool that is used for infrastructure as a code.
 the tools that are same as teraform in cloud we use services IF we are use :
-Aws-- CFT (cloud formation template ) 
-Azure -->ARM( Azure resource management )
-Google -->GRM(google resource management)
-
-* Terraform was developed by HASHICORP It supports multicloud infrastructure.
-* It will be in HCL lanaguage it is in json language.
-* Terraform is free and open source.
+- Aws-- CFT (cloud formation template ) 
+- Azure -->ARM( Azure resource management )
+- Google -->GRM(google resource management)
+- 
+	- Terraform was developed by HASHICORP It supports multicloud infrastructure.
+	- It will be in HCL lanaguage it is in json language.
+	- Terraform is free and open source.
 
 
 | **Ansible** | **Terraform** |
