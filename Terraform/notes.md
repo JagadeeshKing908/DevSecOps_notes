@@ -23,7 +23,7 @@ Google -->GRM(google resource management)
 
 
 ```Installation :-
-
+# Installation
 
 sudo yum install -y yum-utils shadow-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
@@ -469,13 +469,16 @@ ignore_changes = [tags]
 
 
 vault --->
+```valut
 
  export VAULT_ADDR='http://127.0.0.1:8200'
  vault kv put secret/aws access_key="AKIARYEUCR73LCIBK362" secret_key="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"
- 
 
-1)vault server -dev
+``` 
 
+1. vault server -dev
+   
+```terraform
 vim provider.tf 
 
 provider "vault" {
@@ -515,8 +518,11 @@ key_name = "New_key"
 
 }
 
+```
+
 Runtime :--
 
+```terraform
 provider "aws" {
 
 region = var.region
@@ -563,35 +569,32 @@ type = string
 
 }
 
---------------------------------
+```
 
-Day-5 :-
--------
+## Day-5 :-
 
-s3 --Saimple storage service
+
+- s3 --Sample storage service
 
 Plugins
 
-s3 -- for s3 buckets
+- s3 -- for s3 buckets
+
+- S3 uses :--
+
+	1. versioning
+	2. static website hosting
+	3. Nexus - s3.war
 
 
-S3 uses :--
+- Rules to create s3 :--
 
-1)versioning
-2)static website hosting
-3)Nexus - s3.war
-
-
-Rules to create s3 :--
-
-----------------------
-
-1)Bucket name should be unique.(flm.mustafa.devops)
-2)It should not be in the foemat of ip (172.168.0.1)
-3)the legnth should be 4 to 63 characters
-4)We can't delete the bucket first we need to make it as empty
-5)If we delete the bucket then the name should be avaliable
-6)Bucket name should not start or end with special characters.
+	1. Bucket name should be unique.(flm.mustafa.devops)
+	2. It should not be in the foemat of ip (172.168.0.1)
+	3. the legnth should be 4 to 63 characters
+	4. We can't delete the bucket first we need to make it as empty
+	5. If we delete the bucket then the name should be avaliable
+	6. Bucket name should not start or end with special characters.
 
 
 URI = path -->  s3://swetha.devops/
@@ -607,22 +610,22 @@ pipeline synatx -->s3upload
 https://s3.ap-south-1.amazonaws.com/jagadeesh.firstbucket/March+Internet+bill+-+Copy.pdf
 
 
-Day-6 :--
-------
+## Day-6 :--
 
-terraform s3 -->vs code
-s3 bucket using terraform ----kops -- (--image = amiid)
-state file in s3 bucket
 
-vs code 
------------
+1. terraform s3 -->vs code
+2. s3 bucket using terraform ----kops -- (--image = amiid)
+3. state file in s3 bucket
 
-Host myserver  -->Writer whatever we want
+### vs code 
+
+ Host myserver  -->Writer whatever we want
  Hostname 13.232.226.108
  User ec2-user
  IdentityFile ~/Downloads/New_key.pem
 
-------------------------------------
+```terraform
+
 provider "aws" {
 
 region = "ap-south-1"
@@ -651,64 +654,59 @@ region = "ap-south-1"
 }
 }
 
----------------------------------------------
+```
 
-Day-7 :--
--------
+## Day-7 :--
 
-vpc :-- creating a private cloud inside a pubic cloud
 
-1) virtual private cloud is used to create private cloud within public cloud. Mainly it provides Isolation.
-2)Every VPC has it own IP addresses , InternetGateways, Route tables
-3)We can control access to it using Security groups and Network control access lists.
+- vpc :-- creating a private cloud inside a pubic cloud
 
-subnet :-- Dividing a large network into small 
+	1. virtual private cloud is used to create private cloud within public cloud. Mainly it provides Isolation.
+	2. Every VPC has it own IP addresses , InternetGateways, Route tables
+	3. We can control access to it using Security groups and Network control access lists.
 
-1)pubic subnet :
-  public subnet resources can be accessiable from Internet
-2)private subnet :
-  private subnet resources not able to access it from Internet but can be able to accessble using loadbalancers or NAT gateways 
-  which are present in public sunet
+- subnet :-- Dividing a large network into small 
 
-NAT (network  address translator Gateway --> It will help us to access app private.
-IGW (internet gateway)----> it allows internet to access vpc                                  internet ---->Internet gateway -->vpc--->iptables--->public app --->NAT-->iptable (routetable)--->
+	1. pubic subnet : public subnet resources can be accessiable from Internet
+	2. private subnet :private subnet resources not able to access it from Internet but can be able to accessble using loadbalancers or NAT gateways which are present in public sunet
+
+- NAT (network  address translator Gateway --> It will help us to access app private.
+- IGW (internet gateway)----> it allows internet to access 
+- vpc--->internet ---->Internet gateway -->vpc--->iptables--->public app --->NAT-->iptable (routetable)--->
 iptables(route tables) --> these are route tables these allow us to access internet)
 
-Peering connectors -->It helps us to connect with one vpc to other vpc'
+- Peering connectors -->It helps us to connect with one vpc to other vpc'
 
-Day-8:-
-------
+## Day-8:-
 
-creating vpc,subnet,NAT using terraform
+### creating vpc,subnet,NAT using terraform
 
+- Steps to create VPC :-
 
-Steps to create VPC :-
+	1. Create a vpc and Enable DNS hostnames
+	2. Create public and private subnets and assign ipv4 addresses for public subnet
+	3. create IGW and attach it to vpc
+	4. Create NAT gateway on public subnet
+	5. create public and private route tables
+	6. Attach internet gw to public RT & NAT gateway to private RT.
+	7. subnet association
 
-1)Create a vpc and Enable DNS hostnames
-2)Create public and private subnets and assign ipv4 addresses for public subnet
-3)create IGW and attach it to vpc
-4)Create NAT gateway on public subnet
-5)create public and private route tables
-6)Attach internet gw to public RT & NAT gateway to private RT.
-7)subnet association
+### Security Group(Instance firewall) :-
 
-Security Group(Instance firewall) :-
---------------------------------------
+1. Works at EC2 instance level.
+2. Stateful (reply traffic is allowed automatically).
+3. Only ALLOW rules.
+4. Used for day-to-day instance security.
 
-1)Works at EC2 instance level.
-2)Stateful (reply traffic is allowed automatically).
-3)Only ALLOW rules.
-4)Used for day-to-day instance security.
+### NACL (Network ACL) (subnet firewall):-
 
-NACL (Network ACL) (subnet firewall):-
--------------------------------------
-1)Works at subnet level
-2)Stateless (must allow inbound & outbound separately)
-3)Has ALLOW and DENY rules
-4)Used as an extra security layer for the subnet
-
---------------------------------------
-vim vpc.tf
+1. Works at subnet level
+2. Stateless (must allow inbound & outbound separately)
+3. Has ALLOW and DENY rules
+4. Used as an extra security layer for the subnet
+   
+```Terraform
+# vim vpc.tf
 
 provider "aws" {
 region = "us-east-1"
@@ -725,7 +723,7 @@ cidr_blocks = `	"12.0.0.0/16"
 
 }
 
-vim subnets.tf
+# vim subnets.tf
 
 resource "aws_subnet" "public_subnet" {
 vpc_id = aws_vpc.myvpc.id
@@ -749,7 +747,7 @@ cidr_block = "12.0.1.0/24"
 }
 
 
-vim igw.tf
+## vim igw.tf
 
 resource "aws_internet_gateway" "myigw" {
 
@@ -761,7 +759,7 @@ vpc_id = aws_vpc.mypc.id
 
 }
 
-vim "aws_route_table" "public_RT"  {
+## vim "aws_route_table" "public_RT"  {
 tags = {
 Name = "Terraform_public_RT"
 }
@@ -777,7 +775,7 @@ gateway_id = aws_internet_gateway.myigw.id
 }
 
 
-vim nat.tf
+## vim nat.tf
 
 resource "aws_eip" "myeip" {
 domain = "vpc"
@@ -792,7 +790,7 @@ allocation_id = aws_eip.myeip.id
 }
 
 
-vim private_route.tf
+## vim private_route.tf
 
 resource "aws_route_table" "private_route" {
 
@@ -805,7 +803,7 @@ nat_gateway_id = aws_nat_gateway.mynat.id
 }
 
 
-vim subnet-association.tf
+## vim subnet-association.tf
 
 resource "aws_route_table_association" "public_subnet"  {
 subnet_id = aws_subnet.public_subnet.id
@@ -819,7 +817,7 @@ route_table_id = aws_route_table.private_RT.id
 
 }
 
-vim sg.tf
+## vim sg.tf
 
 resource "aws_security_group" "public-sg" {
 name = "public-sg"
@@ -857,34 +855,36 @@ cidr_blocks = ["0.0.0.0/0"]
 }
 }
 
---------------------------------------------------------------------
+```
 
-Day-9:-
------
-ASG & LB (auto scaing groups and load balancers)
+## Day-9:-
 
-Load balancer (LB) : - It will equally distribute the load between group of instance.
+1. ASG & LB (auto scaing groups and load balancers)
 
-Auto scaling groups (ASG) :- It will create an equivalent server when one sever will down another server got created.
+2. Load balancer (LB) : - It will equally distribute the load between group of instance.
 
-Target Group :-- selecting list of instance where the applaication needs to run we call it as target group.
+3. Auto scaling groups (ASG) :- It will create an equivalent server when one sever will down another server got created.
 
-*********************************
-
-Steps two create ASG using terraform :--
-
-1) VPC
-2)Subnets -2
-3)Route table -1
-4)Internet gateway -1
-5)Launch template 
-6)Target group
-7)Load balancer
-8)Auto scaling group
+4. Target Group :-- selecting list of instance where the applaication needs to run we call it as target group.
 
 
 
-vim launch.tf
+### Steps two create ASG using terraform :--
+
+1. VPC
+2. Subnets -2
+3. Route table -1
+4. Internet gateway -1
+5. Launch template 
+6. Target group
+7. Load balancer
+8. Auto scaling group
+
+
+```terraform
+
+#vim launch.tf
+
 resource "aws_launch_template" "mylt" {
 
 name = "terraform-launch-template"
@@ -906,7 +906,7 @@ EOF
 }
 
 
-vim Loadbalancer.tf
+# vim Loadbalancer.tf
 
 resource "aws_elb" "myelb" {
 
@@ -921,7 +921,7 @@ instance_protocol = "http"
 }
 }
 
-vim autoscaling.tf
+# vim autoscaling.tf
 
 resource "aws_autoscaling_group" "myASG" {
 name = "Terraform ASG"
@@ -932,49 +932,49 @@ id = aws_launch_template.mylt.id
 
 }
 
+```
 
-Day-10:-
---------
-
-1)Aws code pipeline 
-2)cloud watch
+## Day-10:-
 
 
-aws cloudpipeline:-
-----------------
+1. Aws code pipeline 
+2. cloud watch
 
-1)code commit -->to get the source code 
-2)build -->code build
-3)Test --> code test (new service)
-4)deploy --> code deploy
 
-*************
-we will integrate these with code pipeline. 
+#### aws cloudpipeline:-
 
-And these are saas clouds.
 
-we have two types of cloud models.
+1. code commit -->to get the source code 
+2. build -->code build
+3. Test --> code test (new service)
+4. deploy --> code deploy
 
-1)service models
- a)iaas --Infra as a service
- b)paas --platform as a service
- c)saas -->software as a service
 
-2)deploy model
 
+- we will integrate these with code pipeline. 
+- And these are saas clouds.
+- we have two types of cloud models.
+
+1. service models
+  a. iaas --Infra as a service
+  b. paas --platform as a service
+  c. saas -->software as a service
+
+2. deploy model
 
 working:--- github repo -->cicd-withaws
 
 Goto build directly -->create project -->source(github)-->manage account creds---->install new app--only selected repos-->code build role-->create project
 
-create pipeline 
+3. create pipeline 
 
-IAM --> AWSCodePipelineServiceRole-us-east-1-mypipeline (Admin access)
-create Ec2 Role -->Amazonec2roleforawscodedeploy (attach to ec2 instance)
+1. IAM --> AWSCodePipelineServiceRole-us-east-1-mypipeline (Admin access)
+2. create Ec2 Role -->Amazonec2roleforawscodedeploy (attach to ec2 instance)
 
 
-Install codedeploy on ourserver.
-------------------------------------
+#### Install codedeploy on ourserver.
+
+ ```bash
 
 sudo yum update -y
 
@@ -988,12 +988,12 @@ sudo ./install auto
 
 sudo service codedeploy-agent status
 
+```
 
-code-deploy:-
-------------
+#### code-deploy:-
+
 
 create role :-- codedeprole -->service(code deploy) --->ec2-full prmissions
-
 
 create app --> create deployment group -->and save
 
@@ -1001,99 +1001,95 @@ pipeline -->edit -->add stage -->action group--->aws code deploy -->and save it
 
 
 
-Disadvantages of code pipeline:-
-------------------------------
-
-1)It is not a opensource and billable
-2)plugins -->It will not have plugins with the help of plugins we can integrate with any tool
-3)Master and slave (it supports master and slave )
-4)Trouble shooting is not easy in code pipeline and time taking
-5)permissions.
+#### Disadvantages of code pipeline:-
 
 
-cloud watch:
-------------
+1. It is not a opensource and billable
+2. plugins -->It will not have plugins with the help of plugins we can integrate with any tool
+3. Master and slave (it supports master and slave )
+4. Trouble shooting is not easy in code pipeline and time taking
+5. permissions.
+
+
+#### cloud watch:
+
 
 see the documents given by trainer for more info--->
-
-
 for cloud watch logs use ubuntu 22.04
 
 
-DAY-11 :-
-------
-cloud watch ----> for cloud watch logs use ubuntu 22.04
-SNS -->simple notification service.
-route53
-EFS--elastic file system
+## DAY-11 :-
+
+1. cloud watch ----> for cloud watch logs use ubuntu 22.04
+2. SNS -->simple notification service.
+3. route53
+4. EFS--elastic file system
 
 
-cloud watch:--
+- cloud watch:--
 
-1)ami -->22.04
-2)apt update -y
-3)apt install python2.7 -y
-4)Install python binary file -->
+	1. ami -->22.04
+	2. apt update -y
+	3. apt install python2.7 -y
+	4. Install python binary file -->
+	DOWNLOAD FILE : curl https://s3.amazonaws.com/awscloudwatch/downloads/latest/awslogs-agent-setup.py -O
+	 5.   RUN PYTHON FILE : python awslogs-agent-setup.py —region ap-south-1
+	6. IAM --> Admin access (or) cloud watch full access --->access key & secret key
+	7.  Need to give logs info and create group at last no
 
-DOWNLOAD FILE : curl https://s3.amazonaws.com/awscloudwatch/downloads/latest/awslogs-agent-setup.py -O
+#### Aws console -->
 
-5) RUN PYTHON FILE : python awslogs-agent-setup.py —region ap-south-1
-6)IAM --> Admin access (or) cloud watch full access --->access key & secret key
-7) Need to give logs info and create group at last no
-
-Aws console -->
-----------
-1)cloud watch
+1. cloud watch
 
 
-SNS :--
------
+#### SNS :--
 
-1) create topic -- Standard topic
-2)create subscription
+
+1. create topic -- Standard topic
+2. create subscription
 
 In mail confirm subscription
 
-
-Route53 :-- for domain related workspace
-------
+#### Route53 :-- for domain related workspace
 
 they are multiple  sites used to create a domain . They are 
-1)godady 
-2)name space ,big rock
-3)route53 on aws --->will check cost and will buy it.
+
+1. godady 
+2. name space ,big rock
+3. route53 on aws --->will check cost and will buy it.
 
 
-EFS:-
----
-Take two servers on different availability zones. And create an EFS and attach it to our servers by running the commands given on attach -->check network and attach.attch 
-the security that you have given while creating instance.
+#### EFS:-
+
+1. Take two servers on different availability zones. And create an EFS and attach it to our servers by running the commands given on attach -->check network and attach.attch 
+2. the security that you have given while creating instance.
+3. while running the commands install efs service.---->go to official doccument and insatll efc --
 
 
-while running the commands install efs service.---->go to official doccument and insatll efc --
+## Day-12:-
 
-
-Day-12:-
--------
 A Terraform module is a collection of Terraform configuration files grouped together to create reusable and modular infrastructure components.
 
 Real-Time Example
 
-For example, instead of writing EC2, VPC, and Security Group code multiple times, we create separate Terraform modules and reuse them across dev, test, and production environments.
-Statefile locking :--> If changes are appalied by two persons at same time then terraform state file will be courropted .to overcome this we make use of state file locking.
+- For example, instead of writing EC2, VPC, and Security Group code multiple times, we create separate Terraform modules and reuse them across dev, test, and production environments.
+- Statefile locking :--> If changes are appalied by two persons at same time then terraform state file will be courropted .to overcome this we make use of state file locking.
 
-mkdir  terraform
+  
+```bash
+# mkdir  terraform
 
-touch main.tf
+# touch main.tf
 
-vim provider.tf
+# vim provider.tf
+
 resource "aws" {
 region = "aws-east-1"
 }
 
-mkdir -p terraform/modules/instance
+# mkdir -p terraform/modules/instance
 
-vim main.tf 
+# vim main.tf 
 
 resource "aws_instance" "myinstance" {
 tags = {
@@ -1103,7 +1099,7 @@ ami_id = var.ami_id
 instance_type = var.itype
 }
 
-vim variable.tf
+# vim variable.tf
 
 variable "iname" {
 type = string;
@@ -1115,7 +1111,7 @@ varibale "itype" {
 type = string
 }
 
-vim modules/main.tf
+# vim modules/main.tf
 
 modules "instance_module" {
 source = "./modules/instance"
@@ -1125,9 +1121,9 @@ itype = ""
 }
 
 
-mkdir statefilelock
+# mkdir statefilelock
 
-vim instance.tf
+# vim instance.tf
 
 resource "aws_instance" "my insta" {
 tags = {
@@ -1137,7 +1133,7 @@ ami = ""
 instance_type = "t2.micro"
 }
 
-vim s3.tf
+# vim s3.tf
 
 resource "aws_s3_bucket" "mybucket" {
 
@@ -1153,7 +1149,7 @@ status = "Enabled"
 }
 }
 
-vim backend.tf
+# vim backend.tf
 
 terraform {
 backend "s3" {
@@ -1165,9 +1161,9 @@ encrypt = true
 }
 }
 
-need to create dynamodb first then add those into that
+# need to create dynamodb first then add those into that
 
-vim dynamodb_table.tf
+# vim dynamodb_table.tf
 
 resource "aws_dynamodb_table" "db" {
 name = "mydynamodb"
@@ -1180,7 +1176,7 @@ type = "S"
 } 
 }
 
-Lockusing s3:-
+# Lockusing s3:-
 
 terraform {
 backend "s3" {
@@ -1191,26 +1187,27 @@ use_lockfile = true
 encrypt = true
 }
 }
+```
 
-DAY-12 :--
--------
-1)tfsec -->used to provide security to our code.
-2)tflint --> It provides configuration of our code.
+## DAY-12 :--
+
+1. tfsec -->used to provide security to our code.
+2. tflint --> It provides configuration of our code.
 
 
-1)Install tfsec 
-2) give x permissions
-3)and mv it to sudo mv /usr/local/bin
-4)tfsec --version
+1.Install tfsec 
+2.  give x permissions
+3. and mv it to sudo mv /usr/local/bin
+4. tfsec --version
 
 
 To check errors -->tfsec .
 
 . -->path
 
-1)tflint -->install tflint
-2)unzip the file
-3)sudo mv file /usr/local/bin
+1. tflint -->install tflint
+2. unzip the file
+3. sudo mv file /usr/local/bin
 
 
 tflint --chdir .
@@ -1225,44 +1222,38 @@ tflint --filter .
 Drift detection in terraform ?
 
 If we had created any server by using terraform and manually some one had made some changes terraform don't know if any changes occur
-1) If we use terraform refresh or terraform plan then we can see in terraform 
-2)
+1. If we use terraform refresh or terraform plan then we can see in terraform 
 
 How should you do to avoid it?
 
 we used a lifecycle module in terraform to prevent this .
 
 
-Day-13:-
-------
-Terraformer
-WAF-->web appalication firewall
+## Day-13:-
 
+1. Terraformer
 
- --> Terraform install
- --> Terraformer install
+2. WAF-->web appalication firewall
+   
+ - Terraform install
+ - Terraformer install
 
 Terraformer: It is the tool that if we want to import n number of instance we can import by using this.
 
 commands----> 1)terraformer import aws --resources=ec2_instances --regions=us-east-1
               2)terraformer state replace-provider -- -/aws hashicorp/aws
 			  
-WAF:-- It is going to restrict access to our app for particular ips to block or restrict access.
----
+#### WAF:-- It is going to restrict access to our app for particular ips to block or restrict access.
 
+#### Backup :- (aws backup service)
 
-Backup :- (aws backup service)
-------
 
 backup-plans---->create on-demand backup and create .
-
-	
 
 Drift detection in terraform ?
 
 If we had created any server by using terraform and manually some one had made some changes terraform don't know if any changes occur
-1) If we use terraform refresh or terraform plan then we can see in terraform 
-2)
+1. If we use terraform refresh or terraform plan then we can see in terraform 
 
 How should you do to avoid it?
 
