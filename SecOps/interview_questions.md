@@ -424,9 +424,9 @@ You can answer:
 
 We separated workloads using namespaces. For example:
 
-dev
-uat
-prod
-argocd
-monitoring
-ingress-nginx
+- dev
+- uat
+- prod
+- argocd
+- monitoring
+- ingress-nginx
