@@ -322,3 +322,97 @@ Finally, we perform regular backups of persistent data and have a documented dis
 Q) Why should we hire you?
 --------------------------
 "I have around 3 years of hands-on DevOps experience working with AWS, Kubernetes, Terraform, Jenkins, Docker, monitoring, and CI/CD automation. I enjoy solving production issues, automating deployments, and continuously learning new technologies. I believe I can contribute quickly while continuing to grow with the team."
+
+Q) What kind of vulnerabilities or code smells have SonarQube/Trivy actually caught for you?
+----------------------------
+Prepare a real example if possible — e.g., SonarQube flagging code duplication, unused variables, or security hotspots; Trivy catching outdated base images with known CVEs before they reached production. Even a general but honest example works: "Trivy has caught outdated base images with known CVEs before they reached production, which we then patched by updating to a newer, patched image version."
+
+Q)can you tell me your cluster size or your architecture of your project flow ?
+------------------------------------------------------------------------------
+In my project, we followed a production-grade AWS DevOps architecture. We maintained separate environments for Development, UAT, and Production, with each environment isolated in its own AWS account or VPC depending on the project requirements.
+
+Our applications were deployed on Amazon EKS. The infrastructure, including VPCs, subnets, IAM roles, security groups, EKS clusters, and node groups, was provisioned using Terraform modules to ensure consistency across environments.
+
+Developers pushed code to GitHub, which triggered Jenkins pipelines through GitHub webhooks. The pipeline performed source checkout, Maven build, unit testing, SonarQube code quality analysis, Docker image creation, Trivy vulnerability scanning, and then pushed the image to Amazon ECR.
+
+Instead of deploying directly from Jenkins to Kubernetes, we followed a GitOps approach. Jenkins updated the Kubernetes manifest or Helm chart repository with the new image tag, and ArgoCD continuously monitored that repository. Once it detected the change, it synchronized the application automatically to the EKS cluster.
+
+For monitoring, we used Prometheus and Grafana to collect application and cluster metrics, while AWS CloudWatch was used for infrastructure monitoring and log collection. Alerts were configured to notify the operations team whenever CPU, memory, or pod health crossed defined thresholds.
+
+```bash
+
+                    Developers
+                         │
+                         ▼
+                     GitHub Repository
+                         │
+                  (GitHub Webhook)
+                         │
+                         ▼
+                     Jenkins Pipeline
+                         │
+      ┌──────────────────┼──────────────────┐
+      ▼                  ▼                  ▼
+ Maven Build      SonarQube Scan      Trivy Scan
+      │
+      ▼
+ Build Docker Image
+      │
+      ▼
+ Push Image to Amazon ECR
+      │
+      ▼
+ Update Helm Chart / Kubernetes Manifest (Git)
+      │
+      ▼
+        ArgoCD (GitOps)
+      │
+      ▼
+      Amazon EKS Cluster
+      │
+ ┌────┴───────────────────────┐
+ ▼                            ▼
+Application Pods        Kubernetes Services
+      │
+      ▼
+AWS Load Balancer / Ingress
+      │
+      ▼
+        End Users
+
+Monitoring:
+Prometheus → Grafana
+AWS CloudWatch
+
+```
+###### Infrastructure Architecture
+
+```bash
+
+AWS
+│
+├── VPC
+│
+├── Public Subnets
+│      │
+│      └── AWS Load Balancer
+│
+├── Private Subnets
+│      │
+│      ├── EKS Worker Nodes
+│      │       ├── Application Pods
+│      │       ├── ArgoCD
+│      │       ├── Prometheus
+│      │       └── Grafana
+│      │
+│      └── Auto Scaling
+│
+├── Amazon ECR
+│
+├── IAM Roles
+│
+├── CloudWatch
+│
+└── S3 (Terraform Backend)
+
+```
