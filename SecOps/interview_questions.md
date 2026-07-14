@@ -416,3 +416,17 @@ AWS
 └── S3 (Terraform Backend)
 
 ```
+
+Q) How many namespaces did you have ?
+-------------------------------------
+
+You can answer:
+
+We separated workloads using namespaces. For example:
+
+dev
+uat
+prod
+argocd
+monitoring
+ingress-nginx
